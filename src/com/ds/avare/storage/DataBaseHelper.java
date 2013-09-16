@@ -1064,8 +1064,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "(" + LATITUDE_DB  + " > " + (lat - Obstacle.RADIUS) + ") and (" + LATITUDE_DB  + " < " + (lat + Obstacle.RADIUS) + ") and " +
                 "(" + LONGITUDE_DB + " > " + (lon - Obstacle.RADIUS) + ") and (" + LONGITUDE_DB + " < " + (lon + Obstacle.RADIUS) + ");";
         /*
-         * Find obstacles at below or higher in lon/lat radius
-         * We ignore all obstacles 500 AGL below in our script
+         * Find obstacles at below or higher in lon/lat radius (bounding box)
+         * Note: Obstacles 500 AGL and below are not populated into the database by the backend script
+         * 
+         * JM: If I'm understanding this correctly, this isn't really a radius but rather a lat/lon bounding box
+         * JM: The size of this bounding box will change as the user moves north/south 
          */
         Cursor cursor = doQuery(qry, getMainDb());
         
