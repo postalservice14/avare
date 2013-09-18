@@ -839,7 +839,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     private void drawAircraft(Canvas canvas) {
         mPaint.setShadowLayer(0, 0, 0, 0);
         mPaint.setColor(Color.WHITE);
-
+        mAirplaneBitmap = new BitmapHolder(getContext(), mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
         if(null != mAirplaneBitmap && null == mPointProjection) {
             
             /*
