@@ -17,7 +17,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="OK">&quot;OK&quot;</string>
     <string name="Nearest">&quot;Nearest&quot;</string>
     <string name="Success">&quot;Success&quot;</string>
-    <string name="WarningMsg">&quot;Warning&quot;</string>
+    <string name="DatabaseName">&quot;maps.db&quot;</string>
+    <string name="WarningMsg">&quot;USE AT YOUR OWN RISK!&quot;</string>
     <string name="DestinationPrompt">&quot;Enter Destination Code&quot;</string>
     <string name="DestinationNF">&quot;Destination Not Found&quot;</string>
     <string name="AirDia">&quot;Airport Diagram&quot;</string>
@@ -151,6 +152,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="WeatherPlan">&quot;Load a plan and press Update to get the latest route weather&quot;</string>
     <string name="SimulationMode">&quot;Simulation&quot;</string>
     <string name="TrackUp">&quot;Track Up&quot;</string>
+    <string name="Understand">&quot;I Understand&quot;</string>
     <string name="NorthUp">&quot;North Up&quot;</string>
     <string name="XlateWeather">&quot;XlateWeather&quot;</string>
     <string name="XlateWeatherLabel">&quot;Translate Weather&quot;</string>
