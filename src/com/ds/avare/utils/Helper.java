@@ -286,12 +286,12 @@ public class Helper {
             act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);            
         }
 
-        if(pref.isPortrait()) {
-            act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);            
-        }
-        else {
-            act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        //if(pref.isPortrait()) {
+        //    act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);            
+        //}
+        //else {
+        //    act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //}
 
     }    
     
@@ -402,14 +402,14 @@ public class Helper {
     public static String incTileName(String name, int rowm, int colm) {
         
         /*
-         * This is all magic. Check databse specificaiton.
+         * This is all magic. Check database specification.
          * Tiles are stored row/col as:
          * 0/row/master_row_col where row, col have leading zeros
          */
 
         try {
             /*
-             * This is all magic. Check databse specificaiton.
+             * This is all magic. Check database specification.
              * Tiles are stored row/col as:
              * 0/row/master_row_col where row, col have leading zeros
              */
