@@ -746,7 +746,8 @@ public class LocationActivity extends Activity implements Observer {
                 mAlertDialogWarn.setMessage(getString(R.string.Warning));
                 mAlertDialogWarn.setCanceledOnTouchOutside(false);
                 mAlertDialogWarn.setCancelable(false);
-                mAlertDialogWarn.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.OK), new DialogInterface.OnClickListener() {
+                mAlertDialogWarn.setIcon(R.drawable.important_red);
+                mAlertDialogWarn.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.Understand), new DialogInterface.OnClickListener() {
                     /* (non-Javadoc)
                      * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
                      */
