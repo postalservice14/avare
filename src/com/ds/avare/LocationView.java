@@ -56,6 +56,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+//jm
+import android.content.res.Configuration;
 /**
  * @author zkhan
  * This is a view that user sees 99% of the time. Has moving map on it.
@@ -243,7 +245,14 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         mDraw = false;
         
         mPref = new Preferences(context);
-        mTextDiv = mPref.isPortrait() ? 24.f : 15.f;
+        //JM: Trying to set text size dynamically.  Only tested on Nexus 7, needs to be tested on other devices
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        	 mTextDiv = 24.f;  //App is in Portrait mode
+        	}
+        else {
+             mTextDiv = 15.f;      //App is in LandScape mode
+        	 }
+        //mTextDiv = mPref.isPortrait() ? 24.f : 15.f;
         
         mFace = Typeface.createFromAsset(mContext.getAssets(), "LiberationMono-Bold.ttf");
         mPaint.setTypeface(mFace);
