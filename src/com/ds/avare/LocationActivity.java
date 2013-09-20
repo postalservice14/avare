@@ -755,7 +755,7 @@ public class LocationActivity extends Activity implements Observer {
                         dialog.dismiss();
                     }
                 });
-    
+                //TODO: This dialog can be dismissed by rotating the device.  How to prevent this?
                 mAlertDialogWarn.show();
             }    
             

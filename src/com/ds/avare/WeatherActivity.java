@@ -33,6 +33,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -128,7 +129,8 @@ public class WeatherActivity extends Activity {
 
         Helper.setTheme(this);
         super.onCreate(savedInstanceState);
-
+     
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mContext = this;
 
@@ -260,6 +262,7 @@ public class WeatherActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        
         Helper.setOrientationAndOn(this);
 
         /*
