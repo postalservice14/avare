@@ -441,7 +441,7 @@ public class SearchActivity extends Activity implements Observer {
     public void onResume() {
         super.onResume();
         Helper.setOrientationAndOn(this);
-
+        
         /*
          * Registering our receiver
          * Bind now.
@@ -538,6 +538,7 @@ public class SearchActivity extends Activity implements Observer {
                     }
                     mToast.setText(getString(R.string.DestinationSet) + ((Destination)arg0).getID());
                     mToast.show();
+                    //Switch to map view with new destination set
                     ((MainActivity)this.getParent()).switchTab(0);
                 }
                 else {
