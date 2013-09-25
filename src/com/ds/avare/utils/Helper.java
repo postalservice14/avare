@@ -279,21 +279,27 @@ public class Helper {
      * Set common features of all activities in the framework
      * @param act
      */
-    public static void setOrientationAndOn(Activity act) {
-        
-        Preferences pref = new Preferences(act.getApplicationContext());
-        if(pref.shouldScreenStayOn()) {
-            act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);            
-        }
+	public static void setOrientationAndOn(Activity act) {
 
-        //if(pref.isPortrait()) {
-        //    act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);            
-        //}
-        //else {
-        //    act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //}
+		Preferences pref = new Preferences(act.getApplicationContext());
+		if (pref.shouldScreenStayOn()) {
+			act.getWindow().addFlags(
+					WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 
-    }    
+		switch (pref.getOrientationPref()) {
+		case 1:
+			act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			break;
+		case 2:
+			act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			break;
+		default:
+			act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); // TODO Should maybe be sensor?
+			break;
+		}
+
+	}   
     
     /**
      * 
