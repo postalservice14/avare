@@ -426,7 +426,16 @@ public class Preferences {
     public boolean isPortrait() {
         return(mPref.getBoolean(mContext.getString(R.string.OrientationP), true));
     }
+    /**
+     * 
+     * @return integer 0=auto,1=portrait,2=landscape
+     */
+	public int getOrientationPref() {
 
+		int val = Integer.parseInt(mPref.getString(
+				mContext.getString(R.string.OrientationPref), "0"));
+		return val;
+	}
     /**
      * 
      * @return

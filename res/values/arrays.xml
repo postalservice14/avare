@@ -640,4 +640,16 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>1</item>
     </string-array>
     
+    <string-array name="OrientationPref">
+        <item>Auto</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
+
+    <string-array name="OrientationPrefValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    
 </resources>
