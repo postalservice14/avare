@@ -76,19 +76,22 @@ public class GpsParams {
         return mSpeed;
     }
     /**
-     * @return
+     * @return 
+     * double Current longitude
      */
     public double getLongitude() {
         return mLongitude;
     }
     /**
-     * @return
+     * @return 
+     * double Current latitude
      */
     public double getLatitude() {
         return mLatitude;
     }
     /**
      * @return
+     * double Current altitude preferred distance unit (e.g. feet or meters)
      */
     public double getAltitude() {
         return mAltitude;

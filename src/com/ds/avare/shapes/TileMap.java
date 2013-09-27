@@ -257,26 +257,26 @@ public class TileMap {
     /**
      * Set the correct tile orientation
      */
-    public void setOrientation() {
-        if((new Preferences(mContext)).isPortrait()) {
-            /*
-             * Have more tiles in Y on portrait
-             */
-            if(mXtiles > mYtiles) {
-                int tmp = mXtiles;
-                mXtiles = mYtiles;
-                mYtiles = tmp;
-            }
-        }
-        else {
-            /*
-             * Have more tiles in X on landscape
-             */
-            if(mYtiles > mXtiles) {
-                int tmp = mXtiles;
-                mXtiles = mYtiles;
-                mYtiles = tmp;
-            }            
-        }
+    public void setOrientation() { //TODO BUGFIX GET THIS DYNAMICALLY
+//        if((new Preferences(mContext)).isPortrait()) {
+//            /*
+//             * Have more tiles in Y on portrait
+//             */
+//            if(mXtiles > mYtiles) {
+//                int tmp = mXtiles;
+//                mXtiles = mYtiles;
+//                mYtiles = tmp;
+//            }
+//        }
+//        else {
+//            /*
+//             * Have more tiles in X on landscape
+//             */
+//            if(mYtiles > mXtiles) {
+//                int tmp = mXtiles;
+//                mXtiles = mYtiles;
+//                mYtiles = tmp;
+//            }            
+//        }
     }
 }

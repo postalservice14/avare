@@ -13,6 +13,7 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.position;
 
 import com.ds.avare.utils.BitmapHolder;
+import com.ds.avare.LocationActivity;
 
 /**
  * 
@@ -40,11 +41,13 @@ public class Pan {
     private float                      mMoveYTileOld;
 
     /**
-     * 
+     * set pan parameters to zero
      */
-    public Pan() {
-        mMoveX = 0;
-        mMoveY = 0;
+    public Pan() {  
+        mMoveX = 0;	//Is this in pixels, so differs by device?	Negative number is left
+        //JM Position plane 3/4 down screen if in TrackUp mode
+        //mMoveY = mLocationView.getTrackUp() ? 300 : 0; //Is this in pixels, so differs by device?  Negative number is upwards
+        mMoveY = 0; //Is this in pixels, so differs by device?  Negative number is upwards
         mMoveXTile = 0;
         mMoveYTile = 0;
         mMoveXTileOld = 0;
