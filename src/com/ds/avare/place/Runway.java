@@ -106,6 +106,7 @@ public class Runway {
     /**
      * 
      * @return
+     * string Runway Number
      */
     public String getNumber() {
         return mNumber;
@@ -114,6 +115,7 @@ public class Runway {
     /**
      * 
      * @return
+     * float True heading of runway
      */
     public float getTrue() {
         float ret = INVALID;

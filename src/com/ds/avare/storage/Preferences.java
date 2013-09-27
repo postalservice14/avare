@@ -423,9 +423,9 @@ public class Preferences {
      * 
      * @return
      */
-    public boolean isPortrait() {
-        return(mPref.getBoolean(mContext.getString(R.string.OrientationP), true));
-    }
+//    public boolean isPortrait() {
+//        return(mPref.getBoolean(mContext.getString(R.string.OrientationP), true));
+//    }
     /**
      * 
      * @return integer 0=auto,1=portrait,2=landscape

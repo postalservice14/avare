@@ -130,7 +130,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * @return
      */
     private String getMainDb() {
-        return "other.db";
+        return "main.db";
     }
 
     /**
@@ -810,10 +810,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * Find the closets tiles to current position
      * @param lon
      * @param lat
-     * @param offset
-     * @param p
-     * @param names
-     * @return
+     * @return string ret
      */
     public String findClosestAirportID(double lon, double lat) {
 
@@ -853,7 +850,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * Find the lat/lon of an airport
      * @param name
      * @param type
-     * @return
+     * @return string ret
      */
     public String findLonLat(String name, String type) {
 
