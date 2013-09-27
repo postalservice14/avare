@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 import com.ds.avare.R;
+//import com.ds.avare.LocationView.ClosestAirportTask;
 import com.ds.avare.animation.AnimateButton;
 import com.ds.avare.gdl90.AdsbStatus;
 import com.ds.avare.gdl90.Id6364Product;
@@ -29,6 +30,7 @@ import com.ds.avare.touch.GestureInterface;
 import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.NetworkHelper;
 
+import android.R.string;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
@@ -40,6 +42,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Paint.Align;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -439,7 +443,31 @@ public class LocationActivity extends Activity implements Observer {
 
             @Override
             public void onClick(View v) {
+            	
+            	//JM Maybe put a toast up here displaying location?
                 mLocationView.center();
+//                mToast.setDuration(Toast.LENGTH_LONG);
+//                mToast.setGravity(Gravity.TOP |Gravity.CENTER_HORIZONTAL, 0, 250);
+//                String mText = "You are 5 miles from nowhere";
+//                
+//                int airportnum = mService.getArea().getAirportsNumber();
+//                GpsParams params = new GpsParams(location);
+//                if(0 == airportnum) {
+//                	mText = "There are no airports in your area";
+//                }
+//                mToast.setText(mText);
+//                //Get my location
+//                //Find closest airport to our location
+//                findClosestAirportID(getLongitude(), getLatitude());
+//                //Get lon/lat of that airport
+//                findLonLat(String name, String type);
+//                //Find distance between those points
+//                Projection(double lon1, double lat1, double lon2, double lat2);
+//                
+//                
+//                
+//                getGeneralDirectionFrom(double declination);
+//                mToast.show();
             }
             
         });
