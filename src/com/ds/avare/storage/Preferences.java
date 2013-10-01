@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Zubair Khan (governer@gmail.com), , Jesse McGraw (jlmcgraw@gmail.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -344,9 +344,20 @@ public class Preferences {
      * @return
      */
     public boolean shouldLeaveRunning() {
-        return(mPref.getBoolean(mContext.getString(R.string.LeaveRunning), true));
+    	return(mPref.getBoolean(mContext.getString(R.string.LeaveRunning), true));
     }
-
+    /** Return the state of the "Track Up" preference
+     * 
+     * @return
+     * True/False
+     */
+    public boolean getTrackUp() {
+        return(mPref.getBoolean("TrackUpPrefKey", false));
+    }
+    public void setTrackUp(boolean value) {
+    	mPref.edit().putBoolean("TrackUpPrefKey", value);
+    }
+	 //mPref.edit().putBoolean("TrackUpPrefKey", mLocationView.toggleTrackUp()).apply();
     /**
      * 
      * @return
@@ -388,11 +399,25 @@ public class Preferences {
     }
 
     /**
-     * 
+     * Should we show extended runway centerlines?
      * @return
      */
     public boolean shouldExtendRunways() {
         return(mPref.getBoolean(mContext.getString(R.string.Runways), true));
+    }
+    /**
+     * Should we show pattern lines?
+     * @return
+     */
+    public boolean shouldShowPattern() {
+        return(mPref.getBoolean("RunwayPatternLineKey", true));
+    }
+    /**
+     * Should we show distance rings?
+     * @return
+     */
+    public boolean shouldShowDistanceRings() {
+        return(mPref.getBoolean("DistanceRingsKey", true));
     }
 
     /**
