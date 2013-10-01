@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Zubair Khan (governer@gmail.com) , Jesse McGraw (jlmcgraw@gmail.com)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -20,6 +20,7 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -49,10 +50,18 @@ public class MainActivity extends TabActivity {
      * 
      */
     public void onCreate(Bundle savedInstanceState) {
-        
+      
         Helper.setTheme(this);
         super.onCreate(savedInstanceState);
-         
+        
+        final boolean DEVELOPER_MODE = false;
+		if (DEVELOPER_MODE) {
+
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+					.detectAll().penaltyLog().penaltyDialog().build());
+			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+					.detectAll().penaltyLog().build());
+		}
         requestWindowFeature(Window.FEATURE_NO_TITLE);
                 
         setContentView(R.layout.main);
