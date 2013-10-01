@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Zubair Khan (governer@gmail.com), Jesse McGraw (jlmcgraw@gmail.com)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -628,20 +629,19 @@ public class LocationActivity extends Activity implements Observer {
         });
 
         mTrackButton = (ToggleButton)view.findViewById(R.id.location_button_track);
+        
         mTrackButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                
-                /*
-                 * Bring up preferences
-                 */
-                if(mTrackButton.getText().equals(getString(R.string.TrackUp))) {
-                    mLocationView.setTrackUp(true);
-                }
-                else {
-                    mLocationView.setTrackUp(false);
-                }
+            	  mLocationView.toggleTrackUp(); 
+//                if(mTrackButton.getText().equals(getString(R.string.TrackUp))) {
+//      
+//                    mLocationView.setTrackUp(true);
+//                }
+//                else {
+//                    mLocationView.setTrackUp(false);
+//                }
             }
             
         });
