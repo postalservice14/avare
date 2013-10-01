@@ -115,39 +115,38 @@ public class Runway {
     /**
      * 
      * @return
-     * float True heading of runway
+     * float True heading of runway if available, otherwise an estimation based on runway number
      */
-    public float getTrue() {
-        float ret = INVALID;
+	public float getTrue() {
+		float ret = INVALID;
 
-        /*
-         * Get true heading of runway if given
-         */
-        try {
-            ret = Integer.parseInt(mHeading);
-        }
-        catch (Exception e) {
-            
-        }
-        
-        
-        /*
-         * Nothing found in True, now parse number of runway and add variation.
-         */
-        if(INVALID == ret) {
-            try {
-                /*
-                 * This is an approxmation.
-                 */
-                ret = (float)Integer.parseInt(mNumber.replace("L", "").replace("R", "").replace("C", "")) * 10.f - (float)mVariation;
-            }
-            catch (Exception e) {
-                
-            }
-    
-        }
-        return ret;
-    }
+		/*
+		 * Get true heading of runway if given
+		 */
+		try {
+			ret = Integer.parseInt(mHeading);
+		} catch (Exception e) {
+
+		}
+
+		/*
+		 * Nothing found in True, now parse number of runway and add variation.
+		 */
+		if (INVALID == ret) {
+			try {
+				/*
+				 * This is an approximation.
+				 */
+				ret = (float) Integer.parseInt(mNumber.replace("L", "")
+						.replace("R", "").replace("C", ""))
+						* 10.f - (float) mVariation;
+			} catch (Exception e) {
+
+			}
+
+		}
+		return ret;
+	}
 
     /**
      * 
