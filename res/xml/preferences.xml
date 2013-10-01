@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Zubair Khan (governer@gmail.com), Jesse McGraw (jlmcgraw@gmail.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -88,6 +88,17 @@ Redistribution and use in source and binary forms, with or without modification,
             android:summary="@string/RunwaysSummary"
             android:title="@string/RunwaysLabel" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="RunwayPatternLineKey"
+            android:title="Show Runway Pattern Lines"
+            android:summary="Enable to show the preferred pattern for each runway"
+            android:dependency="@string/Runways"/>
+           <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="DistanceRingsKey"
+            android:title="Show distance rings"
+            android:summary="Enable to show distance rings (5nm, 10nm and 5 minute)"/>
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/Obstacles"
             android:summary="@string/ObstaclesSummary"
@@ -117,6 +128,11 @@ Redistribution and use in source and binary forms, with or without modification,
             android:key="@string/IconHelicopter"
             android:summary="@string/IconHelicopterSummary"
             android:title="@string/IconHelicopterLabel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="TrackUpPrefKey"
+            android:summary="Rotate maps so track is up"
+            android:title="Track Up" />
     </PreferenceCategory>
 
 </PreferenceScreen>
