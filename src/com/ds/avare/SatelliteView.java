@@ -66,7 +66,7 @@ public class SatelliteView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.WHITE);
         mPaint.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "LiberationMono-Bold.ttf"));
-        mPaint.setStrokeWidth(4);
+        mPaint.setStrokeWidth(4);  //TODO Should probably be dynamic based on device resolution
         mPaint.setShadowLayer(0, 0, 0, Color.BLACK);
         mLastTime = "";
     }
