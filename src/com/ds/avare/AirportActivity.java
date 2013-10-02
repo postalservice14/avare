@@ -236,7 +236,16 @@ public class AirportActivity extends Activity {
              * Add runways
              */
             for(Runway run : runways){
-                views[iterator] = "Runway-" + run.getNumber() + " (" + run.getLength() + "'x" + run.getWidth() + "')";
+				String mRunwayName = "Runway-";
+				if (run.getNumber().startsWith("H")) {
+					mRunwayName = "Helipad-";
+				} else {
+					if (run.getNumber().endsWith("W")) {
+						mRunwayName = "Waterway-";
+					}
+				}
+            	mRunwayName = mRunwayName+run.getNumber();
+            	views[iterator] = mRunwayName + " (" + run.getLength() + "'x" + run.getWidth() + "')";
                 values[iterator] = 
                         "DT: " + run.getThreshold() + ",\n" +
                         "Elev: " + run.getElevation() + ",\n" +
