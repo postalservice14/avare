@@ -283,6 +283,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 
         
         setOnTouchListener(this);
+        //Note that the ownship icon will not currently change until setup() is called again, eg on device rotation 
         mAirplaneBitmap = new BitmapHolder(context, mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
         mLineBitmap = new BitmapHolder(context, R.drawable.line);
         mLineHeadingBitmap = new BitmapHolder(context, R.drawable.line_heading);
@@ -880,8 +881,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 	private void drawAircraft(Canvas canvas) {
 		mPaint.setShadowLayer(0, 0, 0, 0);
 		mPaint.setColor(Color.WHITE);
-		mAirplaneBitmap = new BitmapHolder(getContext(),
-				mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
+//		mAirplaneBitmap = new BitmapHolder(getContext(),
+//				mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
 		if (null != mAirplaneBitmap 
 				//&& null == mPointProjection
 				) {
