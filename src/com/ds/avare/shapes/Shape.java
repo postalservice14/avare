@@ -20,6 +20,8 @@ import com.ds.avare.position.Scale;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.Typeface;
 
 /**
@@ -79,64 +81,96 @@ public abstract class Shape {
     }
 
     /**
-     * This will draw the TFR shape in canvas with given screen params
+     * This will draw the shape in canvas with given screen params
      * @param c
      * @param origin
      * @param scale
      * @param movement
      * @param paint
      */
-    public void drawShape(Canvas c, Origin origin, Scale scale, Movement movement, Paint paint, Typeface face) {
-        
-        float x = (float)origin.getOffsetX(mLonMin);
-        float y = (float)origin.getOffsetY(mLatMax);
-        float sx = scale.getScaleFactor();
-        float sy = scale.getScaleCorrected();
-        float facx = sx / (float)movement.getLongitudePerPixel();
-        float facy = sy / (float)movement.getLatitudePerPixel();
-        
-        /*
-         * Draw the TFR segment by segment
-         */
-        for(int coord = 0; coord < (getNumCoords() - 1); coord++) {
-            float x1 = x + (float)(mCoords.get(coord).getLongitude() - mLonMin) * facx;
-            float x2 = x + (float)(mCoords.get(coord + 1).getLongitude() - mLonMin) * facx;
-            float y1 = y + (float)(mCoords.get(coord).getLatitude() - mLatMax) * facy;
-            float y2 = y + (float)(mCoords.get(coord + 1).getLatitude() - mLatMax) * facy;
-            c.drawLine(x1, y1, x2, y2, paint);
-        }
-        
-        /*
-         * Save this
-         */
-        mXtop = x + (float)(mLonOfLatMax - mLonMin) * facx;
-        mYtop = y;
+	public void drawShape(Canvas c, Origin origin, Scale scale,	Movement movement, Paint paint, Typeface face) {
+		//drawShape is being called with no coordinates in mCoords, return if this is the case
+		if (getNumCoords() < 1)
+			return;
+		Style save_style = paint.getStyle();
+		int save_stroke = paint.getAlpha();
+		
+		float x = (float) origin.getOffsetX(mLonMin);
+		float y = (float) origin.getOffsetY(mLatMax);
+		float sx = scale.getScaleFactor();
+		float sy = scale.getScaleCorrected();
+		float facx = sx / (float) movement.getLongitudePerPixel();
+		float facy = sy / (float) movement.getLatitudePerPixel();
 
-        /*
-         * Do a tab on top of shape for TFR
-         */
-        if(this instanceof TFRShape) {
-            c.drawLine((float)mXtop, (float)mYtop, (float)mXtop, (float)mYtop - WIDTHTOP / 4, paint);
-        }
-        /*
-         * Draw pivots at end of track
-         */
-        else if (this instanceof TrackShape) {
-            if(getNumCoords() < 2) {
-                return;
-            }
-            float x1 = (float)origin.getOffsetX(mCoords.get(0).getLongitude());
-            float y1 = (float)origin.getOffsetY(mCoords.get(0).getLatitude());
-            c.drawCircle(x1, y1, 8, paint);
-            float x2 = (float)origin.getOffsetX(mCoords.get(getNumCoords() - 1).getLongitude());
-            float y2 = (float)origin.getOffsetY(mCoords.get(getNumCoords() - 1).getLatitude());
-            c.drawCircle(x2, y2, 8, paint);
-        }
-    }
+		// Create a new path starting at the 0th lat/lon pair of the shape 
+		Path polyPath = new Path();
+		float xStart = x + (float) (mCoords.get(0).getLongitude() - mLonMin) * facx;
+		float yStart = y + (float) (mCoords.get(0).getLatitude() - mLatMax) * facy;
+		polyPath.moveTo(xStart, yStart);
+
+		/*
+		 * Create the path segment by segment
+		 */
+		for (int coord = 0; coord < (getNumCoords() - 1); coord++) {
+			float x2 = x + (float) (mCoords.get(coord + 1).getLongitude() - mLonMin) * facx;
+			float y2 = y + (float) (mCoords.get(coord + 1).getLatitude() - mLatMax)	* facy;
+			polyPath.lineTo(x2, y2);
+		}
+
+		/*
+		 * Save this
+		 */
+		mXtop = x + (float) (mLonOfLatMax - mLonMin) * facx;
+		mYtop = y;
+
+		/*
+		 * Are we creating a TFR?
+		 */
+		if (this instanceof TFRShape) {
+			//Draw a solid tab on top of the shape
+			paint.setStyle(Style.STROKE);
+			paint.setAlpha(255);
+			c.drawLine((float) mXtop, (float) mYtop, (float) mXtop,	(float) mYtop - WIDTHTOP / 4, paint);
+			
+			//Draw the edge of the TFR in a solid color.  This is because you can't set different values for the fill and the stroke
+			//TODO This is causing flickering due to double-buffering.
+			
+			c.drawPath(polyPath, paint);
+			
+			// Close the poly
+			polyPath.close();
+			
+			//Now set up the final draw to shade the interior of the TFR
+			paint.setStyle(Style.FILL);
+			paint.setAlpha(32);
+		}
+		/*
+		 * Draw pivots at end of track
+		 */
+		else if (this instanceof TrackShape) {
+			
+			if (getNumCoords() < 2) {
+				return;
+			}
+			paint.setStyle(Style.STROKE);
+			paint.setAlpha(150); // Track line is partially transparent
+			float x1 = (float) origin.getOffsetX(mCoords.get(0).getLongitude());
+			float y1 = (float) origin.getOffsetY(mCoords.get(0).getLatitude());
+			c.drawCircle(x1, y1, 8, paint);
+			float x2 = (float) origin.getOffsetX(mCoords.get(getNumCoords() - 1).getLongitude());
+			float y2 = (float) origin.getOffsetY(mCoords.get(getNumCoords() - 1).getLatitude());
+			c.drawCircle(x2, y2, 8, paint);
+		}
+		//Finally draw the path on the screen
+		c.drawPath(polyPath, paint);
+		paint.setStyle(save_style);
+		paint.setAlpha(save_stroke);
+	}
+    
     
     /**
      * 
-     * @return
+     * @return the number of coordinate pairs
      */
     public int getNumCoords() {
         return mCoords.size();
@@ -152,8 +186,8 @@ public abstract class Shape {
     
     /**
      * 
-     * @param x
-     * @param y
+     * @param x X coordinate of touchpoint on screen
+     * @param y Y coordinate of touchpoint on screen
      * @return
      */
     public String getTextIfTouched(double x, double y) {
