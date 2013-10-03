@@ -93,11 +93,17 @@ Redistribution and use in source and binary forms, with or without modification,
             android:title="Show Runway Pattern Lines"
             android:summary="Enable to show the preferred pattern for each runway"
             android:dependency="@string/Runways"/>
-           <CheckBoxPreference
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="DistanceRingsKey"
             android:title="Show distance rings"
-            android:summary="Enable to show distance rings (5nm, 10nm and 5 minute)"/>
+            android:summary="Enable to show distance rings (5nm, 10nm and one based on speed)"/>
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:defaultValue="5"
+            android:key="SpeedRingKey"
+            android:title="Time for speed ring"
+            android:summary="Draw the speed ring this many minutes away based on current speed"
+            android:dependency="DistanceRingsKey"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/Obstacles"

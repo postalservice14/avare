@@ -82,7 +82,9 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     /**
      * The plane on screen
      */
-    private BitmapHolder               mAirplaneBitmap;
+    private BitmapHolder               mOwnshipBitmap;
+    private BitmapHolder               mAircraftBitmap;
+    private BitmapHolder               mNotMovingBitmap;
     private BitmapHolder               mRunwayBitmap;
     private BitmapHolder               mLineBitmap;
     private BitmapHolder               mObstacleBitmap;
@@ -202,9 +204,14 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private float                      mThreshold;
     
-
+    /*
+     * Are we displaying map as track-up (instead of default north up)
+     */
     private boolean                    mTrackUp;
-    
+    /*
+     * How many minutes out is our speed ring
+     */
+    private float mSpeedRingTime;
     /*
      * Shadow length 
      */
@@ -254,7 +261,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         mDraw = false;
         
         mPref = new Preferences(context);
-        mTrackUp = mPref.getTrackUp();   //TODO Set trackup based on preferences.  Right now the button can get out of sync
+        //TODO Set trackup based on preferences.  Right now the button can get out of sync
+        mTrackUp = mPref.getTrackUp();   
         //JM: Trying to set text size dynamically.  Only tested on Nexus 7, needs to be tested on other devices
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
         	 mTextDiv = 24.f;  //App is in Portrait mode
@@ -262,8 +270,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         else {
              mTextDiv = 15.f;      //App is in LandScape mode
         	 }
-        //mTextDiv = mPref.isPortrait() ? 24.f : 15.f;
-        
+    	// Get the time for the speed ring from preferences
+		mSpeedRingTime = mPref.getSpeedRingTime();  
         mFace = Typeface.createFromAsset(mContext.getAssets(), "LiberationMono-Bold.ttf");
         mPaint.setTypeface(mFace);
         mFontHeight = 8; // This is just double of all shadows
@@ -284,7 +292,9 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         
         setOnTouchListener(this);
         //Note that the ownship icon will not currently change until setup() is called again, eg on device rotation 
-        mAirplaneBitmap = new BitmapHolder(context, mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
+        mAircraftBitmap = new BitmapHolder(context, mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
+        mOwnshipBitmap = mAircraftBitmap;
+        mNotMovingBitmap = new BitmapHolder(context, R.drawable.blue_square);
         mLineBitmap = new BitmapHolder(context, R.drawable.line);
         mLineHeadingBitmap = new BitmapHolder(context, R.drawable.line_heading);
         mRunwayBitmap = new BitmapHolder(context, R.drawable.runway_extension);
@@ -294,7 +304,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         
         mGestureDetector = new GestureDetector(context, new GestureListener());
     }
-    
+
     /**
      * 
      */
@@ -593,7 +603,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         
         
         /*
-         * Draw TFRs, TFR
+         * Draw TFRs
          */            
         LinkedList<TFRShape> shapes = null;
         if(null != mService) {
@@ -722,38 +732,43 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * 
      * @param canvas
      */
-    private void drawTrack(Canvas canvas) {
-        if(null == mService) {
-            return;
-        }
+	private void drawTrack(Canvas canvas) {
+		if (null == mService) {
+			return;
+		}
 
-		if (mService.getDestination() != null 
-				//&& null == mPointProjection
-				) {
+		if (mService.getDestination() != null
+		// && null == mPointProjection
+		) {
 			if (mPref.isTrackEnabled() && (!mPref.isSimulationMode())) {
-		
+
 				mPaint.setColor(Color.MAGENTA);
 				// Converts 6 dip into its equivalent px
+
+				float px = TypedValue.applyDimension(
+						TypedValue.COMPLEX_UNIT_DIP, 6, getResources()
+								.getDisplayMetrics());
+
+				mPaint.setStrokeWidth(px);
+
 				
-				float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
-				
-				mPaint.setStrokeWidth(px); 
-				
-				mPaint.setAlpha(150); // Track line is partially transparent
 				// If destination set and no plan active
 				if (mService.getDestination().isFound()
 						&& !mService.getPlan().isActive()) {
 					mService.getDestination()
 							.getTrackShape()
-							.drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace);
+							.drawShape(canvas, mOrigin, mScale, mMovement,
+									mPaint, mFace);
 				} else if (mService.getPlan().isActive()) {
 					mService.getPlan()
 							.getTrackShape()
-							.drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace);
+							.drawShape(canvas, mOrigin, mScale, mMovement,
+									mPaint, mFace);
 				}
 			}
 			if (!mPref.isSimulationMode()) {
-				mPaint.setAlpha(0xFF); // Course and heading line are not transparent 
+				mPaint.setAlpha(0xFF); // Course and heading line are not
+										// transparent
 				/*
 				 * Draw course line towards destination
 				 */
@@ -766,19 +781,22 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 							mLineBitmap.getTransform(), mPaint);
 				}
 				/*
-				 * Draw heading line
+				 * Draw bearing line only if we're actually moving
 				 */
+
 				if (null != mLineHeadingBitmap && mGpsParams != null) {
-					rotateBitmapIntoPlace(mLineHeadingBitmap,
-							(float) mGpsParams.getBearing(),
-							mGpsParams.getLongitude(),
-							mGpsParams.getLatitude(), false);
-					canvas.drawBitmap(mLineHeadingBitmap.getBitmap(),
-							mLineHeadingBitmap.getTransform(), mPaint);
+					if (mGpsParams.getSpeed() > 1) {
+						rotateBitmapIntoPlace(mLineHeadingBitmap,
+								(float) mGpsParams.getBearing(),
+								mGpsParams.getLongitude(),
+								mGpsParams.getLatitude(), false);
+						canvas.drawBitmap(mLineHeadingBitmap.getBitmap(),
+								mLineHeadingBitmap.getTransform(), mPaint);
+					}
 				}
 			}
 		}
-    }
+	}
 
     /**
      * 
@@ -881,24 +899,32 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 	private void drawAircraft(Canvas canvas) {
 		mPaint.setShadowLayer(0, 0, 0, 0);
 		mPaint.setColor(Color.WHITE);
-//		mAirplaneBitmap = new BitmapHolder(getContext(),
-//				mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
-		if (null != mAirplaneBitmap 
-				//&& null == mPointProjection
-				) {
+		if (null != mOwnshipBitmap
+		// && null == mPointProjection
+		) {
 
 			/*
 			 * Rotate and move to a panned location
 			 */
-			rotateBitmapIntoPlace(mAirplaneBitmap,
+			if (mGpsParams.getSpeed() < 1) {
+				mOwnshipBitmap = mNotMovingBitmap;
+
+			} else {
+				mOwnshipBitmap = mAircraftBitmap;
+
+			}
+			rotateBitmapIntoPlace(mOwnshipBitmap,
 					(float) mGpsParams.getBearing(), mGpsParams.getLongitude(),
 					mGpsParams.getLatitude(), true);
-			canvas.drawBitmap(mAirplaneBitmap.getBitmap(),
-					mAirplaneBitmap.getTransform(), mPaint);
+			canvas.drawBitmap(mOwnshipBitmap.getBitmap(),
+					mOwnshipBitmap.getTransform(), mPaint);
 		}
 
 	}
-
+    /**
+     * 
+     * @param canvas
+     */
 	private void drawRings(Canvas canvas) {
 		if (mService == null) {
 			return;
@@ -907,17 +933,10 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		float y = (float) mOrigin.getOffsetY(mGpsParams.getLatitude());
 		float speed = (float) mGpsParams.getSpeed();
 		
-        
-        
-        //float sx = mScale.getScaleFactor();
         float sy = mScale.getScaleCorrected();
-        //float facx = sx / (float)mMovement.getLongitudePerPixel();
         float facy = sy / (float)mMovement.getLatitudePerPixel();
         float mPixPerNm = Math.abs(facy/60);
-      //TODO BUGFIX the .02 here is a guess, need to get more exact number        
-//		final float nautical_mile = (float) (mOrigin.getOffsetX(mGpsParams
-//				.getLatitude() + .02) - mOrigin.getOffsetX(mGpsParams
-//				.getLatitude()));
+       
 		Paint rPaint = new Paint(mPaint);
 
 		rPaint.setShadowLayer(0, 0, 0, 0);
@@ -933,17 +952,18 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		rPaint.setColor(Color.YELLOW);
 		rPaint.setAlpha(160);
 		canvas.drawCircle(x, y, 10 * mPixPerNm, rPaint);
-		// 5 minute speed ring
+		//Speed*time ring
 		rPaint.setColor(Color.WHITE);
-		rPaint.setAlpha(255);
-		//canvas.drawText(String.valueOf(mPixPerNm), x, y, rPaint);
-		rPaint.setAlpha(160);
-		canvas.drawCircle(x, y, (5/60)*speed*mPixPerNm, rPaint);
+		rPaint.setAlpha(192);
+		canvas.drawCircle(x, y, (mSpeedRingTime/60)*speed*mPixPerNm, rPaint);
 	}
 
 	
-
-	private void drawRunwaysNew(Canvas canvas) {
+    /**
+     * 
+     * @param canvas
+     */
+	private void drawRunways(Canvas canvas) {
 		if (null == mService) {
 			return;
 		}
@@ -1023,8 +1043,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					rPaint.setShadowLayer(0, 0, 0, 0);
 					// TODO BUGFIX The dashed effect doesn't seem to work. May
 					// be due to Android bug with hardware acceleration
-					rPaint.setPathEffect(new DashPathEffect(new float[] { 10,
-							20 }, 0));
+					//rPaint.setPathEffect(new DashPathEffect(new float[] { 10,
+					//		20 }, 0));
 
 					// Draw the extended runway centerline
 					canvas.drawLine(x, y, mRunwayNumberCoordinatesX,
@@ -1041,13 +1061,14 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 							vXP = -(vXP);
 							vYP = -(vYP);
 						}
-						rPaint.setColor(Color.DKGRAY);
+						rPaint.setColor(Color.BLUE);
 						rPaint.setStyle(Style.FILL_AND_STROKE);
 						rPaint.setAlpha(162);
 						// TODO BUGFIX The dashed effect doesn't seem to work.
 						// May be due to Android bug with hardware acceleration
-						rPaint.setPathEffect(new DashPathEffect(new float[] {
-								10, 20 }, 0));
+						//rPaint.setPathEffect(new DashPathEffect(new float[] {
+						//		10, 20 }, 0));
+						
 						// Draw the base leg of the pattern
 						canvas.drawLine(mRunwayNumberCoordinatesX,
 								mRunwayNumberCoordinatesY,
@@ -1117,7 +1138,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * Does pretty much all drawing on screen
      */
 	private void drawMap(Canvas canvas) {
-		//Set the text size depending mTextDic, which changes with device orientation
+		mTrackUp=mPref.getTrackUp();
+		//Set the text size depending on mTextDiv, which changes with device orientation
 		mPaint.setTextSize(getHeight() / mTextDiv);
 		mTextPaint.setTextSize(getHeight() / mTextDiv * 3 / 4);
 
@@ -1128,14 +1150,16 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 			 */
 			float x = (float) mOrigin.getOffsetX(mGpsParams.getLongitude());
 			float y = (float) mOrigin.getOffsetY(mGpsParams.getLatitude());
+			//Move the display so we can see more of what's in front of us
+			canvas.translate(0, canvas.getHeight()/4);
 			canvas.rotate(-(int) mGpsParams.getBearing(), x, y);
 		}
 		drawTiles(canvas);
 		drawNexrad(canvas);
 		drawDrawing(canvas);
-		// drawRunways(canvas);
+		 
 		if (mPref.shouldExtendRunways()) {
-			drawRunwaysNew(canvas);
+			drawRunways(canvas);
 		}
 		drawTFR(canvas);
 		drawTrack(canvas);
@@ -1143,12 +1167,13 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 			drawObstacles(canvas);
 		}
 		drawAircraft(canvas);
+		if (mPref.shouldShowDistanceRings()) {
+			drawRings(canvas);
+			}
 		if (mTrackUp) {
 			canvas.restore();
 		}
-		if (mPref.shouldShowDistanceRings()) {
-		drawRings(canvas);
-		}
+	
 		drawTfrText(canvas);
 		drawCornerTexts(canvas);
 	}    
@@ -1349,9 +1374,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
                  */
                 LinkedList<TFRShape> shapes = mService.getTFRShapes();
                 if(null != shapes) {
-                    for(int shape = 0; shape < shapes.size(); shape++) {
-                        shapes.get(shape).prepareIfVisible(centerTile.getLongitude(),
-                                centerTile.getLatitude());
+                    for(int shape = 0; shape < shapes.size(); shape++) {	//TODO BUGFIX Should this be shapes.size()-1?
+                        shapes.get(shape).prepareIfVisible(centerTile.getLongitude(), centerTile.getLatitude());
                     }
                 }
                             
@@ -1520,7 +1544,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
             }
 
             /*
-             * XXX:
+             * TODO:
              * For track up, currently there is no math to find anything with long press.
              */
             if(mTrackUp) {

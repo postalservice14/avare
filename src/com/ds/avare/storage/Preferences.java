@@ -354,9 +354,17 @@ public class Preferences {
     public boolean getTrackUp() {
         return(mPref.getBoolean("TrackUpPrefKey", false));
     }
-    public void setTrackUp(boolean value) {
-    	mPref.edit().putBoolean("TrackUpPrefKey", value);
+    /** Return the value of the SpeedRingTime preference
+     * 
+     * @return
+     * True/False
+     */
+    public int getSpeedRingTime() {
+        return(Integer.parseInt(mPref.getString("SpeedRingKey","5")));
     }
+//    public void setTrackUp(boolean value) {
+//    	mPref.edit().putBoolean("TrackUpPrefKey", value);
+//    }
 	 //mPref.edit().putBoolean("TrackUpPrefKey", mLocationView.toggleTrackUp()).apply();
     /**
      * 
