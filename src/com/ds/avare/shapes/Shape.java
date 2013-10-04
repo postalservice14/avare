@@ -137,7 +137,7 @@ public abstract class Shape {
 			
 			c.drawPath(polyPath, paint);
 			
-			// Close the poly
+			// Close the polygon
 			polyPath.close();
 			
 			//Now set up the final draw to shade the interior of the TFR

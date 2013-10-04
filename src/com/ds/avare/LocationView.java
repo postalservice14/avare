@@ -306,7 +306,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     }
 
     /**
-     * 
+     * Update mOrigin with info related to current location 
      */
     private void tfrReset() {
         mOrigin.update(mGpsParams, mScale, mPan,
@@ -952,9 +952,11 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		rPaint.setColor(Color.YELLOW);
 		rPaint.setAlpha(160);
 		canvas.drawCircle(x, y, 10 * mPixPerNm, rPaint);
-		//Speed*time ring
+	
 		rPaint.setColor(Color.WHITE);
-		rPaint.setAlpha(192);
+		rPaint.setAlpha(255);
+		canvas.drawText(String.valueOf(mPixPerNm)+","+String.valueOf(speed*(mSpeedRingTime/60)), x, y, rPaint);
+		//rPaint.setAlpha(160);
 		canvas.drawCircle(x, y, (mSpeedRingTime/60)*speed*mPixPerNm, rPaint);
 	}
 
@@ -971,7 +973,16 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		if (null != mService.getDestination()
 		// && null == mPointProjection
 		) {
-
+			float x;
+			float y;
+			double lon;
+			double lat;
+			int xfactor;
+			int yfactor;
+			int mRunwayLineLength = getHeight()/6; //The length of each runway line
+			float vXP;  
+			float vYP;
+			
 			LinkedList<Runway> runways = mService.getDestination().getRunways();
 			if (runways != null) {
 				//Copy the existing paint to a new paint so we don't mess it up
@@ -992,10 +1003,9 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					 * Get lat/lon of the runway. If either one is invalid, use
 					 * airport lon/lat
 					 */
-					double lon = r.getLongitude();
-					double lat = r.getLatitude();
-					float x;
-					float y;
+					lon = r.getLongitude();
+					lat = r.getLatitude();
+					
 					if (Runway.INVALID == lon || Runway.INVALID == lat) {
 
 						lon = mService.getDestination().getLocation()
@@ -1012,15 +1022,14 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 
 					String num = r.getNumber(); // The runway number, ie. What's
 												// painted on the runway
-					int xfactor;
-					int yfactor;
+			
 					/*
 					 * If there are parallel runways, draw their text displaced
 					 * so it does not overlap
 					 */
 					// TODO BUGFIX Make this length dynamic based on device
 					// size/resolution
-					int mRunwayLineLength = 250;
+					
 					if (num.contains("C")) {
 						xfactor = yfactor = mRunwayLineLength * 3 / 4;
 					} else if (num.contains("L")) {
@@ -1053,8 +1062,9 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					if (mPref.shouldShowPattern()) {
 						// Get a vector perpendicular to the vector of the
 						// runway heading line
-						float vXP = -(mRunwayNumberCoordinatesY - y);
-						float vYP = (mRunwayNumberCoordinatesX - x);
+						vXP = -(mRunwayNumberCoordinatesY - y);
+						vYP = (mRunwayNumberCoordinatesX - x);
+						
 						// Reverse the vector of the pattern line if right
 						// traffic is indicated for this runway
 						if (r.getPattern().equalsIgnoreCase("Right")) {
@@ -1121,10 +1131,10 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					rPaint.setAlpha(0xff);
 					rPaint.setTextAlign(Paint.Align.LEFT);
 
+					//Draw the text so it's centered within the shadow rectangle, which is itself centered at the end of the extended runway centerline
 					canvas.drawText(num,
 							mRunwayNumberCoordinatesX - (rect.width() / 2),
-							mRunwayNumberCoordinatesY
-									+ (rect.height() / 2 - SHADOW * 2), rPaint);
+							mRunwayNumberCoordinatesY + (rect.height() / 2 - SHADOW * 2), rPaint);
 					if (mTrackUp) {
 						canvas.restore();
 					}

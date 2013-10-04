@@ -13,9 +13,10 @@ Redistribution and use in source and binary forms, with or without modification,
     package="com.ds.avare"
     android:versionCode="129"
     android:versionName="5.0.9" >
+    android:hardwareAccelerated="false"
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

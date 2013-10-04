@@ -481,7 +481,7 @@ public class LocationActivity extends Activity implements Observer {
             public void onClick(View v) {
                 AnimateButton s = new AnimateButton(getApplicationContext(), mSimButton, AnimateButton.DIRECTION_R_L);
                 AnimateButton z = new AnimateButton(getApplicationContext(), mZoom, AnimateButton.DIRECTION_R_L);
-                AnimateButton t = new AnimateButton(getApplicationContext(), mTrackButton, AnimateButton.DIRECTION_R_L);
+                //AnimateButton t = new AnimateButton(getApplicationContext(), mTrackButton, AnimateButton.DIRECTION_R_L);
                 AnimateButton c = new AnimateButton(getApplicationContext(), mChartSpinner, AnimateButton.DIRECTION_R_L, (View[])null);
                 AnimateButton b = new AnimateButton(getApplicationContext(), mHelpButton, AnimateButton.DIRECTION_L_R, mCenterButton, mMenuButton, mDrawButton);
                 AnimateButton d = new AnimateButton(getApplicationContext(), mDownloadButton, AnimateButton.DIRECTION_L_R, (View[])null);
@@ -490,7 +490,7 @@ public class LocationActivity extends Activity implements Observer {
                 d.animate(true);
                 c.animate(true);
                 s.animate(true);
-                t.animate(true);
+                //t.animate(true);
                 f.animate(true);
                 z.animate(true);
             }
@@ -628,23 +628,23 @@ public class LocationActivity extends Activity implements Observer {
             
         });
 
-        mTrackButton = (ToggleButton)view.findViewById(R.id.location_button_track);
-        
-        mTrackButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-            	  mLocationView.toggleTrackUp(); 
-//                if(mTrackButton.getText().equals(getString(R.string.TrackUp))) {
-//      
-//                    mLocationView.setTrackUp(true);
-//                }
-//                else {
-//                    mLocationView.setTrackUp(false);
-//                }
-            }
-            
-        });
+//        mTrackButton = (ToggleButton)view.findViewById(R.id.location_button_track);
+//        
+//        mTrackButton.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//            	  mLocationView.toggleTrackUp(); 
+////                if(mTrackButton.getText().equals(getString(R.string.TrackUp))) {
+////      
+////                    mLocationView.setTrackUp(true);
+////                }
+////                else {
+////                    mLocationView.setTrackUp(false);
+////                }
+//            }
+//            
+//        });
 
         /*
          * Draw
