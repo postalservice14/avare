@@ -21,6 +21,7 @@ import com.ds.avare.gdl90.Id6364Product;
 import com.ds.avare.gdl90.NexradBitmap;
 import com.ds.avare.gdl90.NexradImage;
 import com.ds.avare.gps.*;
+import com.ds.avare.network.MetFetcher;
 import com.ds.avare.network.TFRFetcher;
 import com.ds.avare.place.Area;
 import com.ds.avare.place.Destination;
@@ -29,6 +30,7 @@ import com.ds.avare.position.Movement;
 import com.ds.avare.position.Pan;
 import com.ds.avare.shapes.Draw;
 import com.ds.avare.shapes.TFRShape;
+import com.ds.avare.shapes.MetShape;
 import com.ds.avare.shapes.TileMap;
 import com.ds.avare.storage.DataSource;
 import com.ds.avare.utils.BitmapHolder;
@@ -107,6 +109,11 @@ public class StorageService extends Service {
      * TFR list
      */
     private TFRFetcher mTFRFetcher;
+    
+    /**
+     * AIRMET and SIGMET list
+     */
+    private MetFetcher mMetFetcher;
 
     /**
      * For performing periodic activities.
@@ -190,6 +197,8 @@ public class StorageService extends Service {
                 
         mTFRFetcher = new TFRFetcher(getApplicationContext());
         mTFRFetcher.parse();
+        mMetFetcher = new MetFetcher(getApplicationContext());
+        mMetFetcher.parse();
         mTimer = new Timer();
         TimerTask gpsTime = new UpdateTask();
         mIsGpsOn = false;
@@ -378,6 +387,21 @@ public class StorageService extends Service {
      */
     public LinkedList<TFRShape> getTFRShapes() {
         return mTFRFetcher.getShapes();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public MetFetcher getMetFetcher() {
+        return mMetFetcher;
+    }
+    
+    /**
+     * @return
+     */
+    public LinkedList<MetShape> getMetShapes() {
+        return mMetFetcher.getShapes();
     }
 
     /**

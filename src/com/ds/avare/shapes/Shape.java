@@ -40,6 +40,15 @@ public abstract class Shape {
     private double mXtop;
     private double mYtop;
     private String mText;
+    private int mShapeColor;  //The color to draw this shape in
+    private String min_ft_msl;
+    private String max_ft_msl;
+    private String movement_dir_degrees;
+    private String movement_speed_kt;
+    private String hazard;
+    private String severity;
+    private String airsigmet_type;
+
     
     private static final int WIDTHTOP = 60;
     
@@ -60,7 +69,8 @@ public abstract class Shape {
 
     /**
      * 
-     * @param coords
+     * @param 
+     * 
      */
     public void add(double lon, double lat) {
         Coordinate c = new Coordinate(lon, lat);
@@ -78,6 +88,14 @@ public abstract class Shape {
             mLatMax = lat;
             mLonOfLatMax = lon;
         }
+    }
+    /**
+     * 
+     * @param 
+     * 
+     */
+    public void setColor(int _color) {
+    	mShapeColor = _color;         
     }
 
     /**
@@ -126,16 +144,18 @@ public abstract class Shape {
 		/*
 		 * Are we creating a TFR?
 		 */
-		if (this instanceof TFRShape) {
+		if (this instanceof TFRShape || this instanceof MetShape) {
 			//Draw a solid tab on top of the shape
 			paint.setStyle(Style.STROKE);
+			paint.setColor(mShapeColor);  //TFRs and METshapes have their color defined in them
 			paint.setAlpha(255);
 			c.drawLine((float) mXtop, (float) mYtop, (float) mXtop,	(float) mYtop - WIDTHTOP / 4, paint);
 			
 			//Draw the edge of the TFR in a solid color.  This is because you can't set different values for the fill and the stroke
 			//TODO This is causing flickering due to double-buffering.
-			
+			if (!c.quickReject(polyPath, Canvas.EdgeType.AA)){;
 			c.drawPath(polyPath, paint);
+			}
 			
 			// Close the polygon
 			polyPath.close();
@@ -162,7 +182,9 @@ public abstract class Shape {
 			c.drawCircle(x2, y2, 8, paint);
 		}
 		//Finally draw the path on the screen
+		if (!c.quickReject(polyPath, Canvas.EdgeType.AA)){;
 		c.drawPath(polyPath, paint);
+		}
 		paint.setStyle(save_style);
 		paint.setAlpha(save_stroke);
 	}

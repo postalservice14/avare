@@ -25,6 +25,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -49,6 +51,7 @@ import com.ds.avare.position.Origin;
 import com.ds.avare.position.Pan;
 import com.ds.avare.position.Projection;
 import com.ds.avare.position.Scale;
+import com.ds.avare.shapes.MetShape;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.shapes.Tile;
 import com.ds.avare.storage.DataSource;
@@ -605,16 +608,17 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         /*
          * Draw TFRs
          */            
-        LinkedList<TFRShape> shapes = null;
+        LinkedList<TFRShape> tfrshapes = null;
         if(null != mService) {
-            shapes = mService.getTFRShapes();
+            tfrshapes = mService.getTFRShapes();
         }
-        if(null != shapes) {
+        if(null != tfrshapes) {
             mPaint.setColor(Color.RED);
             mPaint.setStrokeWidth(8); //TODO Should probably be dynamic based on device resolution
             mPaint.setShadowLayer(0, 0, 0, 0);
-            for(int shape = 0; shape < shapes.size(); shape++) {
-                TFRShape cshape = shapes.get(shape);
+            //Log.d("drawTFR ","TFR shapes "+Integer.toString(tfrshapes.size()));
+            for(int shape = 0; shape < tfrshapes.size(); shape++) {
+                TFRShape cshape = tfrshapes.get(shape);
                 if(cshape.isVisible()) {
                     /*
                      * Find offsets of TFR then draw it
@@ -626,6 +630,34 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         }
     }
 
+    private void drawMets(Canvas canvas) {
+        mPaint.setColor(Color.BLUE);
+        mPaint.setShadowLayer(0, 0, 0, 0);    
+        
+        /*
+         * Draw METs
+         */            
+        LinkedList<MetShape> metshapes = null;
+        if(null != mService) {
+        	metshapes = mService.getMetShapes();
+        }
+        if(null != metshapes) {
+            mPaint.setColor(Color.BLUE);
+            mPaint.setStrokeWidth(8); //TODO Should probably be dynamic based on device resolution
+            mPaint.setShadowLayer(0, 0, 0, 0);
+            Log.d("drawMets ","METs shapes "+Integer.toString(metshapes.size()));
+            for(int shape = 0; shape < metshapes.size(); shape++) {
+                MetShape cshape = metshapes.get(shape);
+                //if(cshape.isVisible()) {
+                    /*
+                     * Find offsets of TFR then draw it
+                     */
+                	
+                    cshape.drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace);
+                //}
+            }
+        }
+    }
 
     /**
      * 
@@ -952,11 +984,10 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		rPaint.setColor(Color.YELLOW);
 		rPaint.setAlpha(160);
 		canvas.drawCircle(x, y, 10 * mPixPerNm, rPaint);
-	
+		// Speed ring, time comes from preferences
 		rPaint.setColor(Color.WHITE);
-		rPaint.setAlpha(255);
-		canvas.drawText(String.valueOf(mPixPerNm)+","+String.valueOf(speed*(mSpeedRingTime/60)), x, y, rPaint);
-		//rPaint.setAlpha(160);
+		//canvas.drawText(String.valueOf(mPixPerNm)+","+String.valueOf(speed*(mSpeedRingTime/60)), x, y, rPaint);
+		rPaint.setAlpha(160);
 		canvas.drawCircle(x, y, (mSpeedRingTime/60)*speed*mPixPerNm, rPaint);
 	}
 
@@ -979,7 +1010,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 			double lat;
 			int xfactor;
 			int yfactor;
-			int mRunwayLineLength = getHeight()/6; //The length of each runway line
+			int mRunwayLineLength = getHeight()/8; //The length of each runway line = 1/6 the height of the view
 			float vXP;  
 			float vYP;
 			
@@ -1172,6 +1203,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 			drawRunways(canvas);
 		}
 		drawTFR(canvas);
+		drawMets(canvas);
 		drawTrack(canvas);
 		if (mPref.shouldShowObstacles()) {
 			drawObstacles(canvas);
@@ -1381,6 +1413,9 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 
                 /*
                  * Update TFR shapes if they exist in this area.
+                 */
+                /*
+                 * This loop is currently unnecessary because we're saying everything is visibl, it should be commented out or the visibility routine needs to be fixed
                  */
                 LinkedList<TFRShape> shapes = mService.getTFRShapes();
                 if(null != shapes) {
