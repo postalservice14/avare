@@ -1010,7 +1010,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 			double lat;
 			int xfactor;
 			int yfactor;
-			int mRunwayLineLength = getHeight()/8; //The length of each runway line = 1/6 the height of the view
+			int mRunwayLineLength = getHeight()/8; //The length of each runway line = 1/8 the height of the view
 			float vXP;  
 			float vYP;
 			

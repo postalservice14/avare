@@ -567,6 +567,10 @@ public class Helper {
 				while ((line = br.readLine()) != null) {
 					String tokens[] = line.split(",");
 					int color = 10;
+					double lon;
+					double lat;
+					double centerLat = 0;
+					double centerLon = 0;
 					// Assume any line with more than 2 tokens has valid data
 					if (tokens.length > 2) {
 						// First token is the MET description
@@ -597,10 +601,17 @@ public class Helper {
 						// are separated by ":")
 						for (int id = 0; id < lonlats.length; id++) {
 							String lonlat[] = lonlats[id].split(":");
-							//Log.d("GetShapesInMet.addpoints ",lonlat[1]+","+lonlat[0]);
+							//Log.d("GetShapesInMet.addpoints ",lat+","+lon);
 							//Add the coordinates to the shape
-							shape.add(Double.parseDouble(lonlat[0]), Double.parseDouble(lonlat[1]));
+							lon = Double.parseDouble(lonlat[0]);
+							lat = Double.parseDouble(lonlat[1]);
+							centerLon = centerLon + lon;
+							centerLat = centerLat + lat;
+							shape.add(lon, lat);
 						}
+						centerLon = centerLon / lonlats.length;  //Calculate the average longitude point 
+						centerLat = centerLat / lonlats.length;  //Calculate the average latitude point
+						shape.addCenter(centerLon,centerLat);
 						shapeList.add(shape);
 					}
 				}

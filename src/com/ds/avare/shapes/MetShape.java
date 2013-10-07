@@ -24,6 +24,8 @@ public class MetShape extends Shape {
 
     private static final double MAXDISTANCE = 150;
 	private boolean mVisible;
+	private double mCenterLat = 0;
+	private double mCenterLon = 0;
 
     /**
      * 
@@ -52,4 +54,15 @@ public class MetShape extends Shape {
          */
        mVisible = true; 
     }
+/**
+ * 
+ * @param lon
+ * @param lat
+ */
+	public void addCenter(double lon, double lat) {
+		mCenterLon = lon;
+		mCenterLat = lat;
+		// TODO Auto-generated method stub
+		
+	}
 }
