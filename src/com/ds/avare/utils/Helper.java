@@ -13,12 +13,9 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.utils;
 
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -27,18 +24,15 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import com.ds.avare.R;
-import com.ds.avare.shapes.MetShape;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.storage.Preferences;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.WindowManager;
 
 /**
@@ -305,7 +299,12 @@ public class Helper {
 			break;
 		}
 
-	}   
+        /*
+         * Do not open keyboard automatically.
+         */
+        act.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+    }    
     
     /**
      * 
@@ -365,8 +364,11 @@ public class Helper {
                 if(year < 1 || month < 0 || day < 1 || hour < 0 || min < 0) {
                     return true;
                 }
+                /*
+                 * so many min expiry
+                 */
                 expires.set(year, month, day, hour, min);
-                expires.add(Calendar.HOUR_OF_DAY, 1);
+                expires.add(Calendar.MINUTE, NetworkHelper.EXPIRES);
             }
             else {
                 /*
@@ -506,25 +508,23 @@ public class Helper {
                         shapeList.add(shape);
                     }                                 
                     shape = new TFRShape(tokens[id].replace(
-                            "TFR:: ", ctx.getString(R.string.TFRReceived) + " " + time.toString() + "-").
-                            replace("Top", "\nTop").
-                            replace("Low", "\nLow").
-                            replace("Eff", "\nEff").
-                            replace("Exp", "\nExp"));
+                            "TFR:: ", "@ " + time.toString()).
+                            replace("Top", "\n" + "Top      ").
+                            replace("Low", "\n" + "Bottom   ").
+                            replace("Eff", "\n" + "Effective").
+                            replace("Exp", "\n" + "Expires  "));
                     continue;
                 }
                 try {
                     /*
                      * If we get bad input from Govt. site. 
                      */
-                	
                     shape.add(Double.parseDouble(tokens[id + 1]),
                             Double.parseDouble(tokens[id]));
                 }
                 catch (Exception e) {
                     
                 }
-                shape.setColor(Color.RED);  //TFRs are red
                 id++;
             }
             if(null != shape) {
@@ -535,98 +535,5 @@ public class Helper {
         return shapeList;
     }  
 
-	public static LinkedList<MetShape> getShapesInMet(Context ctx) {
-		InputStream fis;
-		BufferedReader br;
-		String line;
-
-		/*
-		 * Create a shapes list
-		 */
-		LinkedList<MetShape> shapeList = new LinkedList<MetShape>();
-
-		String filename = new Preferences(ctx).mapsFolder()	+ "/airsigmets.cache.csv";
- 
-		File file = new File(filename);
-		try {
-			if (file.exists()) {
-				Log.d("GetShapesInMet ","Opened "+filename);
-				Date time = new Date(file.lastModified());
-				fis = new FileInputStream(file);
-				br = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
-				//Skip 6 header lines.
-				for(int i=1;i<=6;i++)
-				{
-				    br.readLine();
-				    //Log.d("GetShapesInMet ","Read line "+ br.readLine());
-				}
-				/*
-				 * Now read from file line by line
-				 */
-				MetShape shape = null;
-				while ((line = br.readLine()) != null) {
-					String tokens[] = line.split(",");
-					int color = 10;
-					double lon;
-					double lat;
-					double centerLat = 0;
-					double centerLon = 0;
-					// Assume any line with more than 2 tokens has valid data
-					if (tokens.length > 2) {
-						// First token is the MET description
-						// This may be too long to use?
-						//Log.d("GetShapesInMet ","New shape "+ tokens[0]);
-						shape = new MetShape(tokens[0]);
-						String type = tokens[8];
-						
-						//TODO Find a cleaner way to do this
-						if (type.equals("TURB")) {
-							color = Color.GREEN;
-						} else if (type.equals("IFR")) {
-							color = Color.LTGRAY;
-						} else if (type.equals("MTN OBSCN")) {
-							color = Color.DKGRAY;
-						} else if (type.equals("CONVECTIVE")) {
-							color = Color.YELLOW;
-						} else if (type.equals("ICE")) {
-							color = Color.BLUE;
-						}
-						shape.setColor(color);
-						
-						// Token 3 has the longitude/latitude pairs separated by ";"
-						// Some may be bogus, how to filter?
-						String lonlats[] = tokens[3].split(";");
-
-						// Iterate through each of the pairs of longitude/latitude (which
-						// are separated by ":")
-						for (int id = 0; id < lonlats.length; id++) {
-							String lonlat[] = lonlats[id].split(":");
-							//Log.d("GetShapesInMet.addpoints ",lat+","+lon);
-							//Add the coordinates to the shape
-							lon = Double.parseDouble(lonlat[0]);
-							lat = Double.parseDouble(lonlat[1]);
-							centerLon = centerLon + lon;
-							centerLat = centerLat + lat;
-							shape.add(lon, lat);
-						}
-						centerLon = centerLon / lonlats.length;  //Calculate the average longitude point 
-						centerLat = centerLat / lonlats.length;  //Calculate the average latitude point
-						shape.addCenter(centerLon,centerLat);
-						shapeList.add(shape);
-					}
-				}
-
-				br.close();
-				br = null;
-				fis = null;
-			}
-		} catch (Exception e) {
-			Log.e("GetShapesInMet ",e.getMessage());
-			br = null;
-			fis = null;
-			return null;
-		}
-		return shapeList;
-	}
 
 }

@@ -12,8 +12,6 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare.shapes;
 
-import com.ds.avare.position.Projection;
-
 
 /**
  * 
@@ -22,34 +20,12 @@ import com.ds.avare.position.Projection;
  */
 public class TFRShape extends Shape {
 
-    private static final double MAXDISTANCE = 150;
-	private boolean mVisible;
+    private boolean mVisible;
 
     /**
      * 
      */
     public TFRShape(String text) {
         super(text);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public boolean isVisible() {
-        return mVisible;
-    }
-    
-    /**
-     * Update from display bound the visibility of this TFR shape,
-     * and if visible, draw in a bitmap.
-     * @param  Longitude of center tile
-     * @param  Latitude of center tile
-     */
-    public void prepareIfVisible(double lon, double lat) {
-        /**
-         * XXX: Draw all TFRs regardless of whether they're visible on screen or not. This is true since added continental zoom.
-         */
-       mVisible = true; 
-    }
+    }    
 }

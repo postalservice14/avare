@@ -426,14 +426,11 @@ public class ChartsDownloadActivity extends Activity {
                     if(mName.equals(getString(R.string.TFRs))) {
                         mService.getTFRFetcher().parse();
                     }
-                    /*
-                     * If airsigmets fetched, parse it. 
-                     * TODO We'll be getting the .gz version
-                     */
-                    if(mName.equals("airsigmets.cache.csv")) {
-                        mService.getMetFetcher().parse();
+                
+                    if(mName.equals("weather")) {
+                        mService.getInternetWeatherCache().parse(getApplicationContext());
                     }
-    
+                    
                     mChartAdapter.updateVersion(mName, mDownload.getVersion());
                     mChartAdapter.unsetChecked(mName);
                     mChartAdapter.refresh();

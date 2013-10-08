@@ -25,8 +25,9 @@ Redistribution and use in source and binary forms, with or without modification,
         android:entries="@array/UnitsD"
         android:entryValues="@array/UnitsDValues"
         android:key="@string/Units"
+        android:title="@string/UnitsLabel"
         android:summary="@string/UnitsSummary"
-        android:title="@string/UnitsLabel" />
+      />
 
     <PreferenceCategory
         android:summary="Storage and downloads"
@@ -65,6 +66,13 @@ Redistribution and use in source and binary forms, with or without modification,
             android:title="@string/GpsOffWarnLabel" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Display" >
+ <com.ds.avare.utils.ListPreferenceWithSummary
+        android:key="@string/AirSigType"
+        android:title="@string/AirSigTypeLabel"
+        android:summary="@string/AirSigTypeSummary"
+        android:entries="@array/AirSig"
+        android:defaultValue="NONE"
+        android:entryValues="@array/AirSig"/>
          <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/OrientationPref"

@@ -22,6 +22,7 @@ import com.ds.avare.place.Airport;
 import com.ds.avare.place.Destination;
 import com.ds.avare.place.Obstacle;
 import com.ds.avare.place.Runway;
+import com.ds.avare.position.Coordinate;
 import com.ds.avare.shapes.Tile;
 import com.ds.avare.utils.Helper;
 
@@ -117,16 +118,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String TILE_NAME = "name";
     
-    /**
-     * 
-     * @return
-     */
-    private String getFilesDb() {
-        int db = Integer.parseInt(mPref.getChartType());
-        String dbs[] = mContext.getResources().getStringArray(R.array.ChartDbNames);
-        return dbs[db];
-    }
-
     /**
      * 
      * @return
@@ -248,7 +239,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return c;
     }
-    
+
     /**
      * 
      * @param name
@@ -324,50 +315,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 
-     * @param name
-     * @return
-     */
-    public Tile findTile(String name) {
-        String query = "select * from " + TABLE_FILES + " where " + TILE_NAME + "=='" + name +"'";
-        Cursor cursor = doQuery(query, getFilesDb());
-        Tile tile = null;
-        try {
-            if(cursor != null) {
-                if(cursor.moveToFirst()) {
-        
-                    /*
-                     * Database
-                     */
-                    tile = new Tile(
-                            mPref,
-                            cursor.getString(0),
-                            cursor.getDouble(1),
-                            cursor.getDouble(2),
-                            cursor.getDouble(3),
-                            cursor.getDouble(4),
-                            cursor.getDouble(5),
-                            cursor.getDouble(6),
-                            cursor.getDouble(7),
-                            cursor.getDouble(8),
-                            cursor.getDouble(9),
-                            cursor.getDouble(10),
-                            cursor.getString(11));
-                    /*
-                     * Position on tile
-                     */
-                }
-            }
-        }
-        catch (Exception e) {
-        }
-        
-        closes(cursor);
-        return tile;            
-
-    }
-
-    /**
      * Find airports in an particular area
      * @param name
      * @param params
@@ -413,6 +360,38 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         closes(cursor);
     }
 
+    /**
+     * Find coordinate of center tile.
+     */
+    public Coordinate getCoordinate(String name) {
+            
+        Cursor cursor;
+        
+        String types = TABLE_AIRPORTS;
+        Coordinate c = null;
+
+        String qry = "select * from " + types + " where " + LOCATION_ID_DB + "=='" + name + "';";
+        cursor = doQuery(qry, getMainDb());
+
+        try {
+            if(cursor != null) {
+                if(cursor.moveToFirst()) {
+                        
+                        /*
+                         * Put ID and name first
+                         */
+                    c = new Coordinate(
+                            cursor.getDouble(LONGITUDE_COL),
+                            cursor.getDouble(LATITUDE_COL));
+                }
+            }
+        }
+        catch (Exception e) {
+        }
+        closes(cursor);
+        return c;
+    }
+    
     /**
      * Search something in database
      * @param name
@@ -724,37 +703,39 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     
                     runways.add(r);
                    
-                    //If the first runway is a helipad, don't add a second end
-					if (!run.toUpperCase().startsWith("H")) {
+                    /*
+                     * If the first runway is a helipad, don't add a second end
+                     */
+					if(!(run.startsWith("H") || run.startsWith("h"))) {
 						run = Helper.removeLeadingZeros(cursor.getString(5));
 						lat = Helper.removeLeadingZeros(cursor.getString(7));
 						lon = Helper.removeLeadingZeros(cursor.getString(9));
 
 						Elevation = cursor.getString(11);
-						if (Elevation.equals("")) {
+						if(Elevation.equals("")) {
 							Elevation = params.get("Elevation");
 						}
 						Heading = cursor.getString(13);
 						DT = cursor.getString(15);
-						if (DT.equals("")) {
+						if(DT.equals("")) {
 							DT = "0";
 						}
 						Lighted = cursor.getString(17);
-						if (Lighted.equals("0") || Lighted.equals("")) {
+						if(Lighted.equals("0") || Lighted.equals("")) {
 							Lighted = mContext.getString(R.string.No);
 						}
 						ILS = cursor.getString(19);
-						if (ILS.equals("")) {
+						if(ILS.equals("")) {
 							ILS = mContext.getString(R.string.No);
 						}
 						VGSI = cursor.getString(21);
-						if (VGSI.equals("")) {
+						if(VGSI.equals("")) {
 							VGSI = mContext.getString(R.string.No);
 						}
 						Pattern = cursor.getString(23);
-						if (Pattern.equals("Y")) {
+						if(Pattern.equals("Y")) {
 							Pattern = "Right";
-						} else {
+						}else {
 							Pattern = "Left";
 						}
 
@@ -897,72 +878,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Find the closets tiles to current position
-     * @param lon
-     * @param lat
-     * @param offset
-     * @param p
-     * @param names
-     * @return
-     */
-    public Tile findClosest(double lon, double lat, double offset[], double p[], int factor) {
-      
-        String qry =
-                "select * from " + TABLE_FILES + " where " + 
-                "((latul - " + lat + ") > 0) and " +
-                "((latll - " + lat + ") < 0) and " + 
-                "((lonul - " + lon + ") < 0) and " + 
-                "((lonur - " + lon + ") > 0) and " +
-                "level=='" + factor + "';";
-        
-        /*
-         * In case we fail
-         */
-        offset[0] = 0;
-        offset[1] = 0;
-        
-        Cursor cursor = doQuery(qry, getFilesDb());
-        
-        try {
-            if(cursor != null) {
-                if(cursor.moveToFirst()) {
-    
-                    /*
-                     * Database only return center tile, we find tiles around it using arithmetic
-                     */
-                    mCenterTile = new Tile(
-                            mPref,
-                            cursor.getString(0),
-                            cursor.getDouble(1),
-                            cursor.getDouble(2),
-                            cursor.getDouble(3),
-                            cursor.getDouble(4),
-                            cursor.getDouble(5),
-                            cursor.getDouble(6),
-                            cursor.getDouble(7),
-                            cursor.getDouble(8),
-                            cursor.getDouble(9),
-                            cursor.getDouble(10),
-                            cursor.getString(11));
-                  
-                    /*
-                     * Position on tile
-                     */
-                    offset[0] = mCenterTile.getOffsetX(lon);
-                    offset[1] = mCenterTile.getOffsetY(lat);
-                    p[0] = mCenterTile.getPx();
-                    p[1] = mCenterTile.getPy();
-                }
-            }
-        }
-        catch (Exception e) {
-        }
-        
-        closes(cursor);
-        return mCenterTile;        
-    }
-
-    /**
      * Search Minimums plates for this airport
      * @param airportId
      * @return Minimums
@@ -1088,7 +1003,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-
+    /**
+     * 
+     * @return
+     */
+    private String getFilesDb() {
+        int db = Integer.parseInt(mPref.getChartType());
+        String dbs[] = mContext.getResources().getStringArray(R.array.ChartDbNames);
+        return dbs[db];
+    }
 
     /**
      * 
@@ -1179,13 +1102,106 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * @param names
      * @return
      */
-   
+    public Tile findClosest(double lon, double lat, double offset[], double p[], int factor) {
+      
+        String qry =
+                "select * from " + TABLE_FILES + " where " + 
+                "((latul - " + lat + ") > 0) and " +
+                "((latll - " + lat + ") < 0) and " + 
+                "((lonul - " + lon + ") < 0) and " + 
+                "((lonur - " + lon + ") > 0) and " +
+                "level like '%" + factor + "%';";
+        
+        /*
+         * In case we fail
+         */
+        offset[0] = 0;
+        offset[1] = 0;
+        
+        Cursor cursor = doQueryFiles(qry, getFilesDb());
+        
+        try {
+            if(cursor != null) {
+                if(cursor.moveToFirst()) {
+    
+                    /*
+                     * Database only return center tile, we find tiles around it using arithmetic
+                     */
+                    mCenterTile = new Tile(
+                            mPref,
+                            cursor.getString(0),
+                            cursor.getDouble(1),
+                            cursor.getDouble(2),
+                            cursor.getDouble(3),
+                            cursor.getDouble(4),
+                            cursor.getDouble(5),
+                            cursor.getDouble(6),
+                            cursor.getDouble(7),
+                            cursor.getDouble(8),
+                            cursor.getDouble(9),
+                            cursor.getDouble(10),
+                            cursor.getString(11));
+                  
+                    /*
+                     * Position on tile
+                     */
+                    offset[0] = mCenterTile.getOffsetX(lon);
+                    offset[1] = mCenterTile.getOffsetY(lat);
+                    p[0] = mCenterTile.getPx();
+                    p[1] = mCenterTile.getPy();
+                }
+            }
+        }
+        catch (Exception e) {
+        }
+        
+        closesFiles(cursor);
+        return mCenterTile;        
+    }
+
     /**
      * 
      * @param name
      * @return
      */
-    
+    public Tile findTile(String name) {
+        String query = "select * from " + TABLE_FILES + " where " + TILE_NAME + "=='" + name +"'";
+        Cursor cursor = doQueryFiles(query, getFilesDb());
+        Tile tile = null;
+        try {
+            if(cursor != null) {
+                if(cursor.moveToFirst()) {
+        
+                    /*
+                     * Database
+                     */
+                    tile = new Tile(
+                            mPref,
+                            cursor.getString(0),
+                            cursor.getDouble(1),
+                            cursor.getDouble(2),
+                            cursor.getDouble(3),
+                            cursor.getDouble(4),
+                            cursor.getDouble(5),
+                            cursor.getDouble(6),
+                            cursor.getDouble(7),
+                            cursor.getDouble(8),
+                            cursor.getDouble(9),
+                            cursor.getDouble(10),
+                            cursor.getString(11));
+                    /*
+                     * Position on tile
+                     */
+                }
+            }
+        }
+        catch (Exception e) {
+        }
+        
+        closesFiles(cursor);
+        return tile;            
+
+    }
 
 
 }

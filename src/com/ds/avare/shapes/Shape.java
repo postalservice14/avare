@@ -69,8 +69,7 @@ public abstract class Shape {
 
     /**
      * 
-     * @param 
-     * 
+     * @param coords
      */
     public void add(double lon, double lat) {
         Coordinate c = new Coordinate(lon, lat);
@@ -99,7 +98,7 @@ public abstract class Shape {
     }
 
     /**
-     * This will draw the shape in canvas with given screen params
+     * This will draw the closed shape in canvas with given screen params
      * @param c
      * @param origin
      * @param scale

@@ -26,11 +26,20 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>Topographic Maps</item>
         <item>Heli/Other Charts</item>
     </string-array>
+
+    <string-array name="resGroupsPopout">
+        <item>METAR</item>
+        <item>TAF</item>
+        <item>AIREP/PIREP</item>
+        <item>TFR</item>
+        <item>AIRMET/SIGMET</item>
+    </string-array>
     
     <string-array name="resNameDatabase">
         <item>@string/databases</item>
         <item>@string/TFRs</item>
-    </string-array>
+        <item>@string/weather</item>
+     </string-array>
 
     <string-array name="resNameAFD">
         <item>A/FD NE</item>
@@ -307,7 +316,8 @@ Redistribution and use in source and binary forms, with or without modification,
     
     <string-array name="resFilesDatabase">
         <item>databases</item>
-        <item>@string/TFRs</item>
+        <item>TFRs</item>
+        <item>weather</item>
     </string-array>    
     <string-array name="resFilesIFRLE">
         <item>ELUS_NE</item>
@@ -639,6 +649,26 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>0</item>
         <item>1</item>
     </string-array>
+
+    <string-array name="AirSig">
+        <item>NONE</item>
+        <item>IFR AIRMET</item>
+        <item>ICE AIRMET</item>
+        <item>TURB AIRMET</item>
+        <item>MTN OBSCN AIRMET</item>
+        <item>CONVECTIVE SIGMET</item>
+        <item>CONVECTIVE OUTLOOK</item>
+    </string-array>
+
+    <integer-array name="AirSigColor">
+        <item>0x00000000</item>
+        <item>0xFF800080</item>
+        <item>0xFF0000FF</item>
+        <item>0xFF00FF00</item>
+        <item>0xFFFF00FF</item>
+        <item>0xFF7F0000</item>
+        <item>0xFFFFA500</item>
+    </integer-array>
     
     <string-array name="OrientationPref">
         <item>Auto</item>

@@ -336,7 +336,7 @@ public class Preferences {
      * @return
      */
     public boolean useAdsb() {
-        return(mPref.getBoolean(mContext.getString(R.string.adsb), false));
+        return(false);
     }
 
     /**
@@ -536,6 +536,14 @@ public class Preferences {
      */
     public String getChartType() {
         return(mPref.getString(mContext.getString(R.string.ChartType), "0"));
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getAirSigMetType() {
+        return(mPref.getString(mContext.getString(R.string.AirSigType), "NONE"));
     }
 
     /**

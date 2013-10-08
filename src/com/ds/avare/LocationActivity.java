@@ -52,9 +52,12 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ZoomControls;
@@ -104,10 +107,12 @@ public class LocationActivity extends Activity implements Observer {
     private Button mCenterButton;
     private Button mDrawClearButton;
     private Button mHelpButton;
+    private Button mCrossButton;
     private Button mPrefButton;
     private Button mPlanButton;
     private Button mDownloadButton;
     private Button mMenuButton;
+    private RelativeLayout mDestLayout;
     private ToggleButton mSimButton;
     private Button mDrawButton;
     private ToggleButton mTrackButton;
@@ -117,6 +122,10 @@ public class LocationActivity extends Activity implements Observer {
     private VerticalSeekBar mBar;
     private boolean mIsWaypoint;
     private boolean mSpinner;
+    private TextView mInfoText;
+    private TextView mChartText;
+
+    private ExpandableListView mListPopout;
 
     private GpsInterface mGpsInfc = new GpsInterface() {
 
@@ -191,14 +200,10 @@ public class LocationActivity extends Activity implements Observer {
 
         @Override
         public void adbsMessageCallbackNexrad(Id6364Product pn) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void adbsStatusCallback(AdsbStatus adsbStatus) {
-            // TODO Auto-generated method stub
-            
         }
 
     };
@@ -250,6 +255,7 @@ public class LocationActivity extends Activity implements Observer {
         mToast.setText(getString(R.string.Searching) + " " + dst);
         mToast.show();
         mDestination.find();
+        mDestLayout.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -264,6 +270,7 @@ public class LocationActivity extends Activity implements Observer {
         mToast.show();
         mDestination.find();
         mService.getPlan().makeInactive();
+        mDestLayout.setVisibility(View.INVISIBLE);
     }
 
     /*
@@ -328,6 +335,8 @@ public class LocationActivity extends Activity implements Observer {
         setContentView(view);
         mLocationView = (LocationView)view.findViewById(R.id.location);
         
+        
+
         /*
          * To be notified of some action in the view
          */
@@ -338,7 +347,7 @@ public class LocationActivity extends Activity implements Observer {
              * @see com.ds.avare.GestureInterface#gestureCallBack(int, java.lang.String)
              */
             @Override
-            public void gestureCallBack(int event, String airport) {
+            public void gestureCallBack(int event, String airport, String info, String chart, String tfr, String mets) {
                 if(GestureInterface.LONG_PRESS == event) {
                     if(mLocationView.getDraw()) {
                         /*
@@ -351,26 +360,34 @@ public class LocationActivity extends Activity implements Observer {
                         /*
                          * Show the animation button for dest
                          */
+                        mInfoText.setText(info);
+                        mChartText.setText(chart);
                         if(isSameDest(airport)) {
                             mDestButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.remove, 0, 0, 0);
+                            mDestButton.setText(getString(R.string.Delete));
                         }
                         else {
                             mDestButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.direct, 0, 0, 0);
+                            mDestButton.setText(getString(R.string.Direct));
                         }
-                        mDestButton.setText(airport);
-                        AnimateButton a = new AnimateButton(getApplicationContext(), mDestButton, AnimateButton.DIRECTION_L_R, (View[])null);
-                        a.animate(true);
+                        mCrossButton.setText(airport);
+                        mDestLayout.setVisibility(View.VISIBLE);
                         
                         /*
-                         * Show animation button for dest clear 
+                         * Now populate the pop out weather etc.
                          */
-                        AnimateButton e = new AnimateButton(getApplicationContext(), mPlanButton, AnimateButton.DIRECTION_L_R, (View[])null);
-                        e.animate(true);
+                        PopoutAdapter p = new PopoutAdapter(getApplicationContext(), mService, airport, info, tfr, mets);
+                        mListPopout.setAdapter(p);
                     }
                 }
             }
             
         });
+
+        mInfoText = (TextView)view.findViewById(R.id.location_text_info);
+        mChartText = (TextView)view.findViewById(R.id.location_text_chart);
+
+        mListPopout = (ExpandableListView)view.findViewById(R.id.location_list_popout);
 
         mChartSpinner = (Spinner)view.findViewById(R.id.location_spinner_chart);
         mChartSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -473,6 +490,18 @@ public class LocationActivity extends Activity implements Observer {
             
         });
 
+        mCrossButton = (Button)view.findViewById(R.id.location_button_cross);
+        mCrossButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mDestLayout.setVisibility(View.INVISIBLE);
+            }
+            
+        });
+
+        mDestLayout = (RelativeLayout)view.findViewById(R.id.location_popout_layout);
+
         mMenuButton = (Button)view.findViewById(R.id.location_button_menu);
         mMenuButton.getBackground().setAlpha(255);
         mMenuButton.setOnClickListener(new OnClickListener() {
@@ -514,7 +543,7 @@ public class LocationActivity extends Activity implements Observer {
 
             @Override
             public void onClick(View v) {
-                Button b = mDestButton;
+                Button b = mCrossButton;
                 
                 String type = Destination.BASE;
                 if(b.getText().toString().contains("&")) {
@@ -574,15 +603,16 @@ public class LocationActivity extends Activity implements Observer {
                 /*
                  * On click, find destination that was pressed on in view
                  */
-                Button b = (Button)v;
+                Button b = mCrossButton;
                 /*
                  * If button pressed was a destination go there, otherwise if none, then delete current dest
                  */
                 String dest = b.getText().toString();
-                if(isSameDest(dest)) {
+                if(mDestButton.getText().toString().equals(getString(R.string.Delete))) {
                     mService.setDestination(null);
+                    mDestLayout.setVisibility(View.INVISIBLE);
+                    mLocationView.invalidate();
                     return;
-
                 }
                 String type = Destination.BASE;
                 if(dest.contains("&")) {
@@ -599,7 +629,7 @@ public class LocationActivity extends Activity implements Observer {
             mSimButton.setChecked(true);
         }
         else {
-            mSimButton.setText(getString(R.string.gps));            
+            mSimButton.setText(getString(R.string.Navigate));            
             mSimButton.setChecked(false);
         }
         mSimButton.setOnClickListener(new OnClickListener() {
@@ -853,6 +883,8 @@ public class LocationActivity extends Activity implements Observer {
         else {
             mBar.setVisibility(View.INVISIBLE);
         }
+
+        mDestLayout.setVisibility(View.INVISIBLE);
 
     }
     

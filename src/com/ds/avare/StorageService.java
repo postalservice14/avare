@@ -21,7 +21,6 @@ import com.ds.avare.gdl90.Id6364Product;
 import com.ds.avare.gdl90.NexradBitmap;
 import com.ds.avare.gdl90.NexradImage;
 import com.ds.avare.gps.*;
-import com.ds.avare.network.MetFetcher;
 import com.ds.avare.network.TFRFetcher;
 import com.ds.avare.place.Area;
 import com.ds.avare.place.Destination;
@@ -34,6 +33,7 @@ import com.ds.avare.shapes.MetShape;
 import com.ds.avare.shapes.TileMap;
 import com.ds.avare.storage.DataSource;
 import com.ds.avare.utils.BitmapHolder;
+import com.ds.avare.weather.InternetWeatherCache;
 
 import android.app.Service;
 import android.content.Intent;
@@ -75,6 +75,8 @@ public class StorageService extends Service {
     
     private Draw mDraw;
     
+    private InternetWeatherCache mInternetWeatherCache;
+    
     /**
      * GPS
      */
@@ -110,11 +112,6 @@ public class StorageService extends Service {
      */
     private TFRFetcher mTFRFetcher;
     
-    /**
-     * AIRMET and SIGMET list
-     */
-    private MetFetcher mMetFetcher;
-
     /**
      * For performing periodic activities.
      */
@@ -194,11 +191,11 @@ public class StorageService extends Service {
          * All tiles
          */
         mTiles = new TileMap(getApplicationContext());
-                
+          
+        mInternetWeatherCache = new InternetWeatherCache();
+        mInternetWeatherCache.parse(getApplicationContext());
         mTFRFetcher = new TFRFetcher(getApplicationContext());
         mTFRFetcher.parse();
-        mMetFetcher = new MetFetcher(getApplicationContext());
-        mMetFetcher.parse();
         mTimer = new Timer();
         TimerTask gpsTime = new UpdateTask();
         mIsGpsOn = false;
@@ -389,21 +386,6 @@ public class StorageService extends Service {
         return mTFRFetcher.getShapes();
     }
     
-    /**
-     * 
-     * @return
-     */
-    public MetFetcher getMetFetcher() {
-        return mMetFetcher;
-    }
-    
-    /**
-     * @return
-     */
-    public LinkedList<MetShape> getMetShapes() {
-        return mMetFetcher.getShapes();
-    }
-
     /**
      * @return
      */
@@ -649,5 +631,13 @@ public class StorageService extends Service {
      */
     public SparseArray<NexradBitmap> getNexradImages() {
         return mNexradImg.getImages();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public InternetWeatherCache getInternetWeatherCache() {
+        return mInternetWeatherCache;
     }
 }
