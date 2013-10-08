@@ -20,8 +20,6 @@ package com.ds.avare.shapes;
  */
 public class TFRShape extends Shape {
 
-    private boolean mVisible;
-
     /**
      * 
      */

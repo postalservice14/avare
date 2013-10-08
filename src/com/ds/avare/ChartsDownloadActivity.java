@@ -166,7 +166,7 @@ public class ChartsDownloadActivity extends Activity {
             }
             else {
                 /*
-                 * Create toast beforehand so multiple clicks don't throw up a new toast
+                 * Create toast beforehand so multiple clicks dont throw up a new toast
                  */
                 mToast.setText(getString(R.string.DownloadInst));
                 mToast.show();

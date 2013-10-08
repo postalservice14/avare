@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.ds.avare.R;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.storage.Preferences;
 
@@ -298,6 +297,12 @@ public class Helper {
 			act.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); // TODO Should maybe be sensor?
 			break;
 		}
+
+        /*
+         * Do not open keyboard automatically.
+         */
+        act.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 
         /*
          * Do not open keyboard automatically.
