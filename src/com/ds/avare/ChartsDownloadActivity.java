@@ -144,7 +144,7 @@ public class ChartsDownloadActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName className,
                 IBinder service) {
-            /* 
+            /*
              * We've bound to LocalService, cast the IBinder and get LocalService instance
              */
             StorageService.LocalBinder binder = (StorageService.LocalBinder)service;
@@ -380,9 +380,9 @@ public class ChartsDownloadActivity extends Activity {
                     /*
                      * Throw a confirm dialog
                      */
-                    
+                    String code = msg.getData().getString("code");
                     mAlertDialog = new AlertDialog.Builder(ChartsDownloadActivity.this).create();
-                    mAlertDialog.setMessage(getString(R.string.download) + " " + getString(R.string.Failed));
+                    mAlertDialog.setMessage(getString(R.string.download) + " " + getString(R.string.Failed) + ", reason " + code);
                     mAlertDialog.setCanceledOnTouchOutside(false);
                     mAlertDialog.setCancelable(false);
                     mAlertDialog.setButton(ProgressDialog.BUTTON_POSITIVE, getString(R.string.OK), new DialogInterface.OnClickListener() {
@@ -428,7 +428,7 @@ public class ChartsDownloadActivity extends Activity {
                     }
                 
                     if(mName.equals("weather")) {
-                        mService.getInternetWeatherCache().parse(getApplicationContext());
+                        mService.getInternetWeatherCache().parse(mService);
                     }
                     
                     mChartAdapter.updateVersion(mName, mDownload.getVersion());

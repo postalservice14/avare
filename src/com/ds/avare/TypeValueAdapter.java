@@ -12,7 +12,10 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare;
 
 
+import java.util.regex.Pattern;
+
 import android.content.Context;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,21 +44,38 @@ public class TypeValueAdapter extends ArrayAdapter<String> {
         mValue = value;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = convertView;
+		View rowView = convertView;
 
-        if(null == rowView) {
-            rowView = inflater.inflate(R.layout.typevalue, parent, false);
-        }
-        TextView textView = (TextView)rowView.findViewById(R.id.typevalue_type);
-        textView.setText(mType[position]);
-        textView = (TextView)rowView.findViewById(R.id.typevalue_value);
-        textView.setText(mValue[position]);
-        
-        return rowView;
-    }
-    
+		if (null == rowView) {
+			rowView = inflater.inflate(R.layout.typevalue, parent, false);
+		}
+		TextView textView = (TextView) rowView
+				.findViewById(R.id.typevalue_type);
+
+		textView.setText(mType[position]);
+		textView = (TextView) rowView.findViewById(R.id.typevalue_value);
+		textView.setText(mValue[position]);
+		/*
+		 * This will make links out of certain text patterns eg. Phone numbers,
+		 * email, web address
+		 */
+		/*
+		 * The next three lines are a more custom version of the commented out
+		 * default linkify above. It was catching things like lat/lon, times etc
+		 * This is for US numbers only, I couldn't find what the default regex
+		 * is for numbers but it's probably generally more intelligent than this
+		 * one but it matches too much
+		 */
+		String phoneRegex = "(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-‌​9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})\\b";
+		Pattern phoneMatcher = Pattern.compile(phoneRegex);
+		Linkify.addLinks(textView, phoneMatcher, "tel:");
+
+		return rowView;
+	}
+
 }

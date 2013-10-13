@@ -1,5 +1,7 @@
 /*
 Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Jesse McGraw (jlmcgraw@gmail.com)
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -16,10 +18,16 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 import com.ds.avare.place.Airport;
+import com.ds.avare.place.Awos;
 import com.ds.avare.place.Obstacle;
 import com.ds.avare.place.Runway;
 import com.ds.avare.position.Coordinate;
 import com.ds.avare.shapes.Tile;
+import com.ds.avare.weather.AirSigMet;
+import com.ds.avare.weather.Airep;
+import com.ds.avare.weather.Metar;
+import com.ds.avare.weather.Taf;
+import com.ds.avare.weather.WindsAloft;
 
 import android.content.Context;
 
@@ -84,8 +92,8 @@ public class DataSource {
      * @param name
      * @param params
      */
-    public void findDestination(String name, String type, LinkedHashMap<String, String> params, LinkedList<Runway> runways, LinkedHashMap<String, String> freq) {
-        dbHelper.findDestination(name, type, params, runways, freq);
+    public void findDestination(String name, String type, LinkedHashMap<String, String> params, LinkedList<Runway> runways, LinkedHashMap<String, String> freq,  LinkedList<Awos> awos) {
+        dbHelper.findDestination(name, type, params, runways, freq, awos);
     }
     
     /**
@@ -170,9 +178,68 @@ public class DataSource {
     public LinkedList<String> findFilesToDelete(String name) {
         return dbHelper.findFilesToDelete(name);        
     }
-    
+
+    /**
+     * 
+     * @param name
+     * @param type
+     * @return
+     */
     public String findLonLat(String name, String type) {
         return dbHelper.findLonLat(name, type);          
     }
 
+    /**
+     * 
+     * @param station
+     * @return
+     */
+    public Taf getTAF(String station) {
+        return dbHelper.getTAF(station);          
+    }
+
+    /**
+     * 
+     * @param station
+     * @return
+     */
+    public Metar getMETAR(String station) {
+        return dbHelper.getMETAR(station);          
+    }
+
+    /**
+     * 
+     * @param station
+     * @return
+     */
+    public LinkedList<Airep> getAireps(double lon, double lat) {
+        return dbHelper.getAireps(lon, lat);          
+    }
+
+    /**
+     * 
+     * @param station
+     * @return
+     */
+    public WindsAloft getWindsAloft(double lon, double lat) {
+        return dbHelper.getWindsAloft(lon, lat);          
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public LinkedList<AirSigMet> getAirSigMets() {
+        return dbHelper.getAirSigMets();
+    }
+
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public LinkedList<String> findFrequencies(String name) {
+        return  dbHelper.findFrequencies(name);
+
+    }
 }

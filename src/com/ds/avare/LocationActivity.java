@@ -27,6 +27,7 @@ import com.ds.avare.place.Destination;
 import com.ds.avare.storage.Preferences;
 import com.ds.avare.storage.StringPreference;
 import com.ds.avare.touch.GestureInterface;
+import com.ds.avare.touch.LongTouchDestination;
 import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.NetworkHelper;
 
@@ -280,6 +281,17 @@ public class LocationActivity extends Activity implements Observer {
     @Override
     public void onBackPressed() {
         
+        /*
+         * Back button hides some controls
+         */
+        if(mDestLayout.getVisibility() == View.VISIBLE) {
+            mDestLayout.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        /*
+         * And may exit
+         */
         mAlertDialogExit = new AlertDialog.Builder(LocationActivity.this).create();
         mAlertDialogExit.setTitle(getString(R.string.Exit));
         mAlertDialogExit.setCanceledOnTouchOutside(true);
@@ -347,7 +359,7 @@ public class LocationActivity extends Activity implements Observer {
              * @see com.ds.avare.GestureInterface#gestureCallBack(int, java.lang.String)
              */
             @Override
-            public void gestureCallBack(int event, String airport, String info, String chart, String tfr, String mets) {
+            public void gestureCallBack(int event, LongTouchDestination data) {
                 if(GestureInterface.LONG_PRESS == event) {
                     if(mLocationView.getDraw()) {
                         /*
@@ -360,23 +372,23 @@ public class LocationActivity extends Activity implements Observer {
                         /*
                          * Show the animation button for dest
                          */
-                        mInfoText.setText(info);
-                        mChartText.setText(chart);
-                        if(isSameDest(airport)) {
+                        mInfoText.setText(data.info);
+                        mChartText.setText(data.chart);
+                        if(isSameDest(data.airport)) {
                             mDestButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.remove, 0, 0, 0);
                             mDestButton.setText(getString(R.string.Delete));
                         }
                         else {
                             mDestButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.direct, 0, 0, 0);
-                            mDestButton.setText(getString(R.string.Direct));
+                            mDestButton.setText(getString(R.string.Destination));
                         }
-                        mCrossButton.setText(airport);
+                        mCrossButton.setText(data.airport);
                         mDestLayout.setVisibility(View.VISIBLE);
                         
                         /*
                          * Now populate the pop out weather etc.
                          */
-                        PopoutAdapter p = new PopoutAdapter(getApplicationContext(), mService, airport, info, tfr, mets);
+                        PopoutAdapter p = new PopoutAdapter(getApplicationContext(), data);
                         mListPopout.setAdapter(p);
                     }
                 }

@@ -12,17 +12,18 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare;
 
 
-import java.util.List;
 
-import com.ds.avare.position.Coordinate;
+import java.util.LinkedList;
+
+import com.ds.avare.touch.LongTouchDestination;
 import com.ds.avare.utils.WeatherHelper;
 import com.ds.avare.weather.Airep;
 import com.ds.avare.weather.Metar;
 import com.ds.avare.weather.Taf;
+import com.ds.avare.weather.WindsAloft;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,23 +43,29 @@ public class PopoutAdapter extends BaseExpandableListAdapter {
     
     private Metar mMetar;
     private Taf mTaf;
-    private List<Airep> mAirep;
+    private LinkedList<Airep> mAirep;
+    private LinkedList<String> mFreq;
     private String mTfr;
     private String mMets;
+    private WindsAloft mWa;
     private Typeface mFace;
 
-    private static final int GROUP_METAR = 0;
-    private static final int GROUP_TAF = 1;
-    private static final int GROUP_PIREP = 2;
-    private static final int GROUP_TFR = 3;
-    private static final int GROUP_METS = 4;
-    private static final int GROUP_NUM = 5;
+    private static final int GROUP_COMM = 0;
+    private static final int GROUP_METAR = 1;
+    private static final int GROUP_TAF = 2;
+    private static final int GROUP_WA = 3;
+    private static final int GROUP_PIREP = 4;
+    private static final int GROUP_METS = 5;
+    private static final int GROUP_TFR = 6;
+    private static final int GROUP_NUM = 7;
     
     /**
      * @param context
      * @param textViewResourceId
      */
-    public PopoutAdapter(Context context, StorageService service, String location, String info, String tfr, String mets) {
+    public PopoutAdapter(Context context, LongTouchDestination data) {
+        
+        
         mContext = context;
         mFace = Typeface.createFromAsset(context.getAssets(), "LiberationMono-Bold.ttf");
         
@@ -70,115 +77,103 @@ public class PopoutAdapter extends BaseExpandableListAdapter {
          * Assign children
          */
         mChildren = new String[GROUP_NUM][];
+        mChildren[GROUP_COMM] = new String[1];
         mChildren[GROUP_METAR] = new String[1];
         mChildren[GROUP_TAF] = new String[1];
+        mChildren[GROUP_WA] = new String[1];
         mChildren[GROUP_PIREP] = new String[1];
-        mChildren[GROUP_TFR] = new String[1];
         mChildren[GROUP_METS] = new String[1];
+        mChildren[GROUP_TFR] = new String[1];
         
         mChildrenText = new String[GROUP_NUM];
 
         /*
          * Show view
          */
-        mTfr = tfr;
-        mMets = mets;
-        mChildrenText[GROUP_METAR] = "";
-        mChildrenText[GROUP_TAF] = "";
-        mChildrenText[GROUP_PIREP] = "";
-        mChildrenText[GROUP_TFR] = tfr == null ? "" : tfr;
-        mChildrenText[GROUP_METS] = mets == null ? "" : mets;
+        mTfr = data.tfr;
+        mMets = data.mets;
+        mMetar = data.metar;
+        mTaf = data.taf;
+        mAirep = data.airep;
+        mWa = data.wa;
+        mFreq = data.freq;
 
-        if(service != null && location != null) {
-            if(!location.contains("&")) {
-                /*
-                 * Not GPS
-                 */
-                /*
-                 * Update weather etc.
-                 */
-                new ViewTask().execute(service, location);
-            }
-        }
-    }
-
-    /**
-     * 
-     * @author zkhan
-     *
-     */
-    private class ViewTask extends AsyncTask<Object, Void, Boolean> {
         
-        @Override
-        protected Boolean doInBackground(Object... params) {
-                       
-            StorageService service = (StorageService)params[0];
-            String location = (String)params[1];
-            
+        mChildrenText[GROUP_TFR] = mTfr == null ? "" : mTfr;
+        mChildrenText[GROUP_METS] = mMets == null ? "" : mMets;
+
+        if(mMetar == null) {
+            mChildrenText[GROUP_METAR] = "";
+        }
+        else {
+            mChildrenText[GROUP_METAR] = WeatherHelper.formatWeather(mMetar.rawText) + "\n";          
+        }
+
+        if(mTaf == null) {
+            mChildrenText[GROUP_TAF] = "";
+        }
+        else {
+            mChildrenText[GROUP_TAF] = WeatherHelper.formatWeather(mTaf.rawText) +"\n";          
+        }
+        
+        if(mWa == null) {
+            mChildrenText[GROUP_WA] = "";
+        }
+        else {
+            mChildrenText[GROUP_WA] = mWa.station + " " + mWa.time + "\n" +
+                    "@030 " + WeatherHelper.decodeWind(mWa.w3k) + "\n" + 
+                    "@060 " + WeatherHelper.decodeWind(mWa.w6k) + "\n" +
+                    "@090 " + WeatherHelper.decodeWind(mWa.w9k) + "\n" +
+                    "@120 " + WeatherHelper.decodeWind(mWa.w12k) + "\n" +
+                    "@180 " + WeatherHelper.decodeWind(mWa.w18k) + "\n" +
+                    "@240 " + WeatherHelper.decodeWind(mWa.w24k) + "\n" +
+                    "@300 " + WeatherHelper.decodeWind(mWa.w30k) + "\n" +
+                    "@340 " + WeatherHelper.decodeWind(mWa.w34k) + "\n" +
+                    "@390 " + WeatherHelper.decodeWind(mWa.w39k);
+        }
+
+        
+        if(mAirep == null) {
+            mChildrenText[GROUP_PIREP] = "";
+        }
+        else {
+
+            String txt = "";
+            for(Airep a : mAirep) {
+                txt += a.reportType + "@ " + a.time + "\n" + a.rawText + "\n\n";                
+            }
+    
             /*
-             * Now find all about this airport 
+             * Remove last \n
              */
-            mMetar = service.getInternetWeatherCache().getMetar(location);
-            mTaf = service.getInternetWeatherCache().getTaf(location);
-           
-            Coordinate c = service.getDBResource().getCoordinate(location);
-            if(null != c) {
-                mAirep = service.getInternetWeatherCache().getAirep(c.getLongitude(), c.getLatitude());
+            if(txt.length() > 1) {
+                txt = txt.substring(0, txt.length() - 2);
             }
-            
-            return true;
+
+            mChildrenText[GROUP_PIREP] = txt;
         }
 
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if(mMetar == null) {
-                mChildrenText[GROUP_METAR] = "";
-            }
-            else {
-                mChildrenText[GROUP_METAR] = "@ " + mMetar.time + "\n" + 
-                        WeatherHelper.formatWeather(mMetar.rawText);          
-            }
-
-            if(mTaf == null) {
-                mChildrenText[GROUP_TAF] = "";
-            }
-            else {
-                mChildrenText[GROUP_TAF] = 
-                        mChildrenText[GROUP_TAF] = "@ " + mTaf.time + "\n" + 
-                        WeatherHelper.formatWeather(mTaf.rawText);          
-            }
-
-            if(mAirep == null) {
-                mChildrenText[GROUP_PIREP] = "";
-            }
-            else {
-                /*
-                 * All aireps/pireps sep by \n
-                 */
-                String txt = "";
-                for(int i = 0; i < mAirep.size(); i++) {
-                    Airep a = mAirep.get(i);
-                    txt += a.reportType + "@ " + a.time + "\n" + a.rawText + "\n\n";
-                }
-                /*
-                 * Remove last \n
-                 */
-                if(txt.length() > 1) {
-                    txt = txt.substring(0, txt.length() - 2);
-                }
-                mChildrenText[GROUP_PIREP] = txt;
-            }
-            notifyDataSetChanged();            
+        if(mFreq == null) {
+            mChildrenText[GROUP_COMM] = "";
         }
-    }
+        else {
 
-    /**
-     * Just update numbers.
-     */
-    public void refresh() {
-        new ViewTask().execute();
-    }
+            String txt = "";
+            for(String f : mFreq) {
+                txt += f + "\n\n";                
+            }
+    
+            /*
+             * Remove last \n
+             */
+            if(txt.length() > 1) {
+                txt = txt.substring(0, txt.length() - 2);
+            }
 
+            mChildrenText[GROUP_COMM] = txt;
+        }
+
+    }
 
     /**
      * 
@@ -203,6 +198,10 @@ public class PopoutAdapter extends BaseExpandableListAdapter {
          * Set different values from different outputs.
          */
         switch(group) {
+            case GROUP_COMM:
+                tv.setTextColor(0xFFFFFFFF);
+                tv.setText(mGroups[group]);
+                break;
             case GROUP_METAR:
                 int col = (mMetar == null) ? 0xFFFFFFFF : WeatherHelper.metarColor(mMetar.flightCategory);
                 tv.setText(mGroups[group]);
@@ -222,6 +221,10 @@ public class PopoutAdapter extends BaseExpandableListAdapter {
                 break;
             case GROUP_METS:
                 tv.setTextColor((mMets == null) ? 0xFFFFFFFF : 0xFF0000FF);
+                tv.setText(mGroups[group]);
+                break;
+            case GROUP_WA:
+                tv.setTextColor(0xFFFFFFFF);
                 tv.setText(mGroups[group]);
                 break;
         }
