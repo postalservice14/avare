@@ -167,4 +167,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AirSigType">&quot;AIRMET/SIGMET&quot;</string>
     <string name="AirSigTypeLabel">&quot;AIRMET/SIGMET Type&quot;</string>
     <string name="AirSigTypeSummary">&quot;Select the type of weather to draw&quot;</string>
+    <string name="PatternLinesKey">&quot;Pattern Lines&quot;</string>
+    <string name="PatternLinesTitle">&quot;Pattern Lines&quot;</string>
+    <string name="PatternLinesSummary">&quot;Select to display lines indicating traffic pattern direction&quot;</string>
 </resources>

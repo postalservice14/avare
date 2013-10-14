@@ -58,6 +58,12 @@ Redistribution and use in source and binary forms, with or without modification,
         android:summary="@string/RunwaysSummary"
         android:defaultValue="true"/>
     <CheckBoxPreference
+        android:defaultValue="true"
+        android:dependency="@string/Runways"
+        android:key="@string/PatternLinesKey"
+        android:summary="@string/PatternLinesSummary"
+        android:title="@string/PatternLinesTitle"/>
+<CheckBoxPreference
         android:key="@string/ScreenOn"
         android:title="@string/ScreenOnLabel"
         android:summary="@string/ScreenOnSummary"
