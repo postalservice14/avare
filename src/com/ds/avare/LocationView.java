@@ -953,15 +953,16 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 							* (float) Math.sin(Math.toRadians(heading - 180));
 					float mRunwayNumberCoordinatesY = y - yfactor
 							* (float) Math.cos(Math.toRadians(heading - 180));
-
+					rPaint.setStyle(Style.FILL);
+					
 					if (mPref.shouldShowPattern()) {
 						rPaint.setColor(Color.BLUE);
-						rPaint.setStyle(Style.FILL_AND_STROKE);
+						
 						rPaint.setAlpha(162);
 						rPaint.setShadowLayer(0, 0, 0, 0);
 
 						// set the width of the line. dips->px
-						rPaint.setStrokeWidth(px * 5);
+						rPaint.setStrokeWidth(px * 4);
 
 						// Get a vector perpendicular to the vector of the
 						// runway heading bitmap
@@ -1001,9 +1002,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 						 * shaded square behind runway numbers to make them easier
 						 * to see. Perhaps there's a simpler way to do this? TODO:
 						 * Make this into a nice,rounded rectangle with a border
-						 */
-						rPaint.setStyle(Style.FILL);
-				
+						 */				
 			
 						// Make that rectangle a little bigger to account for
 						// the shadow effect
@@ -1025,6 +1024,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					}
 					rPaint.setShadowLayer(SHADOW, SHADOW, SHADOW, Color.BLACK);
 					rPaint.setColor(TEXT_COLOR);
+					
 					rPaint.setAlpha(0xff);
 					rPaint.setTextAlign(Paint.Align.CENTER);
 
