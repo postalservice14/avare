@@ -30,6 +30,7 @@ import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -53,6 +54,7 @@ public class SatelliteView extends View {
     private int            mAccuracy;
     String 				     mLastTime;
     String                   mName;
+    private float 	mDipToPix;
 
     /**
      * 
@@ -66,9 +68,16 @@ public class SatelliteView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.WHITE);
         mPaint.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "LiberationMono-Bold.ttf"));
-        mPaint.setStrokeWidth(4);
+	/*
+	 *  Converts 1 dip (device independent pixel) into its equivalent physical pixels
+	 */
+        mDipToPix = TypedValue.applyDimension(
+		TypedValue.COMPLEX_UNIT_DIP, 1, getResources()
+				.getDisplayMetrics());
+        mPaint.setStrokeWidth(4 * mDipToPix);
         mPaint.setShadowLayer(0, 0, 0, Color.BLACK);
         mLastTime = "";
+
     }
     
     /**

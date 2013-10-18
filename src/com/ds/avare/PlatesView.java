@@ -19,6 +19,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,6 +57,7 @@ public class PlatesView extends View implements MultiTouchObjectCanvas<Object>, 
     private Preferences                  mPref;
     private BitmapHolder                 mAirplaneBitmap;
     private float[]                     mMatrix;
+    private float			mDipToPix;
     
     /**
      * 
@@ -77,7 +79,14 @@ public class PlatesView extends View implements MultiTouchObjectCanvas<Object>, 
         mGestureDetector = new GestureDetector(context, new GestureListener());
         setBackgroundColor(Color.BLACK);
         mAirplaneBitmap = new BitmapHolder(context, mPref.isHelicopter() ? R.drawable.heli : R.drawable.plane);
+	/*
+	 *  Converts 1 dip (device independent pixel) into its equivalent physical pixels
+	 */
+        mDipToPix = TypedValue.applyDimension(
+		TypedValue.COMPLEX_UNIT_DIP, 1, getResources()
+				.getDisplayMetrics());
     }
+    
     
     /**
      * 
@@ -240,7 +249,7 @@ public class PlatesView extends View implements MultiTouchObjectCanvas<Object>, 
     	canvas.drawBitmap(mBitmap.getBitmap(), mBitmap.getTransform(), mPaint);
         Helper.restoreCanvasColors(mPaint);
         
-    	mPaint.setStrokeWidth(4);
+    	mPaint.setStrokeWidth(4 * mDipToPix);
     	
     	
         if(mErrorStatus != null) {

@@ -58,6 +58,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -219,6 +220,10 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     private static final int TEXT_COLOR = Color.WHITE; 
     private static final int TEXT_COLOR_OPPOSITE = Color.BLACK; 
     
+    /*
+     * dip to pix scaling factor
+     */
+    private float                      mDipToPix;
 
     /**
      * @param context
@@ -278,6 +283,13 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         mGestureDetector = new GestureDetector(context, new GestureListener());
         
         mRunwayPaint = new Paint(mPaint);
+
+	/*
+	 *  Converts 1 dip (device independent pixel) into its equivalent physical pixels
+	 */
+	mDipToPix = TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_DIP, 1, getResources()
+					.getDisplayMetrics());
     }
     
     /**
@@ -584,7 +596,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         }
         if(null != shapes) {
             mPaint.setColor(Color.RED);
-            mPaint.setStrokeWidth(4); //TODO Should probably be dynamic based on device resolution
+            mPaint.setStrokeWidth(4 * mDipToPix);
             mPaint.setShadowLayer(0, 0, 0, 0);
             for(int shape = 0; shape < shapes.size(); shape++) {
                 shapes.get(shape).drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace);
@@ -607,7 +619,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
             mets = mService.getInternetWeatherCache().getAirSigMet();
         }
         if(null != mets) {
-            mPaint.setStrokeWidth(4); //TODO Should probably be dynamic based on device resolution
+            mPaint.setStrokeWidth(4 * mDipToPix); 
             mPaint.setShadowLayer(0, 0, 0, 0);
             String typeArray[] = mContext.getResources().getStringArray(R.array.AirSig);
             int colorArray[] = mContext.getResources().getIntArray(R.array.AirSigColor);
@@ -751,7 +763,8 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         if(mService.getDestination() != null && null == mPointProjection) {
             if(mPref.isTrackEnabled() && (!mPref.isSimulationMode())) {
                 mPaint.setColor(Color.MAGENTA);
-                mPaint.setStrokeWidth(4);
+                mPaint.setAlpha(162);
+                mPaint.setStrokeWidth(4 * mDipToPix);
                 if(mService.getDestination().isFound() && !mService.getPlan().isActive()) {
                     mService.getDestination().getTrackShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace);
                 }
@@ -793,7 +806,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
          * Get draw points.
          */
         mPaint.setColor(Color.BLUE);
-        mPaint.setStrokeWidth(4);
+        mPaint.setStrokeWidth(4 * mDipToPix);
         mService.getDraw().drawShape(canvas, mPaint, mOrigin);
         
     }
@@ -890,12 +903,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 				int xfactor;
 				int yfactor;
 
-				/*
-				 *  Converts 1 dip (device independent pixel) into its equivalent
-				 */
-				float px = TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 1, getResources()
-								.getDisplayMetrics());
+		
 
 				for (Runway r : runways) {
 
@@ -971,7 +979,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 					/*
 					 *  set the width of the line. dips->px
 					 */
-					mRunwayPaint.setStrokeWidth(px * 4);
+					mRunwayPaint.setStrokeWidth(4 * mDipToPix);
 
 					/*
 					 *  Get a vector perpendicular to the vector of the
