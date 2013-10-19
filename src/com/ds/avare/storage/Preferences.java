@@ -427,14 +427,6 @@ public class Preferences {
         return(mPref.getBoolean(mContext.getString(R.string.GpsTime), false));
     }
 
-	/**
-	 * Should we show pattern lines?
-	 * 
-	 * @return
-	 */
-	public boolean shouldShowPattern() {
-		return (mPref.getBoolean(mContext.getString(R.string.PatternLinesKey), false));
-	} 
     /**
      * 
      * @return
