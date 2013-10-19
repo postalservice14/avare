@@ -493,7 +493,7 @@ public class Preferences {
      * @return
      */
     public String getAirSigMetType() {
-        return(mPref.getString(mContext.getString(R.string.AirSigType), "NONE"));
+        return(mPref.getString(mContext.getString(R.string.AirSigType), "ALL"));
     }
 
     /**
