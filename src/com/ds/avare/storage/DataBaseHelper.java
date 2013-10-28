@@ -1,6 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
-Jesse McGraw (jlmcgraw@gmail.com)
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
 
 All rights reserved.
 
@@ -40,7 +39,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * @author zkhan
+ * @author zkhan, jlmcgraw
  * The class that does the grunt wortk of dealing with the databse
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -621,7 +620,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         params.put("Landing Fee", fee);
                         String fss = cursor.getString(FSSPHONE_COL);
 						if (fss.equals("1-800-WX-BRIEF")) {
-							fss = fss + " / 1-800-992-7433";
+							fss = "1-800-992-7433";
 						}
                         params.put(FSSPHONE, fss);
 
@@ -674,9 +673,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     
                     if(freq.containsKey(typeof)) {
                         /*
-                         * Add a hash if duplicate value
+                         * Append this string to the existing one if duplicate key
                          */
-                        freq.put(typeof + "#", cursor.getString(2));                                
+                        freq.put(typeof, freq.get(typeof)+"\n\n"+cursor.getString(2));                                
                     }
                     else {
                         freq.put(typeof, cursor.getString(2));
@@ -1616,15 +1615,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     wa.time = cursor.getString(1);
                     wa.lon = cursor.getFloat(2);
                     wa.lat = cursor.getFloat(3);
-                    wa.w3k = cursor.getString(4);
-                    wa.w6k = cursor.getString(5);
-                    wa.w9k = cursor.getString(6);
-                    wa.w12k = cursor.getString(7);
-                    wa.w18k = cursor.getString(8);
-                    wa.w24k = cursor.getString(9);
-                    wa.w30k = cursor.getString(10);
-                    wa.w34k = cursor.getString(11);
-                    wa.w39k = cursor.getString(12);
+                    wa.w3k = cursor.getString(4).replaceAll("[ ]", "");
+                    wa.w6k = cursor.getString(5).replaceAll("[ ]", "");
+                    wa.w9k = cursor.getString(6).replaceAll("[ ]", "");
+                    wa.w12k = cursor.getString(7).replaceAll("[ ]", "");
+                    wa.w18k = cursor.getString(8).replaceAll("[ ]", "");
+                    wa.w24k = cursor.getString(9).replaceAll("[ ]", "");
+                    wa.w30k = cursor.getString(10).replaceAll("[ ]", "");
+                    wa.w34k = cursor.getString(11).replaceAll("[ ]", "");
+                    wa.w39k = cursor.getString(12).replaceAll("[ ]", "");
                 }
             }
         }

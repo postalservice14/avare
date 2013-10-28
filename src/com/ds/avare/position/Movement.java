@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -12,6 +12,8 @@ Redistribution and use in source and binary forms, with or without modification,
 
 
 package com.ds.avare.position;
+
+import com.ds.avare.storage.Preferences;
 
 /**
  * @author zkhan
@@ -87,4 +89,17 @@ public class Movement {
     public double getOffsetLatitude() {
         return offsety;
     }
+    
+
+    /**
+     * 
+     * @param scale
+     * @return
+     */
+    public float getNMPerLatitude(Scale scale) {
+        float sy = scale.getScaleCorrected();
+        float facy = sy / (float)getLatitudePerPixel();
+        return Math.abs(facy * (float)Preferences.NM_TO_LATITUDE);
+    }
+
 }

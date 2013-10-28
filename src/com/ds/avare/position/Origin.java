@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -158,4 +158,29 @@ public class Origin {
         return diff / mScaleY;
     }
 
+    /** Is the position passed to the function within the range of the 
+    * current display panel
+    *
+    * @param c The coordinate to check against the current display frame
+    * @return true if the value is on the display, false if not
+    */
+    public boolean isInDisplayRange(Coordinate c){
+    	if(c.getLongitude() < mLonL) {
+    		return false;
+        }
+    	
+    	if(c.getLongitude() > mLonR) {
+    		return false;
+        }
+    	
+    	if(c.getLatitude() > mLatU) {
+    		return false;
+        }
+    	
+    	if(c.getLatitude() < mLatL) {
+    		return false;
+        }
+
+    	return true;
+    }
 }

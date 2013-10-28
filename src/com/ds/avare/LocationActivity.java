@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com), Jesse McGraw (jlmcgraw@gmail.com)
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -13,12 +13,11 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Observable;
 import java.util.Observer;
 import com.ds.avare.R;
 import com.ds.avare.animation.AnimateButton;
-import com.ds.avare.gdl90.AdsbStatus;
-import com.ds.avare.gdl90.Id6364Product;
 import com.ds.avare.gps.Gps;
 import com.ds.avare.gps.GpsInterface;
 import com.ds.avare.gps.GpsParams;
@@ -32,6 +31,7 @@ import com.ds.avare.utils.NetworkHelper;
 
 import android.location.GpsStatus;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.app.Activity;
@@ -59,7 +59,7 @@ import android.widget.ToggleButton;
 import android.widget.ZoomControls;
 
 /**
- * @author zkhan
+ * @author zkhan, jlmcgraw
  * Main activity
  */
 public class LocationActivity extends Activity implements Observer {
@@ -102,6 +102,7 @@ public class LocationActivity extends Activity implements Observer {
     private Button mDestButton;
     private Button mCenterButton;
     private Button mDrawClearButton;
+    private Button mTracksButton;
     private Button mHelpButton;
     private Button mCrossButton;
     private Button mPrefButton;
@@ -173,12 +174,6 @@ public class LocationActivity extends Activity implements Observer {
             else if(mPref.isSimulationMode()) {
                 mLocationView.updateErrorStatus(getString(R.string.SimulationMode));                
             }
-            else if(Gps.isGpsDisabled(getApplicationContext(), mPref)) {
-                /*
-                 * Prompt user to enable GPS.
-                 */
-                mLocationView.updateErrorStatus(getString(R.string.GPSEnable)); 
-            }
             else if(timeout) {
                 mLocationView.updateErrorStatus(getString(R.string.GPSLost));
             }
@@ -192,14 +187,6 @@ public class LocationActivity extends Activity implements Observer {
 
         @Override
         public void enabledCallback(boolean enabled) {
-        }
-
-        @Override
-        public void adbsMessageCallbackNexrad(Id6364Product pn) {
-        }
-
-        @Override
-        public void adbsStatusCallback(AdsbStatus adsbStatus) {
         }
 
     };
@@ -491,6 +478,7 @@ public class LocationActivity extends Activity implements Observer {
 
             @Override
             public void onClick(View v) {
+                AnimateButton k = new AnimateButton(getApplicationContext(), mTracksButton, AnimateButton.DIRECTION_R_L);
                 AnimateButton s = new AnimateButton(getApplicationContext(), mSimButton, AnimateButton.DIRECTION_R_L);
                 AnimateButton z = new AnimateButton(getApplicationContext(), mZoom, AnimateButton.DIRECTION_R_L);
                 AnimateButton t = new AnimateButton(getApplicationContext(), mTrackButton, AnimateButton.DIRECTION_R_L);
@@ -505,6 +493,7 @@ public class LocationActivity extends Activity implements Observer {
                 t.animate(true);
                 f.animate(true);
                 z.animate(true);
+                k.animate(true);
             }
             
         });
@@ -680,6 +669,38 @@ public class LocationActivity extends Activity implements Observer {
                 }
             }
             
+        });
+
+        /*
+         * The tracking button handler. Enable/Disable the saving of track points
+         * to a KML file
+         */
+        mTracksButton = (Button)view.findViewById(R.id.location_button_tracks);
+        mTracksButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+            	/* The fileURI is returned when the tracks are closed off. Future would
+            	 * be to have this (auto)post to users timline on facebook/google etc ?
+            	 */
+                if(null != mService) {
+                	URI fileURI = mService.setTracks(mPref, !mService.getTracks());
+                	if(fileURI != null) {
+                		/* 
+                         * A file was created. Send it as an email attachment
+                         */
+                	    try {
+                    	    Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); 
+                    	    emailIntent.setType("application/kml");
+                            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.Save) + " " + fileURI.getPath()); 
+                    	    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(fileURI.getPath())));
+                    	    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                	    }
+                	    catch (Exception e) {
+                	    }
+                	}
+                }
+            }        
         });
 
         /*

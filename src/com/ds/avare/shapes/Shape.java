@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -39,7 +39,7 @@ public abstract class Shape {
     private double mYtop;
     private String mText;
     
-    private static final int WIDTHTOP = 60;
+    private static final int WIDTHTOP = 30;
     
     /**
      * 

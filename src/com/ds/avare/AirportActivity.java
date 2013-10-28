@@ -1,6 +1,5 @@
 /*
-Copyright (c) 2012, Zubair Khan (governer@gmail.com) 
-Jesse McGraw (jlmcgraw@gmail.com)
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -32,7 +31,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +39,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
