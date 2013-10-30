@@ -597,7 +597,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 						}
                         params.put(FSSPHONE, fss);
                         /*
-                         * Store the LFSN for this airtport, it is the key for joining the other tables
+                         * Store the LFSN for this airport, it is the key for joining the other tables
                          */
                         landingSiteFacilityNumber = cursor.getString(22);
                         
