@@ -948,12 +948,12 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		     * If there are parallel runways, offset their text so it
 		     * does not overlap
 		     */
+		    xfactor = yfactor = (int) (mRunwayBitmap.getHeight() + mRunwayPaint.getTextSize()/2);
+		    
 		    if (num.contains("C")) {
-			xfactor = yfactor = mRunwayBitmap.getHeight() * 3 / 4;
+			xfactor = yfactor = xfactor * 3 / 4;
 		    } else if (num.contains("L")) {
-			xfactor = yfactor = mRunwayBitmap.getHeight() / 2;
-		    } else {
-			xfactor = yfactor = mRunwayBitmap.getHeight();
+			xfactor = yfactor = xfactor / 2;
 		    }
 		    /*
 		     * Determine canvas coordinates of where to draw the runway
@@ -967,9 +967,6 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		    mRunwayPaint.setColor(Color.BLUE);
 		    mRunwayPaint.setAlpha(162);
 		    mRunwayPaint.setShadowLayer(0, 0, 0, 0);
-		    /*
-		     * set the width of the line. dips->px
-		     */
 		    mRunwayPaint.setStrokeWidth(4 * mDipToPix);
 		    /*
 		     * Get a vector perpendicular to the vector of the runway
