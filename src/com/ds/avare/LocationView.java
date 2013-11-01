@@ -918,9 +918,6 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 	    if (runways != null) {
 		int xfactor;
 		int yfactor;
-		/*
-		 * Converts 1 dip (device independent pixel) into its equivalent
-		 */
 		
 		for (Runway r : runways) {
 		    float heading = r.getTrue();
@@ -962,7 +959,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
 		     * If there are parallel runways, offset their text so it
 		     * does not overlap
 		     */
-		    xfactor = yfactor = (int) (mRunwayBitmap.getHeight() + mRunwayPaint.getTextSize()/2);
+		    xfactor = yfactor = (int) (mRunwayBitmap.getHeight());
 		    
 		    if (num.contains("C")) {
 			xfactor = yfactor = xfactor * 3 / 4;
