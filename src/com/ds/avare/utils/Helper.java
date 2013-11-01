@@ -520,6 +520,7 @@ public class Helper {
                 id++;
             }
             if(null != shape) {
+                shape.makePolygon();
                 shapeList.add(shape);
             }
         }
