@@ -49,6 +49,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/AirSigType"
             android:summary="@string/AirSigTypeSummary"
             android:title="@string/AirSigTypeLabel" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/XlateWeather"
@@ -80,6 +81,7 @@ authors: zkhan, jlmcgraw
             android:key="@string/Units"
             android:summary="@string/UnitsSummary"
             android:title="@string/UnitsLabel" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/NightMode"
@@ -130,28 +132,30 @@ authors: zkhan, jlmcgraw
             android:key="@string/prefTimerRingSize"
             android:summary="@string/TimerRingSizeSummary"
             android:title="@string/TimerRingSizeLabel" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/prefUseFlightTimer"
             android:summary="@string/UseFlightTimerSummary"
             android:title="@string/UseFlightTimerLabel" />
-        </PreferenceCategory>
-        	<PreferenceCategory android:title="@string/prefTracksCategoryTitle" >
-    	<CheckBoxPreference
-    	    android:key="@string/TrkUpdAllow"
-    	    android:title="@string/TrkUpdAllowLabel"
-    	    android:summary="@string/TrkUpdAllowSummary"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefTracksCategoryTitle" >
+        <CheckBoxPreference
+            android:key="@string/TrkUpdAllow"
+            android:summary="@string/TrkUpdAllowSummary"
+            android:title="@string/TrkUpdAllowLabel" />
         <CheckBoxPreference
             android:key="@string/TrkUpdShowHistory"
-            android:title="@string/TrkUpdShowHistoryLabel"
-            android:summary="@string/TrkUpdShowHistorySummary"/>
-        <ListPreference
+            android:summary="@string/TrkUpdShowHistorySummary"
+            android:title="@string/TrkUpdShowHistoryLabel" />
+
+        <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="2"
             android:entries="@array/AutoPostTracksPrompts"
             android:entryValues="@array/AutoPostTracksValues"
             android:key="@string/prefAutoPostTracks"
             android:summary="@string/AutoPostTracksSummary"
             android:title="@string/AutoPostTracksLabel" />
-        </PreferenceCategory>
-    
+    </PreferenceCategory>
+
 </PreferenceScreen>
