@@ -59,7 +59,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -162,7 +161,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     
     private Preferences                 mPref;
         
-    private TextPaint                   mTextPaint;
+    //private TextPaint                   mTextPaint;
     
     private Typeface                    mFace;
     
@@ -200,12 +199,6 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * Shadow length 
      */
     private static final int SHADOW = 4;
-    
-    /**
-     * Resolution pixel / lon , lat of center tile
-     */
-    private double                     mPx;
-    private double                     mPy;
     
     private double                     mAdjustPan;
     
@@ -245,15 +238,12 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         mMovement = new Movement();
         mErrorStatus = null;
         mThreshold = 0;
-        mPx = 1;
-        mPy = 1;
         mAdjustPan = 1;
         mOnChart = null;
         mTrackUp = false;
         mImageDataSource = null;
         mGpsParams = new GpsParams(null);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
+  
         mPointProjection = null;
         mDraw = false;
         
@@ -264,16 +254,12 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         /* 
          * Set up the base paint
          */
+        mPaint = new Paint();
         mPaint.setTypeface(mFace);
-    	mPaint.setTextSize(getResources().getDimension(R.dimen.TextSize));
-    	
-        
-        mTextPaint = new TextPaint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(Color.WHITE);
-        mTextPaint.setTypeface(mFace);
-        mTextPaint.setTextSize(R.dimen.TextSize);
-        
+        mPaint.setTextSize(getResources().getDimension(R.dimen.TextSize));
+        mPaint.setColor(Color.WHITE);
+        mPaint.setAntiAlias(true);
+
         /*
          * Set up the paint for the distance rings as much as possible here
          */

@@ -20,9 +20,8 @@ authors: zkhan, jlmcgraw
         <com.ds.avare.utils.FolderPreference
             android:summary="@string/MapsSummary"
             android:title="@string/MapsLabel" />
-
-        <com.ds.avare.utils.ListPreferenceWithSummary
-            android:defaultValue="0"
+      <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="@string/Zero"
             android:entries="@array/Server"
             android:entryValues="@array/ServerValues"
             android:key="@string/Root"
@@ -49,7 +48,6 @@ authors: zkhan, jlmcgraw
             android:key="@string/AirSigType"
             android:summary="@string/AirSigTypeSummary"
             android:title="@string/AirSigTypeLabel" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/XlateWeather"
@@ -67,21 +65,22 @@ authors: zkhan, jlmcgraw
             android:key="@string/LeaveRunning"
             android:summary="@string/LeaveRunningSummary"
             android:title="@string/LeaveRunningLabel" />
-        <CheckBoxPreference
-            android:defaultValue="true"
+      <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="Portrait"
+            android:entries="@array/Orientation"
+            android:entryValues="@array/Orientation"
             android:key="@string/OrientationP"
             android:summary="@string/OrientationPSummary"
             android:title="@string/OrientationPLabel" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefDisplayCategoryTitle" >
-        <com.ds.avare.utils.ListPreferenceWithSummary
-            android:defaultValue="0"
+       <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="@string/Zero"
             android:entries="@array/UnitsD"
             android:entryValues="@array/UnitsDValues"
             android:key="@string/Units"
             android:summary="@string/UnitsSummary"
             android:title="@string/UnitsLabel" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/NightMode"
@@ -117,45 +116,43 @@ authors: zkhan, jlmcgraw
             android:key="@string/IconHelicopter"
             android:summary="@string/IconHelicopterSummary"
             android:title="@string/IconHelicopterLabel" />
-
         <com.ds.avare.utils.ListPreferenceWithSummary
-            android:defaultValue="0"
+            android:defaultValue="@string/Zero"
             android:entries="@array/DistanceRingTypePrompts"
             android:entryValues="@array/DistanceRingTypeValues"
             android:key="@string/prefDistanceRingType"
             android:summary="@string/DistanceRingTypeSummary"
             android:title="@string/DistanceRingTypeLabel" />
-        <com.ds.avare.utils.ListPreferenceWithSummary
-            android:defaultValue="0"
+       <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="@string/Zero"
             android:entries="@array/TimerRingSizePrompt"
             android:entryValues="@array/TimerRingSizeValues"
             android:key="@string/prefTimerRingSize"
             android:summary="@string/TimerRingSizeSummary"
             android:title="@string/TimerRingSizeLabel" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/prefUseFlightTimer"
             android:summary="@string/UseFlightTimerSummary"
             android:title="@string/UseFlightTimerLabel" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefTracksCategoryTitle" >
-        <CheckBoxPreference
-            android:key="@string/TrkUpdAllow"
-            android:summary="@string/TrkUpdAllowSummary"
-            android:title="@string/TrkUpdAllowLabel" />
+        </PreferenceCategory>
+        	<PreferenceCategory android:title="@string/prefTracksCategoryTitle" >
+    	<CheckBoxPreference
+    	    android:key="@string/TrkUpdAllow"
+    	    android:title="@string/TrkUpdAllowLabel"
+    	    android:summary="@string/TrkUpdAllowSummary"/>
         <CheckBoxPreference
             android:key="@string/TrkUpdShowHistory"
             android:summary="@string/TrkUpdShowHistorySummary"
             android:title="@string/TrkUpdShowHistoryLabel" />
 
         <com.ds.avare.utils.ListPreferenceWithSummary
-            android:defaultValue="2"
+            android:defaultValue="@string/Zero"
             android:entries="@array/AutoPostTracksPrompts"
             android:entryValues="@array/AutoPostTracksValues"
             android:key="@string/prefAutoPostTracks"
             android:summary="@string/AutoPostTracksSummary"
             android:title="@string/AutoPostTracksLabel" />
-    </PreferenceCategory>
-
+        </PreferenceCategory>
+    
 </PreferenceScreen>
