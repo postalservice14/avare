@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import com.ds.avare.position.Origin;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.storage.Preferences;
 
@@ -778,4 +779,25 @@ public class Helper {
     public static double getSpeedInKnots(double displayedSpeed) {
         return displayedSpeed * Preferences.MS_TO_KT / Preferences.speedConversion; // m/s to knots
     }
+    
+    /**
+     * This function will rotate and move a bitmap to a given lon/lat on screen
+     * @param origin the coordinates of the top/left of the display view
+     * @param b the bitmap to rotate
+     * @param angle how much to rotate clockwise
+     * @param lon center longitude of bitmap
+     * @param lat center latitude of bitmap
+     * @param div Shift the image half way up so it could be centered on y axis
+     */
+    public static void rotateBitmapIntoPlace(Origin origin, BitmapHolder b, float angle, double lon, double lat, boolean div) {
+        float x = (float)origin.getOffsetX(lon);
+        float y = (float)origin.getOffsetY(lat);                        
+                            
+        b.getTransform().setTranslate(
+                x - b.getWidth() / 2,
+                y - (div ? b.getHeight() / 2 : b.getHeight()));
+        
+        b.getTransform().postRotate(angle, x, y);   
+    }
+    
 }

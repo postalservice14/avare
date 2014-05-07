@@ -24,6 +24,7 @@ import com.ds.avare.instruments.CDI;
 import com.ds.avare.instruments.FlightTimer;
 import com.ds.avare.instruments.Odometer;
 import com.ds.avare.instruments.VNAV;
+import com.ds.avare.instruments.VSI;
 import com.ds.avare.network.TFRFetcher;
 import com.ds.avare.place.Area;
 import com.ds.avare.place.Destination;
@@ -179,6 +180,9 @@ public class StorageService extends Service {
     
     // The vertical approach slope indicator
     private VNAV mVNAV;
+
+    // The Vertical Speed Indicator
+    private VSI mVSI;
     
     /*
      * Watches GPS to notify of phases of flight
@@ -280,6 +284,9 @@ public class StorageService extends Service {
         // Allocate the VNAV
         mVNAV = new VNAV();
         
+        // Allocate the VSI
+        mVSI = new VSI();
+        
         mFlightStatus = new FlightStatus(mGpsParams);
         
         /*
@@ -367,6 +374,9 @@ public class StorageService extends Service {
                     
                     // Vertical descent rate calculation
                     getVNAV().calcGlideSlope(mGpsParams, getDestination());
+                    
+                    // Vertical Speed Indicator
+                    getVSI().update(mGpsParams);
                     
                     getFlightStatus().updateLocation(mGpsParams);
                     
@@ -762,6 +772,10 @@ public class StorageService extends Service {
 
     public VNAV getVNAV() {
     	return mVNAV;
+    }
+
+    public VSI getVSI() {
+    	return mVSI;
     }
     
     public FlightStatus getFlightStatus() {

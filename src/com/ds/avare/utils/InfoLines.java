@@ -568,8 +568,11 @@ public class InfoLines {
 
         switch (aField) {
         case ID_FLD_VSI: {
-            return String.format(Locale.getDefault(), "%+05.0f",
-                    mLocationView.getVSI());
+            if (mLocationView.getStorageService() != null) {
+	            return String.format(Locale.getDefault(), "%+05.0f",
+	                    mLocationView.getStorageService().getVSI().getValue());
+            }
+            break;
         }
 
         case ID_FLD_SPD: {
