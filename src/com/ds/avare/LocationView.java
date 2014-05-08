@@ -667,82 +667,85 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     }
 
     /**
-     * 
+     * Draw the TFRs in RED on the display if we have any 
      * @param canvas
      */
     private void drawTFR(Canvas canvas) {
+		if((null == mService) ||			// We need the underlying service
+		   (null != mPointProjection)) {	// No not draw when pinch/zoom
+			return;
+		}
+
+		// Fetch the collection of TFRs from the service
+        LinkedList<TFRShape> shapes = mService.getTFRShapes();
+        if(null == shapes) {
+        	return;
+        }
+        
+        // Set the paint colors and style
         mPaint.setColor(Color.RED);
+        mPaint.setStrokeWidth(3 * mDipToPix);
         mPaint.setShadowLayer(0, 0, 0, 0);
         
-        /*
-         * Draw TFRs, TFR
-         */            
-        LinkedList<TFRShape> shapes = null;
-        if(null != mService) {
-            shapes = mService.getTFRShapes();
-        }
-        if(null != shapes && null == mPointProjection) {
-            mPaint.setColor(Color.RED);
-            mPaint.setStrokeWidth(3 * mDipToPix);
-            mPaint.setShadowLayer(0, 0, 0, 0);
-            for(int shape = 0; shape < shapes.size(); shape++) {
-                shapes.get(shape).drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
-            }
+        // Walk through each TFR and draw it
+        for(int shape = 0; shape < shapes.size(); shape++) {
+            shapes.get(shape).drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
         }
     }
 
     /**
-     * 
+     * Draw all the airmets and sigmets on the display 
      * @param canvas
      */
     private void drawAirSigMet(Canvas canvas) {
+    	if((null == mService) ||
+    	   (null != mPointProjection) ||
+    	   (mPref.useAdsbWeather())) {
+    		return;
+    	}
+    	
+    	// Fetch the collection of AIR/SIG mets
+        List<AirSigMet> mets = mService.getInternetWeatherCache().getAirSigMet();
+
+        // Set up the paint and fetch some config stuff that controls drawing
         mPaint.setShadowLayer(0, 0, 0, 0);
+        mPaint.setStrokeWidth(2 * mDipToPix); 
+        mPaint.setShadowLayer(0, 0, 0, 0);
+        String typeArray[] = mContext.getResources().getStringArray(R.array.AirSig);
+        int colorArray[] = mContext.getResources().getIntArray(R.array.AirSigColor);
+        String storeType = mPref.getAirSigMetType();
         
-        /*
-         * Draw TFRs, TFR
-         */            
-        List<AirSigMet> mets = null;
-        if((null != mService) && (!mPref.useAdsbWeather())) {
-            mets = mService.getInternetWeatherCache().getAirSigMet();
-        }
-        
-        if(null != mets && null == mPointProjection) {
-            mPaint.setStrokeWidth(2 * mDipToPix); 
-            mPaint.setShadowLayer(0, 0, 0, 0);
-            String typeArray[] = mContext.getResources().getStringArray(R.array.AirSig);
-            int colorArray[] = mContext.getResources().getIntArray(R.array.AirSigColor);
-            String storeType = mPref.getAirSigMetType();
-            for(int i = 0; i < mets.size(); i++) {
-                AirSigMet met = mets.get(i);
-                int color = 0;
-                
-                String type = met.hazard + " " + met.reportType;
-                if(storeType.equals("ALL")) {
-                    /*
-                     * All draw all shapes
-                     */
-                }
-                else if(!storeType.equals(type)) {
-                    /*
-                     * This should not be drawn.
-                     */
-                    continue;
-                }
-                
-                for(int j = 0; j < typeArray.length; j++) {
-                    if(typeArray[j].equals(type)) {
-                        color = colorArray[j];
-                        break;
-                    }
-                }
-                
+        // Loop through each item we found
+        for(int i = 0; i < mets.size(); i++) {
+            AirSigMet met = mets.get(i);
+            int color = 0;
+            
+            String type = met.hazard + " " + met.reportType;
+            if(storeType.equals("ALL")) {
                 /*
-                 * Now draw
+                 * All draw all shapes
                  */
-                if(met.shape != null && color != 0) {
-                    mPaint.setColor(color);
-                    met.shape.drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
+            }
+            else if(!storeType.equals(type)) {
+                /*
+                 * This should not be drawn.
+                 */
+                continue;
+            }
+            
+            for(int j = 0; j < typeArray.length; j++) {
+                if(typeArray[j].equals(type)) {
+                    color = colorArray[j];
+                    break;
                 }
+            }
+            
+            /*
+             * Now draw
+             */
+            if(met.shape != null && color != 0) {
+                mPaint.setColor(color);
+                met.shape.drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
             }
         }
     }
@@ -824,7 +827,6 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         }
     }
 
-
     /**
      * Nexrad traffic is contained within an array that the service contains.
      * Each element in that array is a traffic object that contains details
@@ -873,43 +875,44 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     }
 
     /**
-     * 
+     * Draw the main waypoint track. 
      * @param canvas
      */
     private void drawTrack(Canvas canvas) {
-        if(null == mService) {
+        if((null == mService) ||					// We need the service 
+       	   (null == mService.getDestination()) || 	// also a destination
+       	   (null != mPointProjection)) {			// Not in pinch/zoom
             return;
         }
 
-        if(mService.getDestination() != null && null == mPointProjection) {
-            if(mPref.isTrackEnabled()) {
-                mPaint.setColor(Color.MAGENTA);
-                mPaint.setStrokeWidth(5 * mDipToPix);
-                mPaint.setAlpha(162);
-                if(mService.getDestination().isFound() && !mService.getPlan().isActive()  && (!mPref.isSimulationMode())) {
-                    mService.getDestination().getTrackShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
-                }
-                else if (mService.getPlan().isActive()) {
-                    mService.getPlan().getTrackShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());                    
-                }
+        if(mPref.isTrackEnabled()) {
+            mPaint.setColor(Color.MAGENTA);
+            mPaint.setStrokeWidth(5 * mDipToPix);
+            mPaint.setAlpha(162);
+            if(mService.getDestination().isFound() && !mService.getPlan().isActive()  && (!mPref.isSimulationMode())) {
+                mService.getDestination().getTrackShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
             }
-            if(!mPref.isSimulationMode()) {
-                /*
-                 * Draw actual track
-                 */
-                if(null != mLineBitmap && mGpsParams != null) {
-                    Helper.rotateBitmapIntoPlace(mOrigin, mLineBitmap, (float)mService.getDestination().getBearing(),
-                            mGpsParams.getLongitude(), mGpsParams.getLatitude(), false);
-                    canvas.drawBitmap(mLineBitmap.getBitmap(), mLineBitmap.getTransform(), mPaint);
-                }
-                /*
-                 * Draw actual heading
-                 */
-                if(null != mLineHeadingBitmap && mGpsParams != null) {
-                    Helper.rotateBitmapIntoPlace(mOrigin, mLineHeadingBitmap, (float)mGpsParams.getBearing(),
-                            mGpsParams.getLongitude(), mGpsParams.getLatitude(), false);
-                    canvas.drawBitmap(mLineHeadingBitmap.getBitmap(), mLineHeadingBitmap.getTransform(), mPaint);
-                }
+            else if (mService.getPlan().isActive()) {
+                mService.getPlan().getTrackShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());                    
+            }
+        }
+
+        if(!mPref.isSimulationMode()) {
+            /*
+             * Draw actual track
+             */
+            if(null != mLineBitmap && mGpsParams != null) {
+                Helper.rotateBitmapIntoPlace(mOrigin, mLineBitmap, (float)mService.getDestination().getBearing(),
+                        mGpsParams.getLongitude(), mGpsParams.getLatitude(), false);
+                canvas.drawBitmap(mLineBitmap.getBitmap(), mLineBitmap.getTransform(), mPaint);
+            }
+            /*
+             * Draw actual heading
+             */
+            if(null != mLineHeadingBitmap && mGpsParams != null) {
+                Helper.rotateBitmapIntoPlace(mOrigin, mLineHeadingBitmap, (float)mGpsParams.getBearing(),
+                        mGpsParams.getLongitude(), mGpsParams.getLatitude(), false);
+                canvas.drawBitmap(mLineHeadingBitmap.getBitmap(), mLineHeadingBitmap.getTransform(), mPaint);
             }
         }
     }
@@ -959,7 +962,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private void drawAircraft(Canvas canvas) {
         if((null == mAirplaneBitmap) ||		// Ensure we have a bitmap
-      	   (null == mPointProjection)) {	// and we are not doing pinch/zoom
+      	   (null != mPointProjection)) {	// and we are not doing pinch/zoom
         	return;
         }
             
