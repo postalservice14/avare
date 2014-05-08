@@ -1095,7 +1095,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private void drawEdgeMarkers(Canvas canvas) {
         if((null == mService) ||			// Need the service
-           (null == mPointProjection) ||	// No draw during pinch/zoom
+           (null != mPointProjection) ||	// No draw during pinch/zoom
            (!mPref.shouldShowEdgeTape())) {	// Feature disabled ?
         	return;
         }
