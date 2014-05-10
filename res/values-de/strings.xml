@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) Translated by Francois Dinel
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+* * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<resources>
+    <string name="title_activity_main">&quot;Avare&quot;</string>
+<!-- string name="MissingMaps">&quot;Download charts for this area&quot;</string  -->
+    <string name="MissingMaps">&quot;Laden sie die Karten für das betreffende Gebiet herunter&quot;</string>
+<!-- string name="LoadingMaps">&quot;Loading Charts&quot;</string   -->
+    <string name="LoadingMaps">&quot;Am herunterladen&quot;</string>
+    <string name="OK">&quot;OK&quot;</string>    
+<!-- string name="Nearest">&quot;Nearest&quot;</string  -->
+    <string name="Nearest">&quot;am nächsten&quot;</string>
+<!-- string name="Success">&quot;Success&quot;</string  -->
+    <string name="Success">&quot;Erfolgreich&quot;</string>
+    <string name="DatabaseName">&quot;maps.db&quot;</string>
+<!-- string name="WarningMsg">&quot;USE AT YOUR OWN RISK!&quot;</string  -->
+    <string name="WarningMsg">&quot;Verwendung auf eigene Verantwortung!&quot;</string>
+<!-- string name="DestinationPrompt">&quot;Enter Destination&quot;</string  -->
+    <string name="DestinationPrompt">&quot;Geben sie einen ICAO code für den Zielort ein&quot;</string>
+		<!-- translated as "enter an ICAO code for destination   -->
+<!-- string name="DestinationNF">&quot;Destination Not Found&quot;</string  -->
+    <string name="DestinationNF">&quot;Zielort nicht gefunden&quot;</string>
+<!-- string name="AirDia">&quot;Airport Diagram&quot;</string  -->
+    <string name="AirDia">&quot;Flugplatz Karte&quot;</string>    
+<!-- string name="InstallPDF">&quot;To see the diagram, go to Google Play Store, and install a PDF viewer&quot;</string  -->
+    <string name="InstallPDF">&quot;Um ein PDF Dokument zu öffnen muss zuerst ein PDF reader installiert werden&quot;</string>
+	    	<!-- translation: to view an pdf document first must be installed an pdf reader  -->
+<!-- string name="Cancel">&quot;Cancel&quot;</string  -->
+    <string name="Cancel">&quot;Abbrechen&quot;</string>
+<!-- string name="To">&quot;To&quot;</string  -->
+    <string name="To">&quot;Zu&quot;</string>
+<!-- string name="Maps">&quot;Maps&quot;</string  -->
+    <string name="Maps">&quot;Karten&quot;</string>
+<!-- string name="MapsLabel">&quot;Charts Storage Folder&quot;</string  -->
+    <string name="MapsLabel">&quot;Verzeichnis in welchem die Karten gespeichert werden&quot;</string>
+		<!-- translated as "folder in wich the charts where stored"  -->
+<!-- string name="MapsSummary">&quot;Location where charts are stored&quot;</string  -->
+    <string name="MapsSummary">&quot;Verzeichnis in welchem die Karten gespeichert sind&quot;</string>
+		<!-- translated as " folder in wich the charts are stored"  -->
+<!-- string name="OrientationP">&quot;OrientationP&quot;</string  -->
+    <string name="OrientationP">&quot;Ausrichtung&quot;</string>
+<!-- string name="OrientationPLabel">&quot;Screen Orientation&quot;</string  -->
+    <string name="OrientationPLabel">&quot;Bildschirm Ausrichtung&quot;</string>
+<!-- string name="OrientationPSummary">&quot;Select a screen orientation&quot;</string  -->
+    <string name="OrientationPSummary">&quot;Wählen sie die Ausrichtung der Bildschirmanzeige&quot;</string>
+<!-- string name="GpsTime">&quot;GpsTime&quot;</string  -->
+    <string name="GpsTime">&quot;Gps Zeit&quot;</string>
+<!-- string name="GpsTimeLabel">&quot;Short GPS Update Period&quot;</string  -->
+    <string name="GpsTimeLabel">&quot;kürzere GPS Aktualisierungsrate&quot;</string>
+<!-- string name="GpsTimeSummary">&quot;Select for shorter GPS update period&quot;</string  -->
+    <string name="GpsTimeSummary">&quot;eine kürzere GPS Aktualisierungsrate auswählen&quot;</string>
+<!-- string name="GpsOffWarn">&quot;GpsOffWarn&quot;</string  -->
+    <string name="GpsOffWarn">&quot;Gps deaktiviert&quot;</string>
+<!-- string name="GpsOffWarnLabel">&quot;Warn GPS Disabled&quot;</string  -->
+    <string name="GpsOffWarnLabel">&quot;Warnung GPS ist deaktiviert&quot;</string>
+<!-- <string name="GpsOffWarnSummary">&quot;Select to warn frequently when GPS is disabled&quot;</string>  -->
+    <string name="GpsOffWarnSummary">&quot;auswählen wie oft gewarnt werden soll wenn das GPS deaktiviert ist&quot;</string>
+<!-- string name="ShowTrack">&quot;ShowTrack&quot;</string  -->
+    <string name="ShowTrack">&quot;Zeige Track;</string>
+<!-- string name="ShowTrackLabel">&quot;Destination Course Line&quot;</string  -->
+    <string name="ShowTrackLabel">&quot;Kurs Line zum Zielort&quot;</string>
+<!-- <string name="ShowTrackSummary">&quot;Select to show course to destination&quot;</string>  -->
+    <string name="ShowTrackSummary">&quot;auswählen ob die Kurslinie zum Zielort angezeigt werden soll&quot;</string>
+<!-- string name="Help">&quot;Help&quot;</string  -->
+    <string name="Help">&quot;Hilfe&quot;</string>
+    <string name="desc">&quot;Image/Chart&quot;</string>
+			<!-- i have not traslated the previous item because i dont know the scope/intend  -->
+<!-- <string name="Destination">&quot;Destination&quot;</string>  -->
+    <string name="Destination">&quot;Zielort&quot;</string>
+<!-- string name="Settings">&quot;Preferences&quot;</string  -->
+    <string name="Settings">&quot;Einstellungen&quot;</string>
+<!-- string name="Downloading">&quot;Downloading&quot;</string  -->
+    <string name="Downloading">&quot;am herunterladen&quot;</string>
+<!-- string name="download">&quot;Download&quot;</string  -->
+    <string name="download">&quot;Download&quot;</string>
+<!-- string name="Failed">&quot;Failed&quot;</string  -->
+    <string name="Failed">&quot;Fehlgeschlagen&quot;</string>
+<!-- string name="Extracting">&quot;Extracting&quot;</string  -->
+    <string name="Extracting">&quot;Extrahiere&quot;</string>
+<!-- string name="Yes">&quot;Yes&quot;</string  -->
+    <string name="Yes">&quot;Ja&quot;</string>
+<!-- string name="No">&quot;No&quot;</string  -->
+    <string name="No">&quot;Nein&quot;</string>
+<!-- string name="GPSLost">&quot;No GPS Signal&quot;</string  -->
+    <string name="GPSLost">&quot;Kein GPS Signal&quot;</string>
+<!-- string name="GPSEnable">&quot;Turn On GPS&quot;</string  -->
+    <string name="GPSEnable">&quot;GPS aktivieren&quot;</string>
+<!-- string name="Init">&quot;Initializing&quot;</string  -->
+    <string name="Init">&quot;Initialisiere&quot;</string>
+<!-- string name="Recent">&quot;Recent&quot;</string  -->
+    <string name="Recent">&quot;kürzlich&quot;</string>
+		<!-- question: off what object/term/funtion is here referenced?  -->
+<!-- string name="ChartType">&quot;Chart Type&quot;</string  -->
+   	<string name="ChartType">&quot;Karten Kategorie&quot;</string>
+		<!-- Note: for all further item that use "chart type" i will translate it to "chart category"  -->
+<!-- string name="ChartTypeLabel">&quot;Select Chart Type&quot;</string  -->
+	<string name="ChartTypeLabel">&quot;Auswahl Karten Kategorie&quot;</string>
+<!-- string name="ChartTypeSummary">&quot;Select a chart type for navigation&quot;</string  -->
+	<string name="ChartTypeSummary">&quot;Wählen sie eine Karte für die Navigation&quot;</string>
+		<!-- translation: "chose a chart to navigate"  -->
+<!-- string name="weather">&quot;Weather&quot;</string  -->
+    <string name="weather">&quot;Meteo&quot;</string>
+		<!-- Note: "meteo" mean the forecast; weather mean the present weather  -->
+    <string name="TFRReceived">&quot;TFR Received&quot;</string>
+			<!-- i dont know the above abbreviation TFR and are not able to translate it. mean it "Temporary Flight Restriction" ?  -->
+<!-- string name="databases">&quot;Databases (Required)&quot;</string  -->
+    <string name="databases">&quot;Datenbank (erforderlich)&quot;</string>
+<!-- string name="ValidDest">&quot;Enter a valid destination first&quot;</string  -->
+    <string name="ValidDest">&quot;Zuerst muss ein gültiger Zielort eingegeben werden&quot;</string>
+		<!-- translated as "first must are given a valid destination"  -->
+<!-- string name="AreaNF">&quot;Nearest airports shown when GPS locked, and not in simulation&quot;</string  -->
+    <string name="AreaNF">&quot;Der nächstgelegene Flugplatz kann nur angezeigt werden wenn der GPS Empfänger aktiviert ist und nicht im Simulationsmodus&quot;</string>
+<!-- string name="ScreenOn">&quot;Screen Timeout&quot;</string  -->
+    <string name="ScreenOn">&quot;Bildschirm ausschalten nach&quot;</string>
+<!-- string name="ScreenOnLabel">&quot;Keep Screen On&quot;</string  -->
+    <string name="ScreenOnLabel">&quot;Bildschirm immer an&quot;</string>
+<!-- string name="ScreenOnSummary">&quot;Select to keep screen on while application is running&quot;</string  -->
+    <string name="ScreenOnSummary">&quot;Bildschirm nie ausschalten während die Anwendung läuft&quot;</string>
+<!--   -->
+    <string name="update">&quot;Update&quot;</string>
+<!--   -->
+    <string name="gps">&quot;GPS&quot;</string>
+<!--   -->
+    <string name="longitude">&quot;'W&quot;</string>
+<!--   -->
+    <string name="latitude">&quot;'N&quot;</string>
+<!-- string name="accuracy">&quot;Accuracy ft.&quot;</string  -->
+    <string name="accuracy">&quot;Genauigkeit in ft.&quot;</string>
+<!--   -->
+    <string name="degree">&quot;\u00B0&quot;</string>
+<!-- string name="calibratethis">&quot;Geo Tag this point&quot;</string  -->
+    <string name="calibratethis">&quot;Fügen sie die Koordinaten zum markierten Punkt hinzu&quot;</string>
+		<!-- translated as "ad the coordinates to the marked point"  -->
+<!-- string name="Done">&quot;Done&quot;</string  -->
+    <string name="Done">&quot;Fertig&quot;</string>
+<!-- <string name="Calibrate">&quot;GeoTag&quot;</string>  -->
+    <string name="Calibrate">&quot;Geo-Tag&quot;</string>
+<!-- string name="PointsTooClose">&quot;Points too close to each other&quot;</string  -->
+    <string name="PointsTooClose">&quot;Die Markierungen liegen zu nahe beieinander&quot;</string>
+<!-- string name="BadCoords">&quot;Unacceptable Longitude/Latitude input\nLongitude Range: 0 to 180 W\nLatitude Range 0 to 90 N&quot;</string  -->
+    <string name="BadCoords">&quot;Werte für Longitude/Latitude input\nLongitude sind ungültig, Bereich: 0 bis 180 W\nLatitude , 0 bis 90 N&quot;</string>
+<!-- string name="GoodCoords">&quot;Plate marked and saved&quot;</string  -->
+    <string name="GoodCoords">&quot;Markierungen gesetzt und Karte gespeichert&quot;</string>
+		<!-- translated as "markings are set and chart is been saved  -->
+<!-- string name="main">&quot;Map&quot;</string  -->
+    <string name="main">&quot;Karte&quot;</string>
+<!-- string name="plates">&quot;Plate&quot;</string  -->
+    <string name="plates">&quot;Plate&quot;</string>
+		<!-- the term "Plate" dont exist here in relationship with aviation documents/charts and i have no idea what this is   -->
+<!--   -->
+    <string name="AFD">&quot;A/FD&quot;</string>
+<!--   -->
+    <string name="Lon">&quot;Lon&quot;</string>
+<!--   -->
+    <string name="Lat">&quot;Lat&quot;</string>
+<!-- <tring name="DestinationSet">&quot;Destination set to &quot;</string  -->
+    <string name="DestinationSet">&quot;Zielort ist &quot;</string>
+<!-- string name="DownloadInst">&quot;Touch to select an item, then press Get to download it&quot;</string  -->
+    <string name="DownloadInst">&quot;Tipen sie auf einen Eintrag um ihn auszuwählen, und tipen sie danach auf Get um ihn herunterzuladen&quot;</string>
+<!-- string name="Searching">&quot;Searching for&quot;</string  -->
+    <string name="Searching">&quot;Suche nach&quot;</string>
+<!-- string name="Search">&quot;Search&quot;</string  -->
+    <string name="Search">&quot;Suche&quot;</string>
+<!--   -->
+    <string name="Get">&quot;Get&quot;</string>
+<!-- string name="Units">&quot;Distance Unit&quot;</string  -->
+    <string name="Units">&quot;Einheit für die Entfernung&quot;</string>
+<!-- string name="UnitsLabel">&quot;Distance Unit&quot;</string  -->
+    <string name="UnitsLabel">&quot;Einheit für die Entfernung&quot;</string>
+		<!-- note that the original text is the same as for "string name units"  -->
+<!-- string name="UnitsSummary">&quot;Select distance unit&quot;</string  -->
+    <string name="UnitsSummary">&quot;Wählen sie die Einheit für die Entfernung&quot;</string>
+<!-- string name="AllFacilities">&quot;All Facilities&quot;</string  -->
+    <string name="AllFacilities">&quot;Alle Navigationshilfen&quot;</string>
+		<!-- translated as "all help to navigate"  -->
+<!-- string name="AllFacilitiesLabel">&quot;Show All Bases&quot;</string  -->
+    <string name="AllFacilitiesLabel">&quot;Zeige alle Flugplätze&quot;</string>
+<!-- <string name="AllFacilitiesSummary">&quot;Select to show heliport, ultralight, and sea plane bases in Nearest and Search&quot;</string>  -->
+    <string name="AllFacilitiesSummary">&quot;Auswählen ob alle Heliport, Ultraleicht und Wasserlandefelder angezeigt werden sollen&quot;</string>
+<!-- string name="Set">&quot;Set&quot;</string  -->
+    <string name="Set">&quot;Auswahl&quot;</string>
+			<!-- translated as "selection"  -->
+<!-- string name="Runways">&quot;Runway Extensions&quot;</string  -->
+    <string name="Runways">&quot;Rollbahn Info&quot;</string>
+<!-- string name="RunwaysLabel">&quot;Runway Extensions&quot;</string  -->
+    <string name="RunwaysLabel">&quot;Rollbahn Info&quot;</string>
+			<!--   note that runways and runways label use the same term in the original english language -->
+<!-- string name="RunwaysSummary">&quot;Select to show runway extensions&quot;</string  -->
+    <string name="RunwaysSummary">&quot;Auswählen ob die Rollbahn Info angezeigt werden sollen&quot;</string>
+			<!-- question: what mean runway extensions?  -->
+<!--  string name="AutoShowAirportDiagram">&quot;Auto Show Airport Diagram&quot;</string -->
+    <string name="AutoShowAirportDiagram">&quot;Automatisches anzeigen der Flugplatzkarte&quot;</string>
+<!-- string name="AutoShowAirportDiagramLabel">&quot;Auto Show Airport Diagram&quot;</string  -->
+    <string name="AutoShowAirportDiagramLabel">&quot;Automatisches anzeigen der Flugplatzkarte&quot;</string>
+			<!-- info: the both entries on top use the same label in the original draft  -->
+<!-- string name="AutoShowAirportDiagramSummary">&quot;Select to automatically show airport diagrams on rollout&quot;</string  -->
+    <string name="AutoShowAirportDiagramSummary">&quot;Auswählen ob die Flugplatzkarte automatisch angezeigt werden soll während des Rollen (Apron ,Taxiway)&quot;</string>
+			<!-- i dont understand "rollout". mean this taxi movements on the apron and taxiways before departing?  -->
+    <string name="Altitude">&quot;Altitude ft.&quot;</string>
+<!-- string name="Exit">&quot;Exit&quot;</string  -->
+    <string name="Exit">&quot;Beenden&quot;</string>
+<!--   -->
+    <string name="PlatesNF">&quot;No plates available for this destination&quot;</string>
+			<!-- the term "Plate" dont exist here in relationship with aviation documents/charts and i have no idea what this is   -->
+<!-- string name="Obstacles">&quot;Obstacles&quot;</string  -->
+    <string name="Obstacles">&quot;Hindernisse&quot;</string>
+<!-- <string name="ObstaclesLabel">&quot;Show Obstacles&quot;</string>  -->
+    <string name="ObstaclesLabel">&quot;Zeige Hindernisse&quot;</string>
+<!-- <string name="ObstaclesSummary">&quot;Show obstacles near the aircraft&quot;</string>  -->
+    <string name="ObstaclesSummary">&quot;Zeige die Hindernisse in unmitelbarer nähe der aktuellen Position&quot;</string>
+			<!--  translated as " show obstacles in the proximate area from the actual position"  -->
+<!-- string name="Background">&quot;Background&quot;</string  -->
+    <string name="Background">&quot;Hintergrund&quot;</string>
+<!-- string name="BackgroundLabel">&quot;Show Background&quot;</string  -->
+    <string name="BackgroundLabel">&quot;Zeige Hintergrund;</string>
+<!-- string name="BackgroundSummary">&quot;Select to use a color background on text, to improve readability on smaller screens&quot;</string  -->
+    <string name="BackgroundSummary">&quot;Wähle eine Farbe für den Hintergrund aus um die lesbarkeit bei kleine Bildschirme zu verbessern&quot;</string>
+<!-- string name="SelectPlate">&quot;Select A Plate&quot;</string  -->
+    <string name="SelectPlate">&quot;Wählen sie ein Gebiet aus&quot;</string>
+			<!--  translated as "chose a area" -->
+<!-- string name="DownloadDB">&quot;The required data file is missing and must be downloaded.&quot;</string  -->
+    <string name="DownloadDB">&quot;Die erforderlichen Dateien fehlen und müssen zuerst heruntergeladen werden.&quot;</string>
+			<!-- translated as " the required data files  is missing and must first are downloaded.  -->
+<!-- <tring name="Agree">&quot;I Agree&quot;</string  -->
+    <string name="Agree">&quot;Ich akzeptiere&quot;</string>
+<!-- string name="LeaveRunning">&quot;Leave Running&quot;</string  -->
+    <string name="LeaveRunning">&quot;Hintergrundaktivität&quot;</string>
+<!-- string name="LeaveRunningLabel">&quot;Leave Running&quot;</string  -->
+    <string name="LeaveRunningLabel">&quot;Hintergrundaktivität&quot;</string>
+<!-- string name="LeaveRunningSummary">&quot;Select to pause the application on Exit (instead of a complete exit)&quot;</string  -->
+    <string name="LeaveRunningSummary">&quot;Auswählen ob die Anwendung im Hintergrund verbleibt anstatt diese zu beenden (beim verlassen/beenden der Anwendung)&quot;</string>
+<!--   -->
+    <string name="TFRs">&quot;TFRs&quot;</string>
+			<!-- i dont know the abbreviation TFR: mean this Temporary Flight Restrictions Graphics?  -->
+<!-- string name="NightMode">&quot;Night Mode&quot;</string  -->
+    <string name="NightMode">&quot;Nachtmodus&quot;</string>
+<!-- string name="NightModeLabel">&quot;Night Mode&quot;</string  -->
+    <string name="NightModeLabel">&quot;Nachtmodus&quot;</string>
+<!-- string name="NightModeSummary">&quot;Select to reduce white light during night operation (requires restart)&quot;</string  -->
+    <string name="NightModeSummary">&quot;Auswählen ob die Helligkeit des Bildschirm reduziert werden soll für den Nachtmdous (Neustart erforderlich)&quot;</string>
+<!-- string name="Delete">&quot;Delete&quot;</string  -->
+    <string name="Delete">&quot;Löschen&quot;</string>
+<!--   -->
+    <string name="Label">&quot;Label&quot;</string>
+			<!-- is here a translation needed?  -->
+<!-- string name="Plan">&quot;Plan&quot;</string  -->
+    <string name="Plan">&quot;Flugroute&quot;</string>
+			<!-- translated as "Flightroute" because we use here the term "Plan" for the Flightplan  -->
+<!-- string name="PlanSet">&quot; added to the plan&quot;</string  -->
+    <string name="PlanSet">&quot; zur Flugroute hinzugefügt&quot;</string>
+<!-- string name="PlanNoset">&quot; not added to the plan&quot;</string  -->
+    <string name="PlanNoset">&quot; nicht zur Flugroute hinzugefügt&quot;</string>
+<!-- string name="GpsOnly">&quot;Only GPS destinations can be labeled&quot;</string  -->
+    <string name="GpsOnly">&quot;Um einer Markierung einen Namen zuzuweisen muss diese Geo-Taged sein&quot;</string>
+			<!-- translated as "to label a marking these must first given geo tagged  -->
+<!-- string name="Root">&quot;Root&quot;</string  -->
+    <string name="Root">&quot;Stammverzeichnis&quot;</string>
+<!-- string name="RootLabel">&quot;Charts Download Server&quot;</string  -->
+    <string name="RootLabel">&quot;Download Server&quot;</string>
+<!-- string name="RootSummary">&quot;Select a server from which to download charts/data&quot;</string  -->
+    <string name="RootSummary">&quot;Wähle einen Server aus von welchem du die Karten/Dokumente herunterladen möchtest&quot;</string>
+			<!-- translated as " chose the server from wich you would download the charts/documents"  -->
+<!-- string name="Inactive">&quot;Inactive&quot;</string  -->
+    <string name="Inactive">&quot;Inaktiviert&quot;</string>
+			<!-- translated as "de-activate"  -->
+<!-- string name="Active">&quot;Active&quot;</string  -->
+    <string name="Active">&quot;Aktiviert&quot;</string>
+			<!-- translated as " activate"  -->
+<!--   -->
+    <string name="Total">&quot;Total&quot;</string>
+<!-- string name="Near">&quot;Near&quot;</string  -->
+    <string name="Near">&quot;am nächsten&quot;</string>
+<!-- string name="Find">&quot;Find&quot;</string  -->
+    <string name="Find">&quot;Suche&quot;</string>
+			<!-- translated as "search"  -->
+<!--   -->
+    <string name="IconHelicopter">&quot;Helicopter Icon&quot;</string>
+<!--   -->
+    <string name="IconHelicopterLabel">&quot;Helicopter Icon&quot;</string>
+<!-- string name="IconHelicopterSummary">&quot;Select to make the location icon a helicopter&quot;</string  -->
+    <string name="IconHelicopterSummary">&quot;Ein Helikopter Icon verwenden für die aktuelle Position&quot;</string>
+<!-- string name="Draw">&quot;Draw&quot;</string  -->
+    <string name="Draw">&quot;Zeichnen&quot;</string>
+<!--   -->
+    <string name="Pan">&quot;Pan&quot;</string>
+			<!-- i have no idea what "Pan" is or mean  -->
+<!-- string name="Clear">&quot;Clear&quot;</string  -->
+    <string name="Clear">&quot;Löschen&quot;</string>
+			<!-- translated as "delete"  -->
+<!--   -->
+    <string name="WX">&quot;WX&quot;</string>
+			<!-- WX weather is also well know here but i doubt that we can use it for free  -->
+<!-- string name="Left">&quot;Left&quot;</string  -->
+    <string name="Left">&quot;Links&quot;</string>
+<!-- string name="Right">&quot;Right&quot;</string  -->
+    <string name="Right">&quot;Rechts&quot;</string>
+<!-- string name="Next">&quot;Next&quot;</string  -->
+    <string name="Next">&quot;Nächster&quot;</string>
+<!-- string name="Last">&quot;Last&quot;</string  -->
+    <string name="Last">&quot;Letzter&quot;</string>
+<!-- string name="Save">&quot;Save&quot;</string  -->
+    <string name="Save">&quot;Speichern&quot;</string>
+<!-- string name="SavedPlan">&quot;Saved Plans&quot;</string  -->
+    <string name="SavedPlan">&quot;Gespeicherte Flugrouten&quot;</string>
+			<!-- translated as "saved Flightroutes" because we use here the term Plan for the Flightplan  -->
+<!-- string name="Load">&quot;Load&quot;</string  -->
+    <string name="Load">&quot;Lade&quot;</string>
+<!--   -->
+    <string name="LoadReverse">&quot;Reverse Load&quot;</string>
+			<!-- what is here become reverse loaded?  -->
+<!-- string name="WeatherError">&quot;Could not download weather data&quot;</string  -->
+    <string name="WeatherError">&quot;Meteo Daten konnten nicht heruntergeladen werden&quot;</string>
+<!-- string name="WeatherPlan">&quot;Load a plan and press Update to get the latest route weather&quot;</string  -->
+    <string name="WeatherPlan">&quot;Öffnen sie eine gespeicherte Flugroute und wählen sie anschliessend Update um den letzen Meteo Report für die gewählte Strecke zu erhalten&quot;</string>
+<!--   -->
+    <string name="SimulationMode">&quot;Simulation&quot;</string>
+<!--   -->
+    <string name="TrackUp">&quot;Track Up&quot;</string>
+			<!-- question: track up what?  -->
+<!-- string name="Understand">&quot;I Understand&quot;</string  -->
+    <string name="Understand">&quot;Ich verstehe&quot;</string>
+			<!-- question: what have i here understand?  -->
+<!--   -->
+    <string name="NorthUp">&quot;North Up&quot;</string>
+<!--   -->
+    <string name="XlateWeather">&quot;XlateWeather&quot;</string>
+			<!-- question: is XlateWeather correct here?  -->
+<!-- string name="XlateWeatherLabel">&quot;Translate Weather&quot;</string  -->
+    <string name="XlateWeatherLabel">&quot;Wetterdaten umwandeln&quot;</string>
+			<!-- translated as "transform Weatherdata"  -->
+<!-- string name="XlateWeatherSummary">&quot;Select to translate weather METAR/TAF/PIREP in the WX brief&quot;</string  -->
+    <string name="XlateWeatherSummary">&quot;Auswählen ob METAR/TAF/PIREP in die WX Kurzform umgewandelt werden sollen&quot;</string>
+<!-- <string name="noZoomIn">&quot;Cannot zoom in further&quot;</string>  -->
+    <string name="noZoomIn">&quot;Maximale Vergrösserung erreicht&quot;</string>
+			<!-- translated as "max zoom reached"  -->
+<!--  string name="noZoomOut">&quot;Cannot zoom out further&quot;</string  -->
+    <string name="noZoomOut">&quot;weitere Verkleinerung nicht möglich&quot;</string>
+<!-- string name="Navigate">&quot;Navigate&quot;</string  -->
+    <string name="Navigate">&quot;Navigation&quot;</string>
+			<!-- translated as "navigation"  -->
+<!-- string name="NotAvailable">&quot;Not available&quot;</string  -->
+    <string name="NotAvailable">&quot;Nicht verfügbar&quot;</string>
+<!--   -->
+    <string name="AirSigType">&quot;AIRMET/SIGMET&quot;</string>
+<!-- string name="AirSigTypeLabel">&quot;AIRMET/SIGMET Type&quot;</string  -->
+    <string name="AirSigTypeLabel">&quot;AIRMET/SIGMET Auswahl&quot;</string>
+<!-- string name="AirSigTypeSummary">&quot;Select the type of weather to draw&quot;</string  -->
+    <string name="AirSigTypeSummary">&quot;Auswählen welcher Wetterbericht angezeigt werden soll&quot;</string>
+<!-- string name="prefStorageAndDownloadsCategoryTitle">Storage and Downloads</string  -->
+    <string name="prefStorageAndDownloadsCategoryTitle">Datenablage und Downloads</string>
+<!--   -->
+    <string name="prefGpsCategoryTitle">GPS</string>
+<!-- string name="prefWeatherCategoryTitle">Weather</string  -->
+    <string name="prefWeatherCategoryTitle">Meteo</string>
+<!--   -->
+    <string name="prefDisplayCategoryTitle">Display</string>
+<!-- string name="prefAppStateCategoryTitle">Application State</string  -->
+    <string name="prefAppStateCategoryTitle">Anwendung Status</string>
+<!-- string name="prefDistanceRingType">DistanceRingType</string  -->
+    <string name="prefDistanceRingType">Art der Anzeige für die Entfernung</string>
+<!-- string name="DistanceRingTypeLabel">&quot;Distance Ring Style&quot;</string  -->
+    <string name="DistanceRingTypeLabel">&quot;Stil auswählen für die Anzeige der Entfernung&quot;</string>
+<!-- string name="DistanceRingTypeSummary">&quot;Select the style of distance rings to display&quot;</string  -->
+    <string name="DistanceRingTypeSummary">&quot;Auswahl wie die Anzeige für die Entfernung dargestellt werden soll&quot;</string>
+<!--   -->
+    <string name="UnitKnot">kt</string>
+<!--   -->
+    <string name="UnitMile">mi</string>
+<!--   -->
+    <string name="VsFpm">fpm</string>
+<!--   -->
+    <string name="UnitKilometer">km</string>
+<!--   -->
+    <string name="DistKnot">nm</string>
+<!--   -->
+    <string name="DistMile">mi</string>
+<!--   -->
+    <string name="DistKilometer">km</string>
+<!--   -->
+    <string name="SpeedKnot">kt</string>
+<!--   -->
+    <string name="SpeedMile">mh</string>
+<!--   -->
+    <string name="SpeedKilometer">kh</string>
+<!--   -->
+    <string name="prefTimerRingSize">TimerRingSize</string>
+			<!-- i dont understand what "Timer" mean -->
+    <string name="TimerRingSizeLabel">&quot;Timer Ring Size&quot;</string>
+<!--   -->
+    <string name="TimerRingSizeSummary">&quot;Select the timer ring size in minutes&quot;</string>
+<!-- string name="Up">Up</string  -->
+    <string name="Up">Oben</string>
+<!-- string name="PrivateFolder">Use the default folder</string  -->
+    <string name="PrivateFolder">Standard Verzeichniss benutzen</string>
+<!-- string name="FileStore">Files will be stored in:</string  -->
+    <string name="FileStore">Die Dateien werden gespeichert in:</string>
+<!-- string name="FileStoreInvalid">Unable to write to folder:</string  -->
+    <string name="FileStoreInvalid">Im angegebenen Verzeichnis kann nicht geschrieben werden:</string>
+<!--   -->
+    <string name="prefTracksCategoryTitle">Flight Tracking</string>
+<!--   -->
+    <string name="TracksOn">Tracks On</string>
+<!--   -->
+    <string name="TracksOff">Tracks Off</string>
+<!--   -->
+    <string name="TrkUpdAllow">TrkUpdAllow</string>
+			<!-- is trkUpdAllow correct here?  -->
+<!-- string name="TrkUpdAllowLabel">&quot;Enable Tracking&quot;</string  -->
+    <string name="TrkUpdAllowLabel">&quot;Trackaufzeichnung aktivieren&quot;</string>
+<!-- string name="TrkUpdAllowSummary">&quot;Select to allow position tracking to be recorded.&quot;</string  -->
+    <string name="TrkUpdAllowSummary">&quot;Ermöglicht die aktuelle Position aufzuzeichnen.&quot;</string>
+<!--   -->
+    <string name="TrkUpdShowHistory">TrkUpdShowHistory</string>
+<!-- string name="TrkUpdShowHistoryLabel">&quot;Track History&quot;</string  -->
+    <string name="TrkUpdShowHistoryLabel">&quot;Gespeicherte Tracks&quot;</string>
+<!-- string name="TrkUpdShowHistorySummary">&quot;Select to display the flight path track on the active chart&quot;</string  -->
+    <string name="TrkUpdShowHistorySummary">&quot;Ermöglicht den aufgezeichneten Track auf der aktiven Karte anzuzeigen&quot;</string>
+<!-- string name="AutoPostTracksTitle">&quot;Send tracks file to &quot;</string  -->
+    <string name="AutoPostTracksTitle">&quot;Sende die aufgezeichneten Track an &quot;</string>
+<!--   -->
+    <string name="AutoPostTracksSubject">&quot;Avare flight tracking data - &quot;</string>
+<!--   -->
+    <string name="prefAutoPostTracks">AutoPostTracks</string>
+<!-- string name="AutoPostTracksLabel">&quot;Automatic Track Post&quot;</string  -->
+    <string name="AutoPostTracksLabel">&quot;Tracks automatisch senden an&quot;</string>
+<!-- string name="AutoPostTracksSummary">&quot;Select what to do with the KML tracks file when closed&quot;</string  -->
+    <string name="AutoPostTracksSummary">&quot;Wählen sie aus was mit den aufgezeichneten Track Dateien (KML) geschen soll nachdem diese aufgezeichnet wurden&quot;</string>
+<!-- string name="AutoPostTracksDialogText">&quot;The tracks file %s has been saved&quot;</string  -->
+    <string name="AutoPostTracksDialogText">&quot;Die Track Datei %s wurde gespeichert&quot;</string>
+<!--   -->
+    <string name="Zero">&quot;0&quot;</string>
+<!--   -->
+    <string name="CurrentlySetTo">&quot;\nCurrently: &quot;</string>
+<!-- string name="ADSBWeather">ADSBWeather</string  -->
+    <string name="ADSBWeather">ADSB Meteo Daten</string>
+<!-- string name="ADSBWeatherLabel">&quot;Use ADSB Weather&quot;</string  -->
+    <string name="ADSBWeatherLabel">&quot;benutze die ADSB Meteo Daten&quot;</string>
+<!-- string name="ADSBWeatherSummary">&quot;Select to use the weather from an ADSB receiver (requires the Avare External IO module app.), otherwise use the Internet weather&quot;</string  -->
+    <string name="ADSBWeatherSummary">&quot;Wählen sie die Datenquelle für den Empang der Meto Daten aus: via Internet oder ADSB Empfänger (ADSB Meteo: externes IO Plug-in von Avare erfoderlich);</string>
+<!-- string name="GeoRefPlates">&quot;Geo. Referenced Plates Database&quot;</string  -->
+    <string name="GeoRefPlates">&quot;Datenbank für die georeferenzierten Karten&quot;</string>
+<!--   -->
+    <string name="ADSBTraffic">ADSBTraffic</string>
+<!-- string name="ADSBTrafficLabel">&quot;Show ADSB Traffic&quot;</string  -->
+    <string name="ADSBTrafficLabel">&quot;Zeige den ADSB Traffic&quot;</string>
+<!-- string name="ADSBTrafficSummary">&quot;Select to show the traffic from an ADSB receiver (requires the Avare External IO module app.)&quot;</string  -->
+    <string name="ADSBTrafficSummary">&quot;Zeigt den Verkehr welcher über einen ADSB Empfänger empfangen wird (externes IO Plug-in von Avare erforderlich)&quot;</string>
+<!-- string name="prefUseDynamicFields">UseDynamicFields</string  -->
+    <string name="prefUseDynamicFields">Benutze dynamische Anzeige</string>
+<!-- string name="UseDynamicFieldsLabel">&quot;Use Dynamic Fields&quot;</string  -->
+    <string name="UseDynamicFieldsLabel">&quot;Benutze dynamische Anzeige&quot;</string>
+<!-- string name="UseDynamicFieldsSummary">&quot;Allow the top two text lines can be configured dynamically&quot;</string  -->
+    <string name="UseDynamicFieldsSummary">&quot;Ermöglicht die oberen zwei Textzeilen dynamisch anzuzeigen&quot;</string>
+<!-- string name="prefGetRowFormats">RowFormats</string  -->
+    <string name="prefGetRowFormats">Art der Anzeige der Zeilen</string>
+<!-- string name="SelectTextFieldTitle">&quot;Select field to display&quot;</string  -->
+    <string name="SelectTextFieldTitle">&quot;Auswählen welche Felder angezeigt werden sollen&quot;</string>
+			<!-- i must know first the function of this and parent node feature before i can translate it  -->
+<!-- string name="prefOdometer">Odometer</string  -->
+    <string name="prefOdometer">Entfernungsmesser</string>
+<!-- string name="DownloadDBShort">&quot;Download Databases&quot;</string  -->
+    <string name="DownloadDBShort">&quot;Datenbank herunterladen&quot;</string>
+<!--   -->
+    <string name="Radar">NEXRADTransparency</string>
+			<!--  NexRad cover currently USA, Canada ans Australia  -->
+    <string name="RadarLabel">&quot;NEXRAD Transparency&quot;</string>
+<!--   -->
+    <string name="RadarSummary">&quot;Select how transparent a NEXRAD overlay should be&quot;</string>
+<!-- string name="PlanWarning">&quot;Clear the current plan and load&quot;</string  -->
+    <string name="PlanWarning">&quot;einen anderen Track laden&quot;</string>
+			<!-- translated as "load another Track"  -->
+<!-- string name="PlanDestinationNF">&quot;Some way points not found.&quot;</string  -->
+    <string name="PlanDestinationNF">&quot;Nicht alle Wegpunkte konnten gefunden werden.&quot;</string>
+<!-- string name="prefShowCDI">ShowCDI</string  -->
+    <string name="prefShowCDI">ZeigeCDI</string>
+<!-- string name="ShowCDILabel">&quot;Show CDI/VDI&quot;</string  -->
+    <string name="ShowCDILabel">&quot;Zeige CDI/VDI&quot;</string>
+<!-- string name="ShowCDISummary">&quot;Display the course/vertical deviation indicators on the screen&quot;</string  -->
+    <string name="ShowCDISummary">&quot;Zeigt den Kurs und die vertikale Achse an&quot;</string>
+<!-- string name="Nearest2000">&quot;Nearest\n2000'&quot;</string  -->
+    <string name="Nearest2000">&quot;Am nächsten\n2000'&quot;</string>
+<!--  string name="Nearest4000">&quot;Nearest\n4000'&quot;</string -->
+    <string name="Nearest4000">&quot;am nächsten\n4000'&quot;</string>
+<!-- string name="Nearest6000">&quot;Nearest\n6000'&quot;</string  -->
+    <string name="Nearest6000">&quot;am nächsten\n6000'&quot;</string>
+<!-- string name="Nearest100LL">&quot;Nearest\n100LL&quot;</string  -->
+    <string name="Nearest100LL">&quot;am nächsten\n100LL&quot;</string>
+<!-- string name="GlideRatio">&quot;GlideRatioAircraft&quot;</string  -->
+    <string name="GlideRatio">&quot;Gleitzahl Flugzeug&quot;</string>
+<!-- string name="GlideRatioLabel">&quot;Glide Ratio&quot;</string  -->
+    <string name="GlideRatioLabel">&quot;Gleitzahl&quot;</string>
+<!-- string name="GlideRatioSummary">&quot;Set the glide ratio of your aircraft&quot;</string  -->
+    <string name="GlideRatioSummary">&quot;Geben sie die Gleitzahl vom Flugzeug ein&quot;</string>
+<!-- string name="NotGlideRange">&quot;Not in glide range&quot;</string  -->
+    <string name="NotGlideRange">&quot;Nicht innerhalb des Gleitpfades&quot;</string>
+<!-- string name="Fuel">&quot;Fuel&quot;</string  -->
+    <string name="Fuel">&quot;Kraftstoff&quot;</string>
+			<!-- i dont know the term plate within aviation purpose here in europe  -->
+    <string name="prefLastPlateIndex">LastPlateIndex</string>
+<!--   -->
+    <string name="prefLastPlateAirport">LastPlateAirport</string>
+<!--   -->
+    <string name="EdgeTape">&quot;EdgeTape&quot;</string>
+			<!-- i have no idea what this is  -->
+    <string name="EdgeTapeLabel">&quot;Edge Tape&quot;</string>
+<!--   -->
+    <string name="EdgeTapeSummary">&quot;Select to show a distance tape on the edges&quot;</string>
+<!-- string name="Instrumentation">&quot;Instrumentation&quot;</string  -->
+    <string name="Instrumentation">&quot;Instrumente&quot;</string>
+<!--   -->
+    <string name="register">Register</string>
+<!--   -->
+    <string name="unregister">Unregister</string>
+<!-- string name="error">Error</string  -->
+    <string name="error">Fehler</string>
+<!-- string name="error_internet">Please connect to a working Internet connection</string  -->
+    <string name="error_internet">Internetverbindung erforderlich</string>
+			<!-- activate what? the app?  -->
+    <string name="error_email">Please register a Gmail account before activating</string>
+<!--   -->
+    <string name="already_registered">You have already registered your account</string>
+<!--   -->
+    <string name="already_unregistered">You have already unregistered</string>
+<!--   -->
+    <string name="registering_server">Registering with the Apps4Av servers</string>
+<!--   -->
+    <string name="unregistering_server">Unregistering from the Apps4Av servers</string>
+<!-- string name="register_msg">Thank you for installing Avare.\nThe development team for the free Avare aviation app is dedicated to empowering pilots with helpful free, open source, ad-free, and 
+safe tools.  To that end we have decided to require anonymous Registration of users in order to:\n\n1. Advise users immediately in the event we discover any errors in the app or in the FAA materials 
+we process and provide to our users at no charge.\n\n2. Begin offering additional features useful to pilots, such as local airport info and attractions provided by pilots.\n\n3. Enable the potential for 
+future features such as direct anonymous but verified communication between users or devices such as sharing Waypoints, Tracks, and Plans.\n\n4. Ensure that you assume all liability for your use of 
+our free tools more conveniently, without the need to click an agreement at every launch of Avare.\n\nThe next screen provides more details on our Privacy Policy, and another opportunity to decline 
+Registration.\nPlease press the Register button to continue.</string  -->
+    <string name="register_msg">Das Entwickler Team von Avare bemüht sich den Piloten eine zuverlässige, kostenlose, werbefreie und sichere App zur verfügung zu stellen. Um all dies zu ermöglichen benötigen wir eine anonyme Registration um folgende Punkte zu ermöglichen:\n\n1. Den Benutzer umgehend zu benachrichtigen fals sich kritische Fehler in die App und/oder den beiliegendem Kartenmaterial und den dazugehörenden Dokumente eingeschlichen haben.\n\n2. Den Piloten die Möglichkeit geben selber erstellte Pireps über Flugplätze zu veröffentlichen.\n\n3. Den Piloten die Möglichkeit geben Wegpunkte, Tracks und Routen untereinander zu senden mittels einer sicheren Verbindung.\n\n4. Die Benutzer von der Verpflichtung zu befreien bei jedem Starten der Anwendung einen Lizenzvertrag zuzustimmen.\n\nIm nächsten Fenster sind mehr Details über die Datenschutzrichtlinien aufgeführt und die Möglichkeit eine Registrierung abzulehnen.\nBitte klicken sie auf den Register Button um fortzufahren.</string>
+			<!-- i think that we must here add the notification that only messages in englisch language are permitted/readable for the eu version  -->
+<!-- string name="yes">Yes</string  -->
+    <string name="yes">Ja</string>
+<!-- string name="no">No</string  -->
+    <string name="no">Nein</string>
+<!-- string name="new_message">A new message from Apps4Av</string  -->
+    <string name="new_message">Eine neue Nachricht von Avare</string>
+			<!-- translated as " a new message from avare"  -->
+<!--   -->
+    <string name="online">Account</string>
+<!-- string name="failed_register">Failed to register!</string  -->
+    <string name="failed_register">Registrierung fehlgeschlagen!</string>
+<!-- string name="failed_unregister">Failed to unregister!</string  -->
+    <string name="failed_unregister">Registrierung abbrechen nicht möglich!</string>
+			<!-- translated as "canceling registration not possible"  -->
+<!-- string name="registered">You have now registered! Please press the back button to start using the application. You must first download the Databases (Required) from the Download menu. To 
+see the detailed maps, please download the charts for the area you are interested in.</string  -->
+    <string name="registered">Registrierung erfolgreich abgeschlossen! Wählen sie den Zurück Button um die Anwendung zu starten. Zuerst muss die Datenbank (erforderlich) mittels dem Downloadmenü heruntergeladen werden. Danach kann man über das Downloadmenü die Karten herunterladen.</string>
+<!-- string name="unregistered">You have now unregistered!</string  -->
+    <string name="unregistered">Sie haben sich abgemeldet!</string>
+<!--   -->
+    <string name="DensityAltitude">Density Altitude</string>
+<!--   -->
+    <string name="BestRunway">Best Wind Runway</string>
+<!--   -->
+</resources>
