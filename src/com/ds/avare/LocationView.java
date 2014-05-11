@@ -1024,7 +1024,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * @param canvas
      */
     private void drawTracks(Canvas canvas) {
-        if((null != mService) ||			// We need the service
+        if((null == mService) ||			// We need the service
            (!mPref.shouldDrawTracks()) ||	// Check the config setting 
            (null != mPointProjection)) {	// No draw during pinch/zoom
         	return;
