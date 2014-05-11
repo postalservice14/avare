@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.ds.avare.adsb.NexradBitmap;
 import com.ds.avare.adsb.Traffic;
+import com.ds.avare.flightLog.KMLRecorder;
 import com.ds.avare.gps.GpsParams;
 import com.ds.avare.instruments.EdgeDistanceTape;
 import com.ds.avare.place.Destination;
@@ -1029,16 +1030,21 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
            (null != mPointProjection)) {	// No draw during pinch/zoom
         	return;
         }
-                
-        /*
-         *  Set the brush color and width
-         */
+
+        // Get the recorder object from the service. If it doesn't have
+        // one then we can just get out of here now.
+        KMLRecorder kmlRecorder = mService.getKMLRecorder();
+        if(kmlRecorder == null) {
+        	return;
+        }
+        
+        // Set the brush color and width
         mPaint.setColor(Color.DKGRAY);
         mPaint.setStrokeWidth(6 * mDipToPix);
         mPaint.setStyle(Paint.Style.FILL);
 
         // The object knows how to draw itself
-        mService.getKMLRecorder().getShape().drawShape(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
+        kmlRecorder.draw(canvas, mOrigin, mScale, mMovement, mPaint, mFace, mPref.isNightMode());
     }
 
     /***

@@ -22,9 +22,15 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Environment;
 
 import com.ds.avare.gps.GpsParams;
+import com.ds.avare.position.Movement;
+import com.ds.avare.position.Origin;
+import com.ds.avare.position.Scale;
 import com.ds.avare.shapes.CrumbsShape;
 import com.ds.avare.shapes.Shape;
 import com.ds.avare.utils.Helper;
@@ -355,11 +361,20 @@ public class KMLRecorder {
 		} catch (Exception e) { }
 	}
     
-    /**
-     * 
-     * @return The shape of our tracks to draw
+    /***
+     * Draw the plot trails on the indicated canvas
+     * @param canvas where to draw
+     * @param origin x/y location of current chart display
+     * @param scale how much zoom do we have
+     * @param movement
+     * @param paint what paint to use
+     * @param face typeface to use
+     * @param isNightMode use alternate color for night mode
      */
-    public Shape getShape() {
-       return mShape; 
+    public void draw(Canvas canvas, Origin origin, Scale scale, 
+    		Movement movement, Paint paint, Typeface face, boolean isNightMode) {
+    	if(null != mShape) {
+    		mShape.drawShape(canvas, origin, scale, movement, paint, face, isNightMode);
+    	}
     }
 }
