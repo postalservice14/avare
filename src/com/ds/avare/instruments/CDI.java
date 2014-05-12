@@ -113,7 +113,7 @@ public class CDI {
 	 * @param screenX Total width of the display canvas
 	 * @param screenY Total height of the display canvas
 	 */
-	public void drawCDI(Canvas canvas, float screenX, float screenY)
+	public void draw(Canvas canvas, float screenX, float screenY)
 	{
 		// Calculate the left position of the instrument
         mInstLeft = (screenX - mInstWidth) / 2;

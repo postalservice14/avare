@@ -1068,7 +1068,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     	}
 
     	// Tell the instrument to draw itself
-		mService.getCDI().drawCDI(canvas, getWidth(), getHeight());
+		mService.getCDI().draw(canvas, getWidth(), getHeight());
     }
     
     /***
@@ -1092,7 +1092,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     	}
 
     	// Draw the vertical nav instrument
-    	mService.getVNAV().drawVNAV(canvas, getWidth(), getHeight(), dest);
+    	mService.getVNAV().draw(canvas, getWidth(), getHeight(), dest);
     }
 
     /***
@@ -1118,7 +1118,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * @param canvas where to draw
      */
     private void drawInfoLines(Canvas canvas) {
-      	mInfoLines.drawCornerTextsDynamic(canvas, mPaint, TEXT_COLOR, TEXT_COLOR_OPPOSITE, SHADOW);
+      	mInfoLines.draw(canvas, mPaint, TEXT_COLOR, TEXT_COLOR_OPPOSITE, SHADOW);
     }
     
     /**

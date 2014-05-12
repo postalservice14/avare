@@ -98,7 +98,7 @@ public class VNAV {
 	 * @param screenY Total height of the display canvas
 	 * @param dest The target destination
 	 */
-	public void drawVNAV(Canvas canvas, float screenX, float screenY, Destination dest)
+	public void draw(Canvas canvas, float screenX, float screenY, Destination dest)
 	{
 		// If we have no destination set, then do not draw anything
 		if(dest == null || (!mShow)) {

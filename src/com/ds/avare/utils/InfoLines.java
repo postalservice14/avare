@@ -384,7 +384,7 @@ public class InfoLines {
      * @param aShadow
      *            shadow radius
      */
-    public void drawCornerTextsDynamic(Canvas canvas, Paint aPaint,
+    public void draw(Canvas canvas, Paint aPaint,
             int aTextColor, int aTextColorOpposite, int aShadow) {
         // If the screen width has changed since the last time, we need to
         // recalc
