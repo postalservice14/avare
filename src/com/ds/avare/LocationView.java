@@ -19,7 +19,9 @@ import com.ds.avare.adsb.NexradBitmap;
 import com.ds.avare.adsb.Traffic;
 import com.ds.avare.flightLog.KMLRecorder;
 import com.ds.avare.gps.GpsParams;
+import com.ds.avare.instruments.CDI;
 import com.ds.avare.instruments.EdgeDistanceTape;
+import com.ds.avare.instruments.VNAV;
 import com.ds.avare.place.Destination;
 import com.ds.avare.place.Obstacle;
 import com.ds.avare.position.Movement;
@@ -1067,8 +1069,11 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     		return;
     	}
 
-    	// Tell the instrument to draw itself
-		mService.getCDI().draw(canvas, getWidth(), getHeight());
+    	// Fetch the CDI instrument from the service and draw it
+    	CDI cdi = mService.getCDI();
+    	if (null != cdi) {
+    		cdi.draw(canvas, getWidth(), getHeight());
+    	}
     }
     
     /***
@@ -1091,8 +1096,11 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     		return;
     	}
 
-    	// Draw the vertical nav instrument
-    	mService.getVNAV().draw(canvas, getWidth(), getHeight(), dest);
+    	// Fetch the VNAV instrument from the service and draw it
+    	VNAV vnav = mService.getVNAV();
+    	if(null != vnav) {
+    		vnav.draw(canvas, getWidth(), getHeight(), dest);
+    	}
     }
 
     /***
