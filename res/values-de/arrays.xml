@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  
+Copyright (c) 2012, Apps4Av Inc. (apps4av.com) 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    *     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    *
+    *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<resources> 
+    
+    <string-array name="resGroups">
+        <item>Datanbank</item>
+        <item>Wetter</item>
+        <item>Plates/d-TPP/ADs (nur USA) </item>
+        <item>VFR Karten</item>
+        <item>TAC Charts (nur USA) </item>
+        <item>WAC Charts (nur USA) </item>
+        <item>IFR Low Enroute Charts</item>
+        <item>A/FD Images</item>
+        <item>Gelände Karten</item>
+        <item>IFR High Enroute Charts</item>
+        <item>Topographische Karten</item>
+        <item>Heli/andere Karten</item>
+    </string-array>
+
+    <string-array name="resGroupsPopout">
+        <item>COMM</item>
+        <item>Performance</item>
+        <item>METAR</item>
+        <item>TAF</item>
+        <item>Winds/Temp.</item>
+        <item>AIREP/PIREP</item>
+        <item>AIRMET/SIGMET</item>
+        <item>TFR</item>
+        <item>SUA</item>
+        <item>Radar</item>
+    </string-array>
+    
+    <string-array name="resNameDatabase">
+        <item>@string/databases</item>
+     </string-array>
+     
+    <string-array name="resNameWeather">
+    </string-array>
+        
+    <string-array name="resNameAFD">
+    </string-array>
+
+    <string-array name="resNameIFRHE">
+    </string-array>
+    
+    <string-array name="resNameIFRLE">
+    </string-array>
+    <string-array name="resNameWAC">
+    </string-array>
+    <string-array name="resNameTAC">
+    </string-array>
+    <string-array name="resNameSectional">
+        <item>EU VFR Chart</item>
+    </string-array>
+    <string-array name="resNamePlate">
+	</string-array>
+    <string-array name="resNameTerrain">
+    </string-array>
+    <string-array name="resNameTopo">
+    </string-array>
+    
+    <string-array name="resNameHeli">
+    </string-array>
+    
+    <string-array name="resFilesDatabase">
+        <item>databases-eu</item>
+    </string-array>
+    
+    <string-array name="resFilesWeather">
+    </string-array>
+        
+    <string-array name="resFilesIFRLE">
+    </string-array>
+
+    <string-array name="resFilesIFRHE">
+    </string-array>
+    
+    <string-array name="resFilesAFD">
+    </string-array>
+    
+    <string-array name="resFilesWAC">
+    </string-array>
+    <string-array name="resFilesTAC">
+    </string-array>
+    <string-array name="resFilesSectional">
+        <item>vfr-eu</item>
+    </string-array>
+
+    <string-array name="resFilesPlate">
+    </string-array>
+    <string-array name="resFilesTerrain">
+    </string-array>
+    <string-array name="resFilesTopo">
+    </string-array>
+    
+    <string-array name="resFilesHeli">
+    </string-array>
+    
+    <string-array name="ChartType">
+        <item>Sectional</item>
+        <item>TAC</item>
+        <item>WAC</item>
+        <item>IFR Low</item>
+        <item>IFR High</item>
+    	<item>Terrain</item>
+        <item>Shaded Relief</item>
+        <item>Topographic</item>
+        <item>Heli/Other</item>
+    </string-array>
+
+    <string-array name="ChartTypeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>    
+
+    <string-array name="ChartDbNames">
+        <item>maps.vfr.db</item>
+    </string-array>    
+    
+    <string-array name="UnitsD">
+        <item>Nautical Miles</item>
+        <item>Statute Miles</item>
+        <item>Kilometers</item>
+        </string-array>
+
+    <string-array name="UnitsDValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        </string-array>       
+    
+    <string-array name="Server">
+        <item>Apps4av.com</item>
+        <item>Kitepilot.org</item>
+    </string-array>
+
+    <string-array name="ServerValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="AirSig">
+        <item>ALL</item>
+        <item>NONE</item>
+        <item>IFR AIRMET</item>
+        <item>ICE AIRMET</item>
+        <item>TURB AIRMET</item>
+        <item>MTN OBSCN AIRMET</item>
+        <item>CONVECTIVE SIGMET</item>
+        <item>CONVECTIVE OUTLOOK</item>
+    </string-array>
+
+    <integer-array name="AirSigColor">
+        <item>0xFFFFFFFF</item>
+        <item>0x00000000</item>
+        <item>0xFF800080</item>
+        <item>0xFF0000FF</item>
+        <item>0xFF00FF00</item>
+        <item>0xFF66FFFF</item>
+        <item>0xFF7F0000</item>
+        <item>0xFFFFA500</item>
+    </integer-array>
+    
+	<string-array name="TimerRingSizeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="Opacity">
+        <item>Transparent</item>
+        <item>50 Prozent durchsichtig</item>
+        <item>Undurchsichtig</item>
+    </string-array>
+
+    <string-array name="OpacityValues">
+        <item>0</item>
+        <item>127</item>
+        <item>255</item>
+    </string-array>
+
+    <string-array name="TimerRingSizePrompt">
+        <item>keine Anzeige</item>
+        <item>2 Minuten</item>
+        <item>5 Minuten</item>
+        <item>10 Minuten</item>
+    </string-array>
+
+	<string-array name="Orientation">
+        <item>Hoch</item>
+        <item>Quer</item>
+        <item>Reverse Portrait</item>
+        <item>Reverse Landscape</item>
+     </string-array>
+	
+	<string-array name="DistanceRingTypeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+	<string-array name="DistanceRingTypePrompts">
+        <item>keine</item>
+        <item>dynamisch</item>
+        <item>Fixiert 2/5/10</item>
+    </string-array>
+
+	<string-array name="AutoPostTracksValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+	<string-array name="AutoPostTracksPrompts">
+        <item>kein</item>
+        <item>Sende email</item>
+        <item>Sende an alle Anwendungen</item>
+    </string-array>
+
+	<string-array name="TextFieldOptions">
+	    <item>None</item>
+		<item>Greenwich Mean Time</item>
+	    <item>Local Time</item>
+		<item>Ground Speed</item>
+	    <item>Track</item>
+	    <item>Bearing</item>
+	    <item>Destination Identifier</item>
+	    <item>Distance to Destination</item>
+	    <item>Estimated Time Enroute</item>
+	    <item>Estimated Time of Arrival</item>
+	    <item>MSL Altitude</item>
+	    <item>AGL Height</item>
+	    <item>Hobbs Flight Timer</item>
+	    <item>Vertical Speed Indicator</item>
+	    <item>Vertical Speed Required</item>
+	    <item>Odometer</item>
+	    <item>Course Deviation Indicator</item>
+	</string-array>
+	    
+	<string-array name="TextFieldOptionTitles">
+	    <item></item>
+		<item>Zulu</item>
+	    <item></item>
+		<item>Ground Speed</item>
+	    <item>Track</item>
+	    <item>Brg Next</item>
+	    <item>Next</item>
+	    <item>Dist Next</item>
+	    <item>ETE Next</item>
+	    <item>ETA Next</item>
+	    <item>MSL ft</item>
+	    <item>AGL ft</item>
+	    <item>Flight Time</item>
+	    <item>VSI fpm</item>
+	    <item>VSR fpm</item>
+	    <item>Odometer</item>
+	    <item>CDI</item>
+   	</string-array>
+
+</resources>
