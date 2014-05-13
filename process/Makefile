@@ -15,7 +15,7 @@ CYCLE=1405
 #Never use _ and . in file names
 
 clean:
-	rm -rf tiles maps.vfr.db vfr-eu.zip vfr-eu-warped.tif databases-eu.zip files.csv
+	rm -rf tiles *.db vfr-eu.zip vfr-eu-warped.tif databases-eu.zip files.csv
 	rm -rf tiles
 	mkdir -p tiles/${CYCLE}/vfr
 #	mkdir -p tiles/${CYCLE}/ifr
@@ -53,7 +53,10 @@ finalize:
 	#sqlite3 maps.ifr.db < import.sql
 	#rm -f files.csv
 
+database:
+	sqlite3 main.db < importother.sql
+
 zipit:
+	zip databases-eu.zip -r -1 -T maps.vfr.db main.db
 	zip vfr-eu.zip -r -1 -T `sqlite3 maps.vfr.db "select name from files"`
-	zip databases-eu.zip -r -1 -T maps.vfr.db
 	#zip ifr-eu.zip -r -1 -T `sqlite3 maps.ifr.db "select name from files"`
