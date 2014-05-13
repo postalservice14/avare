@@ -32,6 +32,7 @@ import com.ds.avare.position.Scale;
 import com.ds.avare.shapes.DistanceRings;
 import com.ds.avare.shapes.MetShape;
 import com.ds.avare.shapes.ExtendedRunway;
+import com.ds.avare.shapes.Radar;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.shapes.Tile;
 import com.ds.avare.storage.DataSource;
@@ -48,6 +49,7 @@ import com.ds.avare.utils.InfoLines;
 import com.ds.avare.utils.InfoLines.InfoLineFieldLoc;
 import com.ds.avare.utils.ShadowText;
 import com.ds.avare.utils.WeatherHelper;
+import com.ds.avare.weather.AdsbWeatherCache;
 import com.ds.avare.weather.AirSigMet;
 import com.ds.avare.weather.Airep;
 import com.ds.avare.weather.Metar;
@@ -759,13 +761,24 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private void drawRadar(Canvas canvas) {
         if((null == mService) || 			// We need the service
-           (0 == mPref.showRadar()) || 		// Radar turned on ? 
            (null != mPointProjection) ||	// Not during pinch/zoom
-           (mService.getRadar().isOld()) ||	// Is our image current  ?
+           (0 == mPref.showRadar()) || 		// Radar turned on ? 
            (mPref.useAdsbWeather())) {		// Should we really use ADSB ?
             return;
         }
         
+        // Fetch the radar object, checking to ensure it is valid
+        Radar radar = mService.getRadar();
+        if(null == radar) {
+        	return;
+        }
+        
+        // If it contains old data, then don't display it
+        if(radar.isOld()) {
+        	return;
+        }
+        
+        // Paint the radar image with the configured opaqueness.
         mPaint.setAlpha(mPref.showRadar());
         mService.getRadar().draw(canvas, mPaint, mOrigin, mScale, mPx, mPy);
         mPaint.setAlpha(255);
@@ -777,9 +790,15 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private void drawNexrad(Canvas canvas) {
         if((null == mService) ||			// We need the service 
-           (0 == mPref.showRadar()) ||		// Check the config setting
            (null != mPointProjection) || 	// Not during pinch/zoom
+           (0 == mPref.showRadar()) ||		// Check the config setting
            (!mPref.useAdsbWeather())) {		// Show downloaded radar instead ? 
+        	return;
+        }
+        
+        // Fetch the weather object, ensure that it is valid
+        AdsbWeatherCache adsbWx = mService.getAdsbWeather();
+        if(null == adsbWx) {
         	return;
         }
         
@@ -788,16 +807,15 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
          */
         SparseArray<NexradBitmap> bitmaps = null;
         if(mScale.getMacroFactor() > 4) {
-            if(!mService.getAdsbWeather().getNexradConus().isOld()) {
+            if(!adsbWx.getNexradConus().isOld()) {
                 /*
                  * CONUS for larger scales.
                  */
-                bitmaps = mService.getAdsbWeather().getNexradConus().getImages();                
+                bitmaps = adsbWx.getNexradConus().getImages();                
             }
-        }
-        else {
-            if(!mService.getAdsbWeather().getNexrad().isOld()) {
-                bitmaps = mService.getAdsbWeather().getNexrad().getImages();
+        } else {
+            if(!adsbWx.getNexrad().isOld()) {
+                bitmaps = adsbWx.getNexrad().getImages();
             }
         }
 
@@ -987,15 +1005,21 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
     private void drawRunways(Canvas canvas) {
         if ((!mPref.shouldExtendRunways()) ||	// Are we configured to draw these ?
        		(null == mService) ||				// is the service active ?
-       		(null != mPointProjection) ||		// Not zooming/expanding
-       		(null == mService.getDestination())) {	// Do we have a destination ? 
+       		(null != mPointProjection))	{		// Not zooming/expanding
+        	return;
+        }
+
+        // Fetch our current destination. If we don't have one,
+        // then nothing to draw.
+        Destination dest = mService.getDestination();
+        if(null == dest) {
         	return;
         }
 
         // We are all cleared to draw the runway extensions
     	mExtRunway.draw(canvas,	// Canvas to draw upon 
     			mOrigin, 		// Home origin of the chart display
-    			mService.getDestination(),	// Where we are headed
+    			dest,			// Where we are headed
     			mTrackUp, 		// set if tracking UP always
     			mGpsParams, 	// Latest GPS info
     			mShadowText);	// How to draw text if needed
