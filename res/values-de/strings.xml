@@ -21,7 +21,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Nearest">&quot;am nächsten&quot;</string>
 <!-- string name="Success">&quot;Success&quot;</string  -->
     <string name="Success">&quot;Erfolgreich&quot;</string>
-    <string name="DatabaseName">&quot;maps.db&quot;</string>
+    <string name="DatabaseName">&quot;main.db&quot;</string>
 <!-- string name="WarningMsg">&quot;USE AT YOUR OWN RISK!&quot;</string  -->
     <string name="WarningMsg">&quot;Verwendung auf eigene Verantwortung!&quot;</string>
 <!-- string name="DestinationPrompt">&quot;Enter Destination&quot;</string  -->
