@@ -64,6 +64,7 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>EU VFR Chart</item>
     </string-array>
     <string-array name="resNamePlate">
+        <item>EU VAC/AD Charts</item>
 	</string-array>
     <string-array name="resNameTerrain">
     </string-array>
@@ -98,6 +99,7 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>
 
     <string-array name="resFilesPlate">
+        <item>vac-ad-eu</item>
     </string-array>
     <string-array name="resFilesTerrain">
     </string-array>
