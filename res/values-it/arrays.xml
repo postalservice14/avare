@@ -16,7 +16,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string-array name="resGroups">
         <item>Datanbase</item>
         <item>Meteo</item>
-        <item>Plates/d-TPP/ADs (nur USA) </item>
+        <item>Mappe AD e di avvicinamento</item>
         <item>Mappe VFR</item>
         <item>TAC Charts (USA) </item>
         <item>WAC Charts (USA) </item>
@@ -64,6 +64,7 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>EU VFR Chart</item>
     </string-array>
     <string-array name="resNamePlate">
+        <item>EU VAC/AD Charts</item>
 	</string-array>
     <string-array name="resNameTerrain">
     </string-array>
@@ -98,6 +99,7 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>
 
     <string-array name="resFilesPlate">
+        <item>vac-ad-eu</item>
     </string-array>
     <string-array name="resFilesTerrain">
     </string-array>
@@ -120,9 +122,9 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>    
     
     <string-array name="UnitsD">
-        <item>Nautical Miles</item>
-        <item>Statute Miles</item>
-        <item>Kilometers</item>
+        <item>Miglio Nautico</item>
+        <item>Miglio Terrestre</item>
+        <item>Chilometro</item>
         </string-array>
 
     <string-array name="UnitsDValues">
@@ -215,9 +217,9 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>
 
 	<string-array name="AutoPostTracksPrompts">
-        <item>niente</item>
-        <item>invia email</item>
-        <item>invia a tutte le applicazioni</item>
+        <item>Nessuno</item>
+        <item>Invia email</item>
+        <item>Invia a tutte le applicazioni</item>
     </string-array>
 
 	<string-array name="TextFieldOptions">
@@ -228,15 +230,15 @@ Redistribution and use in source and binary forms, with or without modification,
 	    <item>Track</item>
 	    <item>Bearing</item>
 	    <item>Identificatore di destinazione</item>
-	    <item>Distanza verso destinazione</item>
+	    <item>Distanza verso la destinazione</item>
 	    <item>Tempo estimato Enroute</item>
 	    <item>Tempo estimato di arrivo</item>
 	    <item>MSL Altitude</item>
 	    <item>AGL Height</item>
-	    <item>Hobbs Flight Timer</item>
+	    <item>Contatore dell ore di funzionamento</item>
 	    <item>Indicatore della velocita verticale</item>
 	    <item>Velocita verticale richiesta</item>
-	    <item>Odometer</item>
+	    <item>Misuratore di Distanza</item>
 	    <item>Indicatore di Deviazione della Rotta</item>
 	</string-array>
 	    
