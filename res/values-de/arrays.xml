@@ -16,12 +16,12 @@ Redistribution and use in source and binary forms, with or without modification,
     <string-array name="resGroups">
         <item>Datanbank</item>
         <item>Wetter</item>
-        <item>Plates/d-TPP/ADs (nur USA) </item>
+        <item>AD + VAC + AREA Karten</item>
         <item>VFR Karten</item>
         <item>TAC Charts (nur USA) </item>
         <item>WAC Charts (nur USA) </item>
         <item>IFR Low Enroute Charts</item>
-        <item>A/FD Images</item>
+        <item>AD Karten</item>
         <item>Gelände Karten</item>
         <item>IFR High Enroute Charts</item>
         <item>Topographische Karten</item>
@@ -64,6 +64,7 @@ Redistribution and use in source and binary forms, with or without modification,
         <item>EU VFR Chart</item>
     </string-array>
     <string-array name="resNamePlate">
+        <item>EU VAC/AD Charts</item>
 	</string-array>
     <string-array name="resNameTerrain">
     </string-array>
@@ -98,6 +99,7 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>
 
     <string-array name="resFilesPlate">
+        <item>vac-ad-eu</item>
     </string-array>
     <string-array name="resFilesTerrain">
     </string-array>
@@ -120,9 +122,9 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>    
     
     <string-array name="UnitsD">
-        <item>Nautical Miles</item>
-        <item>Statute Miles</item>
-        <item>Kilometers</item>
+        <item>Nautische Meile</item>
+        <item>Land Meile</item>
+        <item>Kilometer</item>
         </string-array>
 
     <string-array name="UnitsDValues">
@@ -192,8 +194,8 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string-array name="Orientation">
         <item>Hoch</item>
         <item>Quer</item>
-        <item>Reverse Portrait</item>
-        <item>Reverse Landscape</item>
+        <item>Hoch entgegengesetzt</item>
+        <item>Quer entgegengesetzt</item>
      </string-array>
 	
 	<string-array name="DistanceRingTypeValues">
@@ -221,22 +223,22 @@ Redistribution and use in source and binary forms, with or without modification,
     </string-array>
 
 	<string-array name="TextFieldOptions">
-	    <item>None</item>
-		<item>Greenwich Mean Time</item>
-	    <item>Local Time</item>
+	    <item>Keine</item>
+		<item>Greenwich Zeit</item>
+	    <item>Lokalzeit</item>
 		<item>Ground Speed</item>
 	    <item>Track</item>
 	    <item>Bearing</item>
-	    <item>Destination Identifier</item>
-	    <item>Distance to Destination</item>
-	    <item>Estimated Time Enroute</item>
-	    <item>Estimated Time of Arrival</item>
+	    <item>Kennung Zielort</item>
+	    <item>Entfernung bis zum Ziel</item>
+	    <item>Geschätzte Flugdauer</item>
+	    <item>Geschätzte Ankunft</item>
 	    <item>MSL Altitude</item>
 	    <item>AGL Height</item>
-	    <item>Hobbs Flight Timer</item>
+	    <item>Betriebsstundenzähler</item>
 	    <item>Vertical Speed Indicator</item>
 	    <item>Vertical Speed Required</item>
-	    <item>Odometer</item>
+	    <item>Entfernungsmesser</item>
 	    <item>Course Deviation Indicator</item>
 	</string-array>
 	    
@@ -256,7 +258,7 @@ Redistribution and use in source and binary forms, with or without modification,
 	    <item>Flight Time</item>
 	    <item>VSI fpm</item>
 	    <item>VSR fpm</item>
-	    <item>Odometer</item>
+	    <item>Entfernungsmesser</item>
 	    <item>CDI</item>
    	</string-array>
 

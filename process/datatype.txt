@@ -5,6 +5,28 @@ commit
 git push
 
 
+-----------------------------------------------------------------
+make database>
+vare@avare-ch:~/1405$ make database
+sqlite3 main.db < importother.sql
+Error: cannot open "airport.csv"
+Error: cannot open "freq.csv"
+Error: cannot open "runway.csv"
+Error: cannot open "airdiags/aptdiags.csv"
+Error: cannot open "nav.csv"
+Error: cannot open "fix.csv"
+Error: cannot open "dof.csv"
+Error: cannot open "afd.csv"
+Error: cannot open "mins/to.csv"
+Error: cannot open "mins/alt.csv"
+Error: cannot open "awos.csv"
+Error: cannot open "saa.csv"
+Error: cannot open "canap.csv"
+Error: cannot open "canrun.csv"
+Error: cannot open "canfreq.csv"
+make: *** [database] Error 1
+------------------------------------------------------------------------
+
 
 airport.csv
 -----------
