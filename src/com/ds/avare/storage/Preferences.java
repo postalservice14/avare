@@ -142,7 +142,7 @@ public class Preferences {
             /*
              * I hope Android comes up with a better resource solution some time soon.
              */
-            return "http://www.mamba.dreamhosters.com/eu/";
+            return "http://svfr.ch/eu/";
         }
         else if (val.equals("1")) {
             return "http://avare.kitepilot.org/eu/";
