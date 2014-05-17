@@ -42,7 +42,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ShowTrackSummary">&quot;scegli se vuoi visualizzare una linia indicativa verso la destinazione&quot;</string>
     <string name="Help">&quot;Assistenza&quot;</string>
     <string name="desc">&quot;Image/Chart&quot;</string>
-			<!-- i have not traslated the previous item because i dont know the scope/intend  -->
+			<!-- no translation needed  -->
     <string name="Destination">&quot;Destinazione&quot;</string>
     <string name="Settings">&quot;Impostazione&quot;</string>
     <string name="Downloading">&quot;scaricamento in corso&quot;</string>
@@ -66,7 +66,7 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string name="AreaNF">&quot;Li aeroporti in prossimità possono soltanto essere visualizzati se il GPS e attivato&quot;</string>
     <string name="ScreenOn">&quot;Standby Schermo&quot;</string>
     <string name="ScreenOnLabel">&quot;Schermo sempre acceso&quot;</string>
-    <string name="ScreenOnSummary">&quot;Scegli se lo schermo resta sempre acceso quando usi L'applicazione&quot;</string>
+    <string name="ScreenOnSummary">&quot;Scegli se lo schermo resta sempre acceso&quot;</string>
     <string name="update">&quot;Update&quot;</string>
     <string name="gps">&quot;GPS&quot;</string>
     <string name="longitude">&quot;'W&quot;</string>
@@ -92,10 +92,10 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Units">&quot;Unità per la Distanza&quot;</string>
     <string name="UnitsLabel">&quot;Scegli quale Unità viene usata per indicare la Distanza&quot;</string>
     <string name="UnitsSummary">&quot;Scegli l'unità per la Distanza&quot;</string>
-<!-- string name="AllFacilities">&quot;All Facilities&quot;</string  -->
+    <!--  <string name="AllFacilities">&quot;All Facilities&quot;</string no translation needed  -->
     <string name="AllFacilities">&quot;Aiuti alla Navigazione&quot;</string>
     <string name="AllFacilitiesLabel">&quot;Fai vedere tutti gli aeroporti/campi di volo&quot;</string>
-    <string name="AllFacilitiesSummary">&quot;Scegli se voui far vedere i Campi di Volo, Eliporti, le base Ultralight e gli Idrosuperficie in prossimità&quot;</string>
+    <string name="AllFacilitiesSummary">&quot;Scegli se voui far vedere i Campi di Volo, Eliporti, le base Ultralight e gli Idrosuperficie&quot;</string>
     <string name="Set">&quot;Scegli&quot;</string>
     <string name="Runways">&quot;Informazione Pista&quot;</string>
     <string name="RunwaysLabel">&quot;Informazione Pista&quot;</string>
@@ -113,8 +113,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="BackgroundLabel">&quot;Mostra lo sfondo;</string>
     <string name="BackgroundSummary">&quot;Scegli un colore per il sfondo dello schermo per leggere meglio i caratteri sui schermi piccoli&quot;</string>
 <!-- string name="SelectPlate">&quot;Select A Plate&quot;</string  -->
-    <string name="SelectPlate">&quot;Scegli una mappa aeroportouale&quot;</string>
-    <string name="DownloadDB">&quot;I dati richiesti non sono presenti e devono essere prima scaricati.&quot;</string>
+    <string name="SelectPlate">&quot;Scegli una mappa d'aeroporto&quot;</string>
+    <string name="DownloadDB">&quot;I dati richiesti non sono presenti e devono prima essere scaricati.&quot;</string>
     <string name="Agree">&quot;Io accetto&quot;</string>
     <string name="LeaveRunning">&quot;Attività di sfondo&quot;</string>
     <string name="LeaveRunningLabel">&quot;Attività di sfondo&quot;</string>
@@ -142,10 +142,10 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string name="IconHelicopter">&quot;Icona Elicottero&quot;</string>
     <string name="IconHelicopterLabel">&quot;Icona Elicottero&quot;</string>
     <string name="IconHelicopterSummary">&quot;Scegli se per visualizzare la posizione attuale viene utilizata l'icona dell elicottero&quot;</string>
-    <string name="Draw">&quot;Disegna&quot;</string>
+    <string name="Draw">&quot;Non disegnare&quot;</string>
     <string name="Pan">&quot;Disegnare&quot;</string>
 	<string name="Clear">&quot;Cancella&quot;</string>
-	    <string name="WX">&quot;WX&quot;</string>
+	<string name="WX">&quot;WX&quot;</string>
 			<!-- WX weather is also well know and used in europe but i doubt that we can use it for free  -->
     <string name="Left">&quot;Sinistra&quot;</string>
     <string name="Right">&quot;Destra&quot;</string>
@@ -153,8 +153,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Last">&quot;L'ultimo&quot;</string>
     <string name="Save">&quot;Memmorizza&quot;</string>
     <string name="SavedPlan">&quot;Rotte di volo memmorizzate&quot;</string>
-	<!-- string name="Load">&quot;Load&quot;</string  -->
-    <string name="Load">&quot;Apri&quot;</string>
+	<string name="Load">&quot;Apri&quot;</string>
 	<string name="LoadReverse">&quot;cambia l'ordine di successione&quot;</string>
 			<!-- switch the order when opened an saved flightplan  -->
     <string name="WeatherError">&quot;I dati Meteo non possono essere scaricati&quot;</string>
@@ -162,11 +161,10 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="SimulationMode">&quot;Modalità di Simulatione&quot;</string>
     <string name="TrackUp">&quot;Mappa fissa&quot;</string>
 			<!-- der fliegericon bleibt stehen und die karte dreht sich. das gegenteil ist "nord verso sopra"  -->
-<!-- string name="Understand">&quot;I Understand&quot;</string  -->
     <string name="Understand">&quot;Ho capito&quot;</string>
-	<string name="NorthUp">&quot;Nord verso l'alto&quot;</string>
+	<string name="NorthUp">&quot;Nord verso sopra&quot;</string>
     <string name="XlateWeather">&quot;XlateWeather&quot;</string>
-		<!-- no translation given for the upper string  -->
+		<!-- no translation needed  -->
     <string name="XlateWeatherLabel">&quot;Convertire i dati Meteo&quot;</string>
 	<string name="XlateWeatherSummary">&quot;Scegli se METAR/TAF/PIREP devono essere convertiti nella forma breve WX&quot;</string>
     <string name="noZoomIn">&quot;Ingrandimento massimo ragiunto&quot;</string>
@@ -197,8 +195,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="SpeedKilometer">kh</string>
     <string name="prefTimerRingSize">TimerRingSize</string>
 			<!-- no translation needed -->
-    <string name="TimerRingSizeLabel">&quot;Visualiza la distanza tramite un cerchio&quot;</string>
-    <string name="TimerRingSizeSummary">&quot;Select the timer ring size in minutes&quot;</string>
+    <string name="TimerRingSizeLabel">&quot;Visualiza il contaminuti tramite un cerchio&quot;</string>
+    <string name="TimerRingSizeSummary">&quot;Determina il tempo per il contaminuti&quot;</string>
     <string name="Up">In alto</string>
     <string name="PrivateFolder">Cartella pricipale</string>
     <string name="FileStore">I File verrano memmorizati in:</string>
@@ -214,7 +212,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="TrkUpdShowHistory">TrkUpdShowHistory</string>
 		<!-- no translation neede  -->
     <string name="TrkUpdShowHistoryLabel">&quot;Rotte di volo memmorizzate&quot;</string>
-    <string name="TrkUpdShowHistorySummary">&quot;Scegli se voui visualizzare le rotte memmorizzate sullo schermo attuale&quot;</string>
+    <string name="TrkUpdShowHistorySummary">&quot;Scegli se voui visualizzare il Track memmorizzate sullo schermo principale&quot;</string>
     <string name="AutoPostTracksTitle">&quot;Invia le Rotte memmorizzate a &quot;</string>
     <string name="AutoPostTracksSubject">&quot;Avare flight tracking data - &quot;</string>
     <string name="prefAutoPostTracks">AutoPostTracks</string>
@@ -224,7 +222,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AutoPostTracksDialogText">&quot;La Rotta/Track %s e memmorizzata&quot;</string>
     <string name="Zero">&quot;0&quot;</string>
     <string name="CurrentlySetTo">&quot;\nCurrently: &quot;</string>
-    	<!-- no translation made  -->
+    	<!-- no translation needed  -->
     <string name="ADSBWeather">Meteo ADSB</string>
     <string name="ADSBWeatherLabel">&quot;Usa i dati Meteo derivanti dal ricevitore ADSB &quot;</string>
     <string name="ADSBWeatherSummary">&quot;Scegli se utilizzare i dati Meteo proveniente dal ricevitore ADSB invece/anziché dall Internet (ADSB Meteo: IO Plug-in di Avare occorrente);</string>
@@ -234,12 +232,12 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ADSBTrafficLabel">&quot;Visualizza il Traffico indicato dell ricevitore ADSB&quot;</string>
     <string name="ADSBTrafficSummary">&quot;Scegli se vuoi visualizzare il Traffico indicato dall ricevitore ADSB (IO Plug-in di Avare occorente)&quot;</string>
     <string name="prefUseDynamicFields">UseDynamicFields</string>
-    	<!-- no translation made  -->
+    	<!-- no translation needed  -->
     <string name="UseDynamicFieldsLabel">&quot;Visualizza dynamicamente&quot;</string>
     <string name="UseDynamicFieldsSummary">&quot;Scegli se voui visualizzare le due righe informative sullo schermo principale dynamicalmente&quot;</string>
 	<string name="prefGetRowFormats">RowFormats</string>
-		<!-- translation needed for the upper string?  -->
-    <string name="SelectTextFieldTitle">&quot;Scegli quali informazione verano usate per le due righe informative&quot;</string>
+		<!-- no translation needed  -->
+    <string name="SelectTextFieldTitle">&quot;Scegli quali informazione verano visualizzate&quot;</string>
 	<string name="prefOdometer">Telemetro(misura della distanza)</string>
 		<!-- string name="prefOdometer">Odometer</string  -->
     <string name="DownloadDBShort">&quot;Scarica la Database&quot;</string>
@@ -263,14 +261,13 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="GlideRatioSummary">&quot;Determina la Tassa di planata dell tuo aeroplano&quot;</string>
     <string name="NotGlideRange">&quot;Al di fuori della Tassa di planata&quot;</string>
     <string name="Fuel">&quot;Carburante&quot;</string>
-			<!-- how the app show this?  -->
-    <string name="prefLastPlateIndex">LastPlateIndex</string>
-			<!-- how the app show this?  -->
+	    <string name="prefLastPlateIndex">LastPlateIndex</string>
+			<!-- no translatio needed  -->
     <string name="prefLastPlateAirport">LastPlateAirport</string>
-			<!-- how the app show this?  -->
+			<!-- no translatio needed  -->
     <string name="EdgeTape">&quot;EdgeTape&quot;</string>
     <string name="EdgeTapeLabel">&quot;Indicatore di distanza al lato dello schermo&quot;</string>
-    <string name="EdgeTapeSummary">&quot;India al lato dello schermo un misuratore di distanza della mappa&quot;</string>
+    <string name="EdgeTapeSummary">&quot;Indica al lato dello schermo un misuratore di distanza della mappa&quot;</string>
     <string name="Instrumentation">&quot;Istrumenti&quot;</string>
     <string name="register">Registrati</string>
 	<string name="unregister">Disconnettere la Registrazione</string>
@@ -294,7 +291,7 @@ Registration.\nPlease press the Register button to continue.</string  -->
     <string name="no">No</string>
     <string name="new_message">Un nuvo messagio da Apps4Av</string>
 	<string name="online">Account</string>
-		<!-- no translation made  -->
+		<!-- no translation needed  -->
     <string name="failed_register">Registrazione fallita!</string>
     <string name="failed_unregister">Cancellare la registrazione non possibile!</string>
 	<string name="registered">&quot;Registrazione successa! Scelga "indietro" per avviare l'Applicazione. Per primo bisogna caricare la database (occorrente) tramite il Menü Download. Dopodiché si puo caricare le Mappe e gli appartenienti Documenti tramite il Menü Download.&quot;</string>

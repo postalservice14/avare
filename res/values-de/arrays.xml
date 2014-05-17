@@ -46,6 +46,7 @@ Redistribution and use in source and binary forms, with or without modification,
      </string-array>
      
     <string-array name="resNameWeather">
+        <item>Weather</item>
     </string-array>
         
     <string-array name="resNameAFD">

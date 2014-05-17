@@ -94,8 +94,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="UnitsLabel">&quot;Einheit für die Entfernung&quot;</string>
     <string name="UnitsSummary">&quot;Wählen sie die Einheit für die Entfernung&quot;</string>
     <string name="AllFacilities">&quot;Alle Navigationshilfen&quot;</string>
-		<!-- no translation neede = zeige alle flugplatze  -->
-    <string name="AllFacilitiesLabel">&quot;Zeige alle Flugplätze&quot;</string>
+	<string name="AllFacilitiesLabel">&quot;Zeige alle Flugplätze&quot;</string>
+		<!-- no translation needed Show All Bases = zeige alle flugplatze  -->
     <string name="AllFacilitiesSummary">&quot;Auswählen ob auch die Heliport, Ultraleicht und Wasserlandefelder angezeigt werden sollen&quot;</string>
     <string name="Set">&quot;Auswahl&quot;</string>
     <string name="Runways">&quot;Rollbahn Info&quot;</string>
@@ -104,14 +104,14 @@ Redistribution and use in source and binary forms, with or without modification,
 	<string name="AutoShowAirportDiagram">&quot;AD Karten automatisch anzeigen&quot;</string>
     <string name="AutoShowAirportDiagramLabel">&quot;AD Karte automatisch anzeigen&quot;</string>
     <string name="AutoShowAirportDiagramSummary">&quot;Auswählen ob die Flugplatzkarte automatisch angezeigt werden soll während des Rollen (Apron ,Taxiway)&quot;</string>
-			<!-- no translation neede = ad karte autom. anzeigen  -->
+			<!-- no translation needed Auto Show Airport Diagram = Auswählen ob...  -->
     <string name="Altitude">&quot;Altitude ft.&quot;</string>
     <string name="Exit">&quot;Beenden&quot;</string>
     <string name="PlatesNF">&quot;Für den gesuchten Zielort sind keine Karten erhältlich&quot;</string>
     <string name="Obstacles">&quot;Hindernisse&quot;</string>
     <string name="ObstaclesLabel">&quot;Zeige Hindernisse&quot;</string>
     <string name="ObstaclesSummary">&quot;Zeige die Hindernisse in unmitelbarer nähe der aktuellen Position&quot;</string>
-	<!-- string name="Background">&quot;Background&quot;</string  -->
+		<!-- string name="Background">&quot;Background&quot;</string  -->
 		<!-- no translation neede = zeige hintergrund  -->
     <string name="Background">&quot;Hintergrund&quot;</string>
     <string name="BackgroundLabel">&quot;Zeige Hintergrund&quot;</string>
@@ -130,7 +130,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="NightModeSummary">&quot;Auswählen ob die Helligkeit des Bildschirm reduziert werden soll für den Nachtmdous (Neustart erforderlich)&quot;</string>
     <string name="Delete">&quot;Löschen&quot;</string>
     <string name="Label">&quot;Name&quot;</string>
-    	<!-- no translation needed  -->
+    	<!-- no translation needed Label = Name  -->
 	<string name="Plan">&quot;Flugroute&quot;</string>
     <string name="PlanSet">&quot; zur Flugroute hinzugefügt&quot;</string>
     <string name="PlanNoset">&quot; nicht zur Flugroute hinzugefügt&quot;</string>
@@ -194,8 +194,8 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="SpeedMile">mh</string>
     <string name="SpeedKilometer">kh</string>
     <string name="prefTimerRingSize">TimerRingSize</string>
-	<string name="TimerRingSizeLabel">&quot;Entfernung kreisförmig anzeigen&quot;</string>
-    <string name="TimerRingSizeSummary">&quot;Zeigt die Entfernung in einer kreisförmigen Skala am Bildschirm an&quot;</string>
+	<string name="TimerRingSizeLabel">&quot;Timer kreisförmig anzeigen&quot;</string>
+    <string name="TimerRingSizeSummary">&quot;Wähle die Zeit in Munten für den Timer&quot;</string>
     <string name="Up">Oben</string>
     <string name="PrivateFolder">Standard Ordner benutzen</string>
     <string name="FileStore">Die Dateien werden gespeichert in:</string>
@@ -216,7 +216,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AutoPostTracksSummary">&quot;Wählen sie aus was mit den aufgezeichneten Track Dateien (KML) geschen soll nachdem diese aufgezeichnet wurden&quot;</string>
     <string name="AutoPostTracksDialogText">&quot;Die Track Datei %s wurde gespeichert&quot;</string>
     <string name="Zero">&quot;0&quot;</string>
-	    <string name="CurrentlySetTo">&quot;\nCurrently: &quot;</string>
+	<string name="CurrentlySetTo">&quot;\nCurrently: &quot;</string>
 	    <!--  no translation neede-->
     <string name="ADSBWeather">ADSB Meteo Daten</string>
     <string name="ADSBWeatherLabel">&quot;Quelle der Wetter Daten&quot;</string>
@@ -236,10 +236,9 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="RadarLabel">&quot;NEXRAD Anzeige&quot;</string>
     <string name="RadarSummary">&quot;Info: NEXRAD kann nur in USA, Kanada und Australien empfangen werden&quot;</string>
     <string name="PlanWarning">&quot;einen anderen Track laden&quot;</string>
-			<!-- translated as "load another Track"  -->
-    <string name="PlanDestinationNF">&quot;Nicht alle Wegpunkte konnten gefunden werden.&quot;</string>
+	<string name="PlanDestinationNF">&quot;Nicht alle Wegpunkte konnten gefunden werden.&quot;</string>
     <string name="prefShowCDI">ShowCDI</string>
-    	<!-- no translated needed   -->
+    	<!-- no translation needed   -->
     <string name="ShowCDILabel">&quot;Zeige CDI/VDI&quot;</string>
     <string name="ShowCDISummary">&quot;Zeigt den Kurs und die vertikale Achse an&quot;</string>
     <string name="Nearest2000">&quot;Am nächsten\n2000'&quot;</string>
@@ -253,9 +252,9 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="Fuel">&quot;Kraftstoff&quot;</string>
 			<!--  wird im suchen dialog interaktiv angezeigt -->
     <string name="prefLastPlateIndex">LastPlateIndex</string>
-		<!-- no translated needed  -->
+		<!-- no translatio needed  -->
     <string name="prefLastPlateAirport">LastPlateAirport</string>
-		<!-- no translated needed  -->
+		<!-- no translation needed  -->
 	<string name="EdgeTape">&quot;EdgeTape&quot;</string>
     <string name="EdgeTapeLabel">&quot;Seitliche Distanz-Anzeige&quot;</string>
     <string name="EdgeTapeSummary">&quot;Zeigt eine Messskala der Karte seitlich am Bildschirm an&quot;</string>
@@ -281,5 +280,4 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="unregistered">Sie haben sich abgemeldet!</string>
     <string name="DensityAltitude">Density Altitude</string>
     <string name="BestRunway">Best Wind Runway</string>
-			<!-- how the app show this?  -->
-</resources>
+	</resources>
