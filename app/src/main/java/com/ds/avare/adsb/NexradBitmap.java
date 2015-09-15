@@ -11,6 +11,13 @@ Redistribution and use in source and binary forms, with or without modification,
 */
 package com.ds.avare.adsb;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.SparseArray;
+
+import com.ds.avare.position.Origin;
+import com.ds.avare.shapes.DrawingContext;
+import com.ds.avare.storage.Preferences;
 import com.ds.avare.utils.BitmapHolder;
 
 /**
@@ -22,7 +29,6 @@ public class NexradBitmap {
     private double mCoords[];
     private double mScaleX;
     private double mScaleY;
-    private int mBlock;
     private BitmapHolder mBitmap;
     
     public long timestamp;
@@ -73,7 +79,6 @@ public class NexradBitmap {
     public NexradBitmap(long time, int data[], int block, boolean conus, int cols, int rows) {
        
         timestamp = System.currentTimeMillis();
-        mBlock = block;
         mCoords = new double[2];
         
         /*
@@ -133,29 +138,21 @@ public class NexradBitmap {
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public double getScaleX() {
-        return mScaleX / 60.0;
+    public double getLatBottomRight() {
+        return mCoords[1] - mScaleY * mBitmap.getHeight() / 60.0;
     }
-    
-    /**
-     * 
-     * @return
-     */
-    public double getScaleY() {
-        return mScaleY / 60.0;
-    }    
 
     /**
-     * 
+     *
      * @return
      */
-    public int getBlock() {
-        return mBlock;
+    public double getLonBottomRight() {
+        return mCoords[0] + mScaleX * mBitmap.getWidth() / 60.0;
     }
-    
+
     /**
      * 
      * @return
@@ -163,5 +160,80 @@ public class NexradBitmap {
     public BitmapHolder getBitmap() {
         return mBitmap;
     }
-    
+
+
+    /**
+     * Draw on map screen
+     */
+    public void drawOne(Canvas canvas, Paint paint, Origin origin, Preferences pref) {
+        if(null == mBitmap) {
+            return;
+        }
+
+        /*
+         * draw them scaled.
+         */
+        float x0 = (float)origin.getOffsetX(getLonTopLeft());
+        float y0 = (float)origin.getOffsetY(getLatTopLeft());
+        float x1 = (float)origin.getOffsetX(getLonBottomRight());
+        float y1 = (float)origin.getOffsetY(getLatBottomRight());
+
+        float scalex = (x1 - x0) / mBitmap.getWidth();
+        float scaley = (y1 - y0) / mBitmap.getHeight();
+
+        mBitmap.getTransform().setScale(scalex, scaley);
+        mBitmap.getTransform().postTranslate(x0, y1);
+        if(mBitmap.getBitmap() != null) {
+            paint.setAlpha(pref.showLayer());
+            canvas.drawBitmap(mBitmap.getBitmap(), mBitmap.getTransform(), paint);
+            paint.setAlpha(255);
+        }
+
+    }
+
+
+    /**
+     *
+     * @param ctx
+     * @param nexrad
+     * @param conus
+     * @param shouldDraw
+     */
+    public static void draw(DrawingContext ctx, NexradImage nexrad, NexradImageConus conus, boolean shouldDraw) {
+        if(0 == ctx.pref.showLayer() || (!shouldDraw) || (!ctx.pref.useAdsbWeather())) {
+            // This shows only for nexrad layer, and when adsb is used
+            return;
+        }
+
+        /*
+         * Get nexrad bitmaps to draw.
+         */
+        SparseArray<NexradBitmap> bitmaps = null;
+        if(ctx.scale.getMacroFactor() > 4) {
+            if(!conus.isOld()) {
+                /*
+                 * CONUS for larger scales.
+                 */
+                bitmaps = conus.getImages();
+            }
+        }
+        else {
+            if(!nexrad.isOld()) {
+                bitmaps = nexrad.getImages();
+            }
+        }
+
+        if(null == bitmaps) {
+            return;
+        }
+
+        // Draw all nexrad blocks
+        for(int i = 0; i < bitmaps.size(); i++) {
+            int key = bitmaps.keyAt(i);
+            NexradBitmap b = bitmaps.get(key);
+            b.drawOne(ctx.canvas, ctx.paint, ctx.origin, ctx.pref);
+        }
+
+    }
+
 }

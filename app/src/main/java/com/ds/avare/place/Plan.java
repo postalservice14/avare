@@ -12,15 +12,6 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare.place;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.location.Location;
 
@@ -34,6 +25,15 @@ import com.ds.avare.shapes.TrackShape;
 import com.ds.avare.storage.Preferences;
 import com.ds.avare.storage.StringPreference;
 import com.ds.avare.utils.Helper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * 
@@ -55,6 +55,7 @@ public class Plan implements Observer {
 
     private String mEte;
     private double mDistance;
+    private long mEteSec;
     private double mBearing;
     private GpsParams mLastLocation;
     private Passage mPassage;
@@ -67,10 +68,12 @@ public class Plan implements Observer {
     private boolean mEarlyPass;
     private boolean mEarlyPassEvent;
     private boolean mSuspend = false;
+    private int mAltitude = 0;
 
     /**
-     * 
-     * @param dataSource
+     *
+     * @param ctx
+     * @param service
      */
     public Plan(Context ctx, StorageService service) {
         mPref = new Preferences(ctx);
@@ -85,6 +88,7 @@ public class Plan implements Observer {
         mActive = false;
         mTrackShape = new TrackShape();
         mDistance = 0;
+        mEteSec = 0;
         mLastLocation = null;
         mBearing = 0;
         mDeclination = 0;
@@ -286,11 +290,11 @@ public class Plan implements Observer {
 
     /**
      * 
-     * @param lon
-     * @param lat
+     * @param params
      */
     public void updateLocation(GpsParams params) {
         mDistance = 0;
+        mEteSec = 0;
         mBearing = 0;
         mDeclination = params.getDeclinition();
         int num = getDestinationNumber();
@@ -312,6 +316,7 @@ public class Plan implements Observer {
                 mDestination[id].updateTo(params);
             }
             mDistance = mDestination[np].getDistance();
+            mEteSec = mDestination[np].getEteSec();
 
             /*
              * For all upcoming, add distance. Distance is from way point to way
@@ -320,10 +325,12 @@ public class Plan implements Observer {
             for (int id = (np + 1); id < num; id++) {
                 Location l = mDestination[id - 1].getLocation();
                 l.setSpeed((float)GpsParams.speedConvert(params.getSpeed()));
+                l.setAltitude((float)GpsParams.altitudeConvert(params.getAltitude()));
                 l.setBearing((float)params.getBearing());
                 GpsParams p = new GpsParams(l);
                 mDestination[id].updateTo(p);
                 mDistance += mDestination[id].getDistance();
+                mEteSec += mDestination[id].getEteSec();
             }
 
         } else {
@@ -334,6 +341,7 @@ public class Plan implements Observer {
             }
 
             mDistance = 0;
+            mEteSec = 0;
             for (int id = 0; id < num; id++) {
                 /*
                  * For all upcoming, add distance. Distance is from way point to
@@ -341,6 +349,7 @@ public class Plan implements Observer {
                  */
                 if (!mPassed[id]) {
                     mDistance += mDestination[id].getDistance();
+                    mEteSec += mDestination[id].getEteSec();
                 }
             }
         }
@@ -360,8 +369,8 @@ public class Plan implements Observer {
 	            }
 	        }
         }
-        mEte = Helper.calculateEte(mPref.useBearingForETEA() && (!isActive()), mDistance,
-                params.getSpeed(), mBearing, params.getBearing());
+        // ETE is sum of all ETE legs
+        mEte = Helper.calculateEte(0, 0, mEteSec, false);
         mLastLocation = params;
     }
 
@@ -490,8 +499,12 @@ public class Plan implements Observer {
             // Now if we have at least one destination, set GPS coords
             // to the next not passed to simulate we are there.
             // This gives accurate plan total from start of plan
-            updateLocation(new GpsParams(
-                    mDestination[findNextNotPassed()].getLocation()));
+            GpsParams params = new GpsParams(
+                    mDestination[findNextNotPassed()].getLocation());
+            // Set speed to the aircraft TAS in simulation mode
+            params.setSpeed(mPref.getAircraftTAS());
+            params.setAltitude(mAltitude);
+            updateLocation(params);
         }
     }
 
@@ -630,6 +643,14 @@ public class Plan implements Observer {
         }
 
         mTrackShape.updateShapeFromPlan(getCoordinates());
+    }
+
+    public void setAltitude(int altitude) {
+        mAltitude = altitude;
+    }
+
+    public int getAltitude() {
+        return mAltitude;
     }
 
     /**
@@ -785,7 +806,6 @@ public class Plan implements Observer {
     /**
      * Put this plan in JSON array
      * 
-     * @param cls
      * @return
      */
     public String putPlanToStorageFormat() {
@@ -804,8 +824,10 @@ public class Plan implements Observer {
 
     /**
      * Get plan made from JSON object
-     * 
-     * @param cls
+     *
+     * @param ctx
+     * @param json
+     * @param reverse
      * @return
      */
     public Plan(Context ctx, StorageService service, String json,

@@ -11,24 +11,26 @@ Redistribution and use in source and binary forms, with or without modification,
 */
 package com.ds.avare.shapes;
 
-import java.util.LinkedList;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.ds.avare.place.Plan;
 import com.ds.avare.position.Coordinate;
 import com.ds.avare.position.Movement;
 import com.ds.avare.position.Origin;
 import com.ds.avare.position.Scale;
+import com.ds.avare.utils.Helper;
 import com.sromku.polygon.Point;
 import com.sromku.polygon.Polygon;
 import com.sromku.polygon.Polygon.Builder;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
+import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * @author zkhan
+ * @author plinel
  *
  */
 public abstract class Shape {
@@ -39,22 +41,45 @@ public abstract class Shape {
     protected double mLatMin;
     protected double mLatMax;
     
-    private String mText;
+    protected String mText;
     
     private Builder mPolyBuilder;
     private Polygon mPoly;
+
+    private Date mDate;
     
     /**
      * 
      */
-    public Shape(String label) {
+    public Shape(String label, Date date) {
         mCoords = new LinkedList<Coordinate>();
         mLonMin = 180;
         mLonMax = -180;
         mLatMin = 180;
         mLatMax = -180;
         mText = label;
+        mDate = date;
         mPolyBuilder = Polygon.Builder(); 
+    }
+
+    public Date getDate() {
+        return mDate;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOld(int expiry) {
+        if(mDate == null) {
+            return false;
+        }
+        long diff = Helper.getMillisGMT();
+        diff -= mDate.getTime();
+        if(diff > expiry * 60 * 1000) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -105,13 +130,7 @@ public abstract class Shape {
      * @param paint
      */
 	public void drawShape(Canvas c, Origin origin, Scale scale, Movement movement, Paint paint, boolean night, boolean drawTrack, Plan plan) {
-        float x = (float)origin.getOffsetX(mLonMin);
-        float y = (float)origin.getOffsetY(mLatMax);
-        float sx = scale.getScaleFactor();
-        float sy = scale.getScaleCorrected();
-        float facx = sx / (float)movement.getLongitudePerPixel();
-        float facy = sy / (float)movement.getLatitudePerPixel();
-        
+
         /*
          * Do a tab on top of shape
          */
@@ -129,10 +148,10 @@ public abstract class Shape {
              */
         	int cMax = getNumCoords();
             for(int coord = 0; coord < (cMax - 1); coord++) {
-                float x1 = x + (float)(mCoords.get(coord).getLongitude() - mLonMin) * facx;
-                float x2 = x + (float)(mCoords.get(coord + 1).getLongitude() - mLonMin) * facx;
-                float y1 = y + (float)(mCoords.get(coord).getLatitude() - mLatMax) * facy;
-                float y2 = y + (float)(mCoords.get(coord + 1).getLatitude() - mLatMax) * facy;
+                float x1 = (float)origin.getOffsetX(mCoords.get(coord).getLongitude());
+                float x2 = (float)origin.getOffsetX(mCoords.get(coord + 1).getLongitude());
+                float y1 = (float)origin.getOffsetY(mCoords.get(coord).getLatitude());
+                float y2 = (float)origin.getOffsetY(mCoords.get(coord + 1).getLatitude());;
 
                 if(drawTrack) {
 	                paint.setStrokeWidth(width + 4);
@@ -168,16 +187,49 @@ public abstract class Shape {
             /*
              * Draw the shape segment by segment
              */
-            for(int coord = 0; coord < (getNumCoords() - 1); coord++) {
-                float x1 = x + (float)(mCoords.get(coord).getLongitude() - mLonMin) * facx;
-                float x2 = x + (float)(mCoords.get(coord + 1).getLongitude() - mLonMin) * facx;
-                float y1 = y + (float)(mCoords.get(coord).getLatitude() - mLatMax) * facy;
-                float y2 = y + (float)(mCoords.get(coord + 1).getLatitude() - mLatMax) * facy;
-                c.drawLine(x1, y1, x2, y2, paint);
+            if(getNumCoords()>0) {
+                float pts[] = new float[(getNumCoords()) * 4];
+                int i = 0;
+                int coord = 0;
+                float x1 = (float) origin.getOffsetX(mCoords.get(coord).getLongitude());
+                float y1 = (float) origin.getOffsetY(mCoords.get(coord).getLatitude());
+                float x2;
+                float y2;
+
+                for (coord = 1; coord < getNumCoords(); coord++) {
+                    x2 = (float) origin.getOffsetX(mCoords.get(coord).getLongitude());
+                    y2 = (float) origin.getOffsetY(mCoords.get(coord).getLatitude());
+
+                    pts[i++] = x1;
+                    pts[i++] = y1;
+                    pts[i++] = x2;
+                    pts[i++] = y2;
+
+                    x1 = x2;
+                    y1 = y2;
+                }
+                c.drawLines(pts, paint);
             }
         }
     }
-    
+
+    /*
+     * Determine if shape belong to a screen based on Screen longitude and latitude
+     * and shape max/min longitude latitude
+     */
+    public boolean isOnScreen(Origin origin){
+
+        double maxLatScreen = origin.getLatScreenTop();
+        double minLatScreen = origin.getLatScreenBot();
+        double minLonScreen = origin.getLonScreenLeft();
+        double maxLonScreen = origin.getLonScreenRight();
+
+        boolean isInLat = mLatMin < maxLatScreen && mLatMax > minLatScreen;
+        boolean isInLon = mLonMin < maxLonScreen && mLonMax > minLonScreen;
+        return isInLat && isInLon;
+
+    }
+
     /**
      * 
      * @return

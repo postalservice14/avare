@@ -13,25 +13,6 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.utils;
 
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import com.ds.avare.R;
-import com.ds.avare.shapes.TFRShape;
-import com.ds.avare.storage.Preferences;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -44,6 +25,26 @@ import android.text.format.Time;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import com.ds.avare.R;
+import com.ds.avare.shapes.TFRShape;
+import com.ds.avare.storage.Preferences;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * 
  * @author zkhan
@@ -55,29 +56,17 @@ public class Helper {
 	 * Fetch the raw estimated time enroute given the input parameters
 	 * @param distance - how far to the target
 	 * @param speed - how fast we are moving
-	 * @param bearing - direction to target
-	 * @param heading - direction of movement
+     * @param calculated - already calculated value
+     * @param calc - or should I calculate?
 	 * @return int value of HR * 100 + MIN for the ete, -1 if not applicable
 	 */
-	private static Time fetchRawEte(boolean useBearing, double distance, double speed, double bearing, double heading) {
-	    double xFactor = 1;
-	    if(useBearing) {
-            // We can't assume that we are heading DIRECTLY for the destination, so 
-            // we need to figure out the multiply factor by taking the COS of the difference
-            // between the bearing and the heading.
-    		double angDif = angularDifference(heading, bearing);
-    		
-    		// If the difference is 90 or greater, then ETE means nothing as we are not
-    		// closing on the target
-    		if(angDif >= 90)
-    			return null;
-    
-    		// Calculate the actual relative speed closing on the target
-            xFactor  = Math.cos(angDif * Math.PI / 180);
-	    }
-	    
-	    // Calculate the travel time in seconds
-	    double eteTotal = (distance / (speed * xFactor)) * 3600;
+	private static Time fetchRawEte(double distance, double speed, long calculated, boolean calc) {
+
+        double eteTotal = calculated;
+        if(calc) {
+            // Calculate the travel time in seconds
+            eteTotal = (distance / speed) * 3600;
+        }
 
 	    // Allocate an empty time object
 	    Time ete = new Time();
@@ -107,19 +96,19 @@ public class Helper {
 	 * Fetch the estimate travel time to the indicated target
 	 * @param distance - how far to the target
 	 * @param speed - how fast we are moving
-	 * @param bearing - direction to target
-	 * @param heading - direction of movement
+     * @param calculated - already calculated value
+     * @param calc - or should I calculate?
 	 * @return String - "HH:MM" or "MM.SS" time to the target
 	 */
-    public static String calculateEte(boolean useBearing, double distance, double speed, double bearing, double heading) {
+    public static String calculateEte(double distance, double speed, long calculated, boolean calc) {
 
     	// If no speed, then return the empty display value
-        if(0 == speed){
+        if(0 == speed && calc){
             return "--:--";
         }
 
         // Fetch the eteRaw value
-    	Time eteRaw = fetchRawEte(useBearing, distance, speed, bearing, heading);
+    	Time eteRaw = fetchRawEte(distance, speed, calculated, calc);
 
     	// If an invalid eteRaw, then return the empty display value
         if(null == eteRaw){
@@ -160,11 +149,9 @@ public class Helper {
 	 * @param timeZone - The timezone at the destination
 	 * @param distance - how far to the target
 	 * @param speed - how fast we are moving
-	 * @param bearing - direction to target
-	 * @param heading - direction of movement
 	 * @return String - "HH:MM" current time at the target
      */
-    public static String calculateEta(boolean useBearing, TimeZone timeZone, double distance, double speed, double bearing, double heading) {
+    public static String calculateEta(TimeZone timeZone, double distance, double speed) {
 
         // If no speed, then return an empty display string
         if(0 == speed ){
@@ -172,7 +159,7 @@ public class Helper {
         }
 
     	// fetch the raw ETE
-        Time eteRaw = fetchRawEte(useBearing, distance, speed, bearing, heading);
+        Time eteRaw = fetchRawEte(distance, speed, 0, true);
 
         // If the eteRaw is meaningless, then return an empty display string
         if(null == eteRaw){
@@ -250,7 +237,7 @@ public class Helper {
 
     /**
      * See the explanation in the function setThreshold. 
-     * @param altitude in FL for printing
+     * @param threshold
      * @return
      */
     public static String calculateAltitudeFromThreshold(float threshold) {
@@ -260,7 +247,8 @@ public class Helper {
 
     /**
      * See the explanation in the function setThreshold. 
-     * @param altitude in FL for printing
+     * @param threshold
+     * @param elevation
      * @return
      */
     public static String calculateAGLFromThreshold(float threshold, float elevation) {
@@ -362,9 +350,6 @@ public class Helper {
     
     /**
      * 
-     * @param distance
-     * @param eta
-     * @param heading
      * @return
      */
     public static String makeLine(double value, String unit, String eta, double heading, double variation) {
@@ -534,8 +519,7 @@ public class Helper {
             
         }
     }
-    
-    
+
     /**
      * 
      * @param heading
@@ -546,47 +530,10 @@ public class Helper {
         return (heading + variation + 360) % 360;
     }
     
-    /**
-     * 
-     * @param heading
-     * @param variation
-     * @return
-     */
-    public static String incTileName(String name, int rowm, int colm) {
-        
-        /*
-         * This is all magic. Check database specification.
-         * Tiles are stored row/col as:
-         * 0/row/master_row_col where row, col have leading zeros
-         */
 
-        try {
-            /*
-             * This is all magic. Check database specification.
-             * Tiles are stored row/col as:
-             * 0/row/master_row_col where row, col have leading zeros
-             */
-            String [] tokens = name.split("[/_.]");
-    
-            int row = (Integer.parseInt(tokens[7]) + rowm);
-            int col = (Integer.parseInt(tokens[8]) + colm);
-            int lenr = tokens[7].length();
-            int lenc = tokens[8].length();
-            
-            String rformatted = String.format("%0" + lenr + "d", row);
-            String cformatted = String.format("%0" + lenc + "d", col);
-            String pre = tokens[0] + "/" + tokens[1] + "/" + tokens[2] + "/" + tokens[3] + "/" + tokens[4] + "/" + row + "/";
-            String post = tokens[6] + "_" + rformatted + "_" + cformatted + "." + tokens[9];
-            return(pre + post);
-        }
-        catch(Exception e) {
-        }
-        return null;
-    }
-    
     /**
      * 
-     * @param data
+     * @param filename
      */
     private static String readFromFile(String filename) {
         File file = new File(filename);
@@ -608,11 +555,29 @@ public class Helper {
         }
         return null;
     }
-    
+
+    /**
+     *
+     * @param filename
+     */
+    public static String readTimestampFromFile(String filename) {
+        File file = new File(filename);
+        try {
+            if(file.exists()) {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                return br.readLine();
+            }
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        return null;
+    }
 
     /**
      * 
-     * @param airport
+     * @param ctx
      * @return
      */
     public static LinkedList<TFRShape> getShapesInTFR(Context ctx) {
@@ -623,14 +588,27 @@ public class Helper {
         LinkedList<TFRShape> shapeList = new LinkedList<TFRShape>();
 
         String filename = new Preferences(ctx).mapsFolder() + "/tfr.txt";
+        String filenameManifest = new Preferences(ctx).mapsFolder() + "/TFRs";
         String data = readFromFile(filename);
-        if(null != data) {
+        String dataManifest = readTimestampFromFile(filenameManifest);
+        if(null != data && null != dataManifest) {
             /*
              * Find date of last file download
              */
             File file = new File(filename);
-            Date time = new Date(file.lastModified());
-   
+
+            // Find date of TFRs of format 09_03_2015_15:30_UTC, first line in manifest
+            SimpleDateFormat format = new SimpleDateFormat("MM_dd_yyyy_HH:mm", Locale.getDefault());
+
+            Date time;
+            try {
+                time = format.parse(dataManifest.replace("_UTC", "")); // internal times of products in UTC
+            }
+            catch (Exception e) {
+                // nothing to return
+                return shapeList;
+            }
+
             /*
              * Now read from file
              */
@@ -650,7 +628,7 @@ public class Helper {
                             replace("Top", "\n" + "Top      ").
                             replace("Low", "\n" + "Bottom   ").
                             replace("Eff", "\n" + "Effective").
-                            replace("Exp", "\n" + "Expires  "));
+                            replace("Exp", "\n" + "Expires  "), time);
                     continue;
                 }
                 try {
@@ -891,11 +869,35 @@ public class Helper {
     
     /**
      * Get HMTL file location for webview
-     * @param args
+     * @param context
+     * @param name
      * @return
      */
     public static String getWebViewFile(Context context, String name) {
     	return "file:///android_asset/" + name + context.getString(R.string.lang) + ".html";
+    }
+
+    /**
+     * Rotate a set of coordinates by a given angle
+     * @param c_x
+     * @param c_y
+     * @param thetab
+     * @param x
+     * @param y
+     * @return
+     */
+    public static double[] rotateCoord(double c_x,double c_y,double thetab,double x,double y){
+        double prc_x = x - c_x;
+        double prc_y = y - c_y;
+        double r = Math.sqrt(prc_x * prc_x + prc_y * prc_y);
+        double theta = Math.atan2(prc_y, prc_x) ;
+        theta = theta + thetab* Math.PI / 180.0;
+        double pc_x = r * Math.cos(theta );
+        double pc_y = r * Math.sin(theta);
+        double p[]=new double[2];
+        p[0] = pc_x + c_x;
+        p[1] = pc_y + c_y;
+        return p;
     }
 
 }

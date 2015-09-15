@@ -13,8 +13,6 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare.position;
 
-import com.ds.avare.storage.Preferences;
-
 /**
  * @author zkhan
  * A class that holds movement on a tile
@@ -22,84 +20,46 @@ import com.ds.avare.storage.Preferences;
 public class Movement {
 
     /**
-     * Pixels per longitude degree
-     */
-    private double px;
-    /**
-     * Pixels per latitude degree
-     */
-    private double py;
-    /**
      * Offset of location on a tile - x
      */
-    private double offsetx;
+    private double mOffsetX;
     /**
      * Offset of location on a tile - y
      */
-    private double offsety;
+    private double mOffsetY;
         
     /**
      * @param offset
-     * @param pp
      */
-    public Movement(double offset[], double pp[]) {
+    public Movement(double offset[]) {
         /*
          * Store movement
          */
-        px = pp[0];
-        py = pp[1];
-        offsetx = offset[0];
-        offsety = offset[1];
+        mOffsetX = offset[0];
+        mOffsetY = offset[1];
     }
 
     /**
      * This is for no movement
      */
     public Movement() {
-        px = 0.00001f; /* This is to avoid divide by zero */
-        py = 0.00001f;
-        offsetx = 0.f;
-        offsety = 0.f;
+        mOffsetX = 0.f;
+        mOffsetY = 0.f;
     }
 
-    /**
-     * @return
-     */
-    public double getLongitudePerPixel() {
-        return px;
-    }
-    
-    /**
-     * @return
-     */
-    public double getLatitudePerPixel() {
-        return py;
-    }
 
     /**
      * @return
      */
     public double getOffsetLongitude() {
-        return offsetx;
+        return mOffsetX;
     }
     
     /**
      * @return
      */
     public double getOffsetLatitude() {
-        return offsety;
-    }
-    
-
-    /**
-     * 
-     * @param scale
-     * @return
-     */
-    public float getNMPerLatitude(Scale scale) {
-        float sy = scale.getScaleCorrected();
-        float facy = sy / (float)getLatitudePerPixel();
-        return Math.abs(facy * (float)Preferences.NM_TO_LATITUDE);
+        return mOffsetY;
     }
 
 }

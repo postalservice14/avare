@@ -12,15 +12,16 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare.shapes;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
+import com.ds.avare.place.Boundaries;
+import com.ds.avare.position.Pan;
+import com.ds.avare.position.Scale;
 import com.ds.avare.storage.Preferences;
 import com.ds.avare.utils.BitmapHolder;
-
-import android.content.Context;
-import android.graphics.Color;
-import android.view.Display;
-import android.view.WindowManager;
-
-import java.util.HashMap;
+import com.ds.avare.utils.GenericCallback;
+import com.ds.avare.utils.Helper;
 
 
 /**
@@ -28,253 +29,181 @@ import java.util.HashMap;
  * @author zkhan, SteveAtChartbundle
  * A cache of tiles
  */
-public class TileMap {
+public class TileMap extends MapBase {
 
-    private BitmapHolder[] mapA;
-    private BitmapHolder[] mapB;
-    
-    private Context mContext;
-    
-    private Preferences mPref;
-    
-    private int mXtiles;
-    private int mYtiles;
-    
-    private int numTiles;
-    private int numTilesMax;
-    
-    private BitmapHolder[] mBitmapCache;
-    private BitmapHolder[] mFreeList;
+
+    private static final int SIZE = BitmapHolder.HEIGHT * BitmapHolder.WIDTH * 2; // RGB565 = 2
+    private int mNumShowing;
+
     /**
-     * 
-     * @param x
-     * @param y
+     * @param context
      */
     public TileMap(Context context) {
-        /*
-         * Allocate mem for tiles.
-         * Keep tiles for the life of activity
-         */
-        mContext = context;
-        mPref = new Preferences(context);
-
-        int[] tilesdim = mPref.getTilesNumber();
-        mXtiles = tilesdim[0];
-        mYtiles = tilesdim[1];
-        numTiles = mXtiles * mYtiles;
-        numTilesMax = mXtiles * mYtiles;
-        mapA = new BitmapHolder[numTiles];
-        mapB = new BitmapHolder[numTiles];
-        mBitmapCache = new BitmapHolder[numTilesMax];
-        mFreeList = new BitmapHolder[numTilesMax];
-        for(int tile = 0; tile < numTilesMax; tile++) {
-            mBitmapCache[tile] = new BitmapHolder();
-        }
+        super(context, SIZE, (new Preferences(context)).getTilesNumber());
+        mNumShowing = 0;
+        mTileTask = null;
     }
+
+    public void reload(String[] tileNames, GenericCallback c) {
+        mNumShowing = super.reloadMap(tileNames, c);
+    }
+
+    private AsyncTask mTileTask;
+
 
     /**
-     * 
-     * Clear the cache.
-     * 
+     * Lets call chart showing partial when tiles showing are below a threshold
+     *
      * @return
      */
-    public void clear() {
+    @Override
+    public boolean isChartPartial() {
+        return mNumShowing <= 0;
     }
 
-    /*
-     * Force a reload.
+
+    /**
+     * Function that loads new tiles in background
+     *
      */
-    public void forceReload() {
-        for(int tile = 0; tile < numTilesMax; tile++) {
-            if(mBitmapCache[tile] != null) {
-                if(mBitmapCache[tile].getName() != null) {
-                    mBitmapCache[tile].drawInBitmap(null, null, 0, 0);
+    public void loadTiles(final double lon, final double lat, final Pan panIn, final float macro, final Scale scale, final double bearing, final GenericCallback callbackDone) {
+
+        if(mTileTask != null && mTileTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mTileTask.cancel(true);
+        }
+
+        mTileTask = new AsyncTask<Void, Object, TileUpdate>() {
+            double offsets[] = new double[2];
+            double p[] = new double[2];
+            int     movex;
+            int     movey;
+            float factor;
+            String   tileNames[];
+            Tile centerTile;
+            Tile gpsTile;
+            String chart = "";
+
+            /**
+             *
+             */
+            @Override
+            protected void onPreExecute () {
+
+                /*
+                 * Now draw in background, but first find tiles in foreground
+                 * Find tile at my GPS location
+                 */
+                gpsTile = new Tile(mContext, mPref, lon, lat, (double) scale.downSample());
+
+                offsets[0] = gpsTile.getOffsetX(lon);
+                offsets[1] = gpsTile.getOffsetY(lat);
+                p[0] = gpsTile.getPx();
+                p[1] = gpsTile.getPy();
+
+                factor = macro / (float) scale.getMacroFactor();
+
+                /*
+                 * Make a copy of Pan to find next tile set in case this gets stopped, we do not
+                 * destroy our Pan information.
+                 */
+                Pan pan = new Pan(panIn);
+                double n_x = pan.getMoveX();
+                double n_y = pan.getMoveY();
+
+                if (mPref.isTrackUp()) {
+                    double p[] = new double[2];
+                    p = Helper.rotateCoord(0.0, 0.0, bearing, n_x, n_y);
+                    pan.setMove((float) (p[0] * factor), (float) (p[1] * factor));
+                } else {
+                    pan.setMove((float) (n_x * factor), (float) (n_y * factor));
+                }
+                movex = pan.getTileMoveXWithoutTear();
+                movey = pan.getTileMoveYWithoutTear();
+
+                // Find tile of where I am on screen
+                centerTile = new Tile(mContext, mPref, gpsTile, movex, movey);
+
+                /*
+                 * Neighboring tiles with center and pan
+                 */
+                int i = 0;
+                tileNames = new String[getTilesNum()];
+                int ty = (int) (getYTilesNum() / 2);
+                int tx = (int) (getXTilesNum() / 2);
+                for (int tiley = ty; tiley >= -ty; tiley--) {
+                    for (int tilex = -tx; tilex <= tx; tilex++) {
+                        tileNames[i++] = centerTile.getTileNeighbor(tilex, tiley);
+                    }
                 }
             }
-        }
-    }
 
-    /**
-     * 
-     * When a new string of names are available for a new region, reload
-     * will load and reuse older tiles.
-     * 
-     * @param name
-     * @return
-     * @throws InterruptedException 
-     */
-    public void reload(String[] tileNames) throws InterruptedException {
-    	HashMap<String,BitmapHolder> hm = new HashMap<String,BitmapHolder> ();
-    	int freeIndex = 0;
-        mapB = new BitmapHolder[numTiles];
-        /* 
-         * Initial setup, mark all as candidates for the freelist.
-         * Next section will mark the used ones.
-         * Also populate the hashmap for fast name->BitmapHolder mapping
-         */
-        
-        for (int tilen = 0 ; tilen < numTilesMax ; tilen++ ) {
-        	mFreeList[tilen] = null;
-        	if (mBitmapCache[tilen] != null) {
-        		mBitmapCache[tilen].setFree(true);
-        		if (mBitmapCache[tilen].getName() != null ){
-        			hm.put(mBitmapCache[tilen].getName(), mBitmapCache[tilen]);
-        		}
-        	}
-        }
-        /*
-         * For all tiles that will be re-used, find from cache.
-         */
-        for(int tilen = 0; tilen < numTiles; tilen++) {
-        	/* 
-        	 * Setup for later mark as not free.
-        	 */
-            mapB[tilen] = hm.get(tileNames[tilen]);
-            if (mapB[tilen] != null) {
-            	mapB[tilen].setFree(false);
-            }
-        }
-        /*
-         * Build the list of free tiles based on the flags
-         */
-        for (int tilen = 0 ; tilen < numTilesMax ; tilen++ ) {
-        	if (mBitmapCache[tilen] != null && mBitmapCache[tilen].getFree()) {
-        		mFreeList[freeIndex] = mBitmapCache[tilen];
-        		freeIndex++;
-        	}
-        }
-
-        /*
-         * For all tiles that will be loaded.
-         */
-        for(int tilen = 0; tilen < numTiles; tilen++) {
-            
-            /*
-             * Move beyond the move? interrupt.
-             */
-            if(Thread.interrupted()) {
-                throw new InterruptedException();
-            }
-            
-            if(null == tileNames[tilen]) {
+            @Override
+            protected TileUpdate doInBackground(Void... vals) {
+                Thread.currentThread().setName("Tile");
                 /*
-                 * Map out?
+                 * Load tiles, draw in UI thread
                  */
-                continue;
-            }
-            
-            if(null != mapB[tilen]) {
-                /*
-                 * This is reused
-                 */
-                continue;
-            }
-            /*
-             * Pull a free bitmap off the list
-             */
-            BitmapHolder h = null;
-            if (freeIndex > 0 ) {
-            	freeIndex--;
-            	h = mFreeList[freeIndex];
-            }
-            if(h != null) {
-                /*
-                 * At max scale, down sample by down sampling 
-                 */
-                BitmapHolder b = new BitmapHolder(mContext, mPref, tileNames[tilen], 1);
-                if(b.getBitmap() == null) {
-                    h.setFound(false);
+                reload(tileNames,
+                        // As tiles are loaded, callback to notify us
+                        new GenericCallback() {
+                            @Override
+                            public Object callback(Object o1, Object o2) {
+                                publishProgress(o1, o2);
+                                return null;
+                            }
+                        }
+                );
+                if(isChartPartial()) {
+                    // If tiles not found, find name of chart we are on to show to user
+                    chart = Boundaries.getInstance().findChartOn(centerTile.getChartIndex(), centerTile.getLongitude(), centerTile.getLatitude());
                 }
-                else {
-                    h.setFound(true);
-                }
-                h.getBitmap().eraseColor(Color.GRAY);
-                h.drawInBitmap(b, tileNames[tilen], 0, 0);
-                b.recycle();
-                b = null;
-                mapB[tilen] = h;
+                TileUpdate t = new TileUpdate();
+                t.movex = movex;
+                t.movey = movey;
+                t.centerTile = centerTile;
+                t.gpsTile = gpsTile;
+                t.offsets = offsets;
+                t.factor = factor;
+                t.chart = chart;
+
+                return t;
             }
-        }
+
+            @Override
+            protected void onProgressUpdate(Object... objs) {
+                // Put in bitmap cache a new loaded tile
+                TileMap t = (TileMap)objs[0];
+                BitmapHolder b = (BitmapHolder)objs[1];
+                t.addInCache(b);
+                // Do we really want to update the location view and show user the tiles being loaded?
+            }
+
+            @Override
+            protected void onPostExecute(TileUpdate t) {
+                /*
+                 * UI thread
+                 */
+                if(t != null) {
+                    callbackDone.callback(TileMap.this, t);
+                }
+            }
+
+        }.execute(null, null, null);
     }
 
     /**
-     * Call this from UI thread so that tiles can be flipped without tear
+     * Use this with handler to update tiles in UI thread
+     * @author zkhan
+     *
      */
-    public void flip() {
-        mapA = mapB;
-    }
-    
-    /**
-     * 
-     */
-    public void recycleBitmaps() {
-        for(int tile = 0; tile < numTilesMax; tile++) {
-            mBitmapCache[tile].recycle();
-            mBitmapCache[tile] = null;
-        }
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public int getTilesNum() {
-        return numTiles;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public int getXTilesNum() {
-        return mXtiles;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public int getYTilesNum() {
-        return mYtiles;
-    }
-    
-    /**
-     * 
-     * @param tile
-     * @return
-     */
-    public BitmapHolder getTile(int tile) {
-        return mapA[tile];
-    }
-    
-    /**
-     * Set the correct tile orientation
-     */
-    public void setOrientation() {
-    	
-    	WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-    	Display display = wm.getDefaultDisplay();
-    	
-        if(display.getHeight() > display.getWidth()) {
-            /*
-             * Have more tiles in Y on portrait
-             */
-            if(mXtiles > mYtiles) {
-                int tmp = mXtiles;
-                mXtiles = mYtiles;
-                mYtiles = tmp;
-            }
-        }
-        else {
-            /*
-             * Have more tiles in X on landscape
-             */
-            if(mYtiles > mXtiles) {
-                int tmp = mXtiles;
-                mXtiles = mYtiles;
-                mYtiles = tmp;
-            }            
-        }
+    public class TileUpdate {
+        public String chart;
+        public double offsets[];
+        public int movex;
+        public int movey;
+        public float factor;
+        public Tile centerTile;
+        public Tile gpsTile;
     }
 
 }

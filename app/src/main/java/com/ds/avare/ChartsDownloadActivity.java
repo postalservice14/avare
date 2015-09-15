@@ -12,16 +12,6 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare;
 
 
-import java.io.File;
-
-import com.ds.avare.R;
-import com.ds.avare.adapters.ChartAdapter;
-import com.ds.avare.gps.GpsInterface;
-import com.ds.avare.network.Delete;
-import com.ds.avare.network.Download;
-import com.ds.avare.storage.Preferences;
-import com.ds.avare.utils.Helper;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -42,6 +32,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+
+import com.ds.avare.adapters.ChartAdapter;
+import com.ds.avare.gps.GpsInterface;
+import com.ds.avare.network.Delete;
+import com.ds.avare.network.Download;
+import com.ds.avare.storage.Preferences;
+import com.ds.avare.utils.Helper;
+
+import java.io.File;
 
 /**
  * @author zkhan
@@ -325,8 +324,7 @@ public class ChartsDownloadActivity extends Activity {
         }
         
         mDelete = new Delete(mHandler);
-        mDelete.start((new Preferences(getApplicationContext())).mapsFolder(), mName,
-                mService.getDBResource());
+        mDelete.start((new Preferences(getApplicationContext())).mapsFolder(), mName);
         
         mProgressDialog = new ProgressDialog(ChartsDownloadActivity.this);
         mProgressDialog.setIndeterminate(false);
@@ -445,7 +443,7 @@ public class ChartsDownloadActivity extends Activity {
                      */
                     String code = msg.getData().getString("code");
                     mAlertDialog = new AlertDialog.Builder(ChartsDownloadActivity.this).create();
-                    mAlertDialog.setMessage(getString(R.string.download) + " " + getString(R.string.Failed) + ", reason " + code);
+                    mAlertDialog.setMessage(getString(R.string.download) + " " + getString(R.string.Failed) + ": " + code);
                     mAlertDialog.setCanceledOnTouchOutside(false);
                     mAlertDialog.setCancelable(false);
                     mAlertDialog.setButton(ProgressDialog.BUTTON_POSITIVE, getString(R.string.OK), new DialogInterface.OnClickListener() {
@@ -492,10 +490,15 @@ public class ChartsDownloadActivity extends Activity {
     
                     if(mName.equals("weather")) {
                         mService.getInternetWeatherCache().parse(mService);
+                        if(mPref.getLayerType().equals("METAR")) {
+                            mService.getMetarLayer().parse();
+                        }
                     }
                     
                     if(mName.equals("conus")) {
-                        mService.getRadar().parse();
+                        if(mPref.getLayerType().equals("NEXRAD")) {
+                            mService.getRadarLayer().parse();
+                        }
                     }
                     
                     mChartAdapter.updateVersion(mName, mDownload.getVersion());

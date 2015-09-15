@@ -13,11 +13,11 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare.gps;
 
-import com.ds.avare.position.Scale;
-import com.ds.avare.storage.Preferences;
-
 import android.hardware.GeomagneticField;
 import android.location.Location;
+
+import com.ds.avare.position.Scale;
+import com.ds.avare.storage.Preferences;
 
 /**
  * @author zkhan
@@ -35,24 +35,6 @@ public class GpsParams {
     private long   mTime;
     
 
-    /**
-     * @param location
-     */
-    public GpsParams() {
-        
-        /*
-         * Center of USA?
-         */
-        mSpeed = 0;
-        mLongitude = -94.5;
-        mLatitude = 39.5;
-        mAltitude = 0;
-        mBearing = 0;
-        mScale = new Scale();
-        mScale.setScaleAt(mLatitude);
-        mDeclination = 0;
-        mTime = 0;
-    }
 
     /**
      * @param location
@@ -66,7 +48,6 @@ public class GpsParams {
             mAltitude = 0;
             mBearing = 0;
             mScale = new Scale();
-            mScale.setScaleAt(mLatitude);
             mDeclination = 0;
             mTime = 0;
             return;
@@ -87,7 +68,6 @@ public class GpsParams {
         
         mBearing = (location.getBearing() + 360) % 360;
         mScale = new Scale();
-        mScale.setScaleAt(mLatitude);
         
         mTime = location.getTime();
     }
@@ -118,7 +98,16 @@ public class GpsParams {
     public static double speedConvert(double locationSpeed) {
     	return locationSpeed / Preferences.speedConversion;
     }
-    
+
+    /**
+     * Altitude in location to altitude in params
+     * @param locationAltitude
+     * @return
+     */
+    public static double altitudeConvert(double locationAltitude) {
+        return locationAltitude / Preferences.heightConversion;
+    }
+
     /**
      * @return
      * double Speed in (miles or knots) per hour depending on preference settings
@@ -216,4 +205,21 @@ public class GpsParams {
 		// Place all those values into a string and return
 		return String.format("%02.0f\u00B0 %02.0f\' %02.2f\"", deg, min, sec);
     }
+
+    /**
+     *
+     * @param speed
+     */
+    public void setSpeed(int speed) {
+         mSpeed = speed;
+    }
+
+    /**
+     *
+     * @param altitude
+     */
+    public void setAltitude(int altitude) {
+        mAltitude = altitude;
+    }
+
 }

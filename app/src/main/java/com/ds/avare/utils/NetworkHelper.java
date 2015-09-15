@@ -11,6 +11,12 @@ Redistribution and use in source and binary forms, with or without modification,
 */
 package com.ds.avare.utils;
 
+import android.content.Context;
+
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,19 +25,14 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TimeZone;
 
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import android.content.Context;
-
-import com.ds.avare.R;
 
 
 /**
@@ -41,8 +42,7 @@ import com.ds.avare.R;
  */
 public class NetworkHelper {
     
-    public static final int EXPIRES = 10;
-    
+
     /**
      * 
      */
@@ -405,7 +405,7 @@ public class NetworkHelper {
      * @param date
      * @return
      */
-    public static boolean isExpired(String date) {        
+    public static boolean isExpired(String date, int timeout) {
         
         if(null == date) {
             return true;
@@ -442,7 +442,7 @@ public class NetworkHelper {
              * so many min expiry
              */
             expires.set(year, month, day, hour, min);
-            expires.add(Calendar.MINUTE, NetworkHelper.EXPIRES);
+            expires.add(Calendar.MINUTE, timeout);
             if(now.after(expires)) {
                 return true;
             }
@@ -455,6 +455,14 @@ public class NetworkHelper {
         }
         
         return false;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public static String getVersion(int offset) {
+    	return findCycleOffset(getVersion("", "", null), offset);
     }
 
     /**
@@ -477,7 +485,7 @@ public class NetworkHelper {
                     now.get(Calendar.DAY_OF_MONTH),
                     now.get(Calendar.YEAR),
                     now.get(Calendar.HOUR_OF_DAY),
-                    EXPIRES * (int)(now.get(Calendar.MINUTE) / EXPIRES));
+                    now.get(Calendar.MINUTE));
         }
         else if(netVers != null) {
         	return netVers;
@@ -592,4 +600,40 @@ public class NetworkHelper {
         return "" + cycle;
     }
 
+    /**
+     * Get notams from FAA in the plan form KBOS,BOS,KLWM
+     * @param plan
+     * @return
+     */
+    public static String getNotams(String plan) {
+        String ret = null;
+        try {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("retrieveLocId", plan);
+            params.put("reportType", "Raw");
+            params.put("actionType", "notamRetrievalByICAOs");
+            params.put("submit", "View+NOTAMSs");
+            ret = com.ds.avare.message.NetworkHelper.post("https://www.notams.faa.gov/dinsQueryWeb/queryRetrievalMapAction.do",
+                    params);
+        } catch (Exception e) {
+
+        }
+
+        // NOTAMS are in form <PRE></PRE>. Parse them, and convert \n to BR
+        String notams = "";
+        if(ret != null) {
+            String rets[] = ret.split("\\<PRE\\>");
+            for (String ret1 : rets) {
+                if(ret1.contains("</PRE>")) {
+                    String parsed[] = ret1.split("</PRE>");
+                    notams += parsed[0] + "\n\n";
+                }
+            }
+            notams = notams.replaceAll("(\r\n|\n)", "<br />");
+        }
+
+        return notams;
+    }
 }
+
+

@@ -73,12 +73,19 @@ authors: zkhan, jlmcgraw
         android:title="@string/prefWeatherCategoryTitle" 
         android:icon="@android:drawable/ic_menu_call" >
         <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="30"
+            android:entries="@array/Expires"
+            android:entryValues="@array/Expires"
+            android:key="@string/Expires"
+            android:summary="@string/ExpiresSummary"
+            android:title="@string/ExpiresLabel" />
+        <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="255"
             android:entries="@array/Opacity"
             android:entryValues="@array/OpacityValues"
-            android:key="@string/Radar"
-            android:summary="@string/RadarSummary"
-            android:title="@string/RadarLabel" />
+            android:key="@string/Layer"
+            android:summary="@string/LayerSummary"
+            android:title="@string/LayerLabel" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/ADSBWeather"
@@ -104,6 +111,9 @@ authors: zkhan, jlmcgraw
         <com.ds.avare.utils.RegisterActivityPreference
             android:summary="@string/onlineSummary"
             android:title="@string/online" />
+        <com.ds.avare.utils.SyncActivityPreference
+            android:summary="@string/syncSummary"
+            android:title="@string/sync" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/LeaveRunning"
@@ -126,15 +136,16 @@ authors: zkhan, jlmcgraw
             android:key="@string/blinkScreen"
             android:summary="@string/blinkScreenSummary"
             android:title="@string/blinkScreenLabel" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/prefTip"
+            android:summary="@string/prefTipSummary"
+            android:title="@string/prefTipLabel" />
     </PreferenceScreen>
 
     <PreferenceScreen 
         android:title="@string/Instrumentation" 
-        android:icon="@android:drawable/ic_menu_preferences" >
-        <EditTextPreference
-                android:title="@string/GlideRatioLabel"
-                android:summary="@string/GlideRatioSummary"
-                android:key="@string/GlideRatio"/>
+        android:icon="@android:drawable/ic_menu_compass" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/EdgeTape"
@@ -147,6 +158,13 @@ authors: zkhan, jlmcgraw
             android:key="@string/prefDistanceRingType"
             android:summary="@string/DistanceRingTypeSummary"
             android:title="@string/DistanceRingTypeLabel" />
+        <com.ds.avare.utils.ListPreferenceWithSummary
+            android:defaultValue="Default"
+            android:entries="@array/DistanceRingColors"
+            android:entryValues="@array/DistanceRingColors"
+            android:key="@string/prefDistanceRingColors"
+            android:summary="@string/DistanceRingColorsSummary"
+            android:title="@string/DistanceRingColorsLabel" />
         <com.ds.avare.utils.ListPreferenceWithSummary
             android:defaultValue="0"
             android:entries="@array/TimerRingSizePrompt"
@@ -169,6 +187,11 @@ authors: zkhan, jlmcgraw
     <PreferenceScreen 
         android:title="@string/prefDisplayCategoryTitle" 
         android:icon="@android:drawable/ic_menu_gallery" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/TrackUp"
+            android:summary="@string/TrackUpSummary"
+            android:title="@string/TrackUpLabel" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/ScreenOn"
@@ -329,6 +352,63 @@ authors: zkhan, jlmcgraw
             android:key="@string/rubberBand"
             android:title="@string/rubberBandLabel"
             android:summary="@string/rubberBandSummary"/>
-        </PreferenceScreen>
-    
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:title="@string/userData"
+        android:icon="@android:drawable/ic_menu_manage" >
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/PilotContact"
+            android:summary="@string/PilotContactSummary"
+            android:key="@string/PilotContact"/>
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/AircraftHomeBase"
+            android:summary="@string/AircraftHomeBaseSummary"
+            android:key="@string/AircraftHomeBase"/>
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/AircraftTailNumber"
+            android:summary="@string/AircraftTailNumberSummary"
+            android:key="@string/AircraftTailNumber"/>
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/AircraftType"
+            android:summary="@string/AircraftTypeSummary"
+            android:key="@string/AircraftType"/>
+
+        <com.ds.avare.utils.ListPreferenceWithSummary
+            android:entries="@array/ACColor"
+            android:entryValues="@array/ACColorValue"
+            android:key="@string/AircraftColorPrimary"
+            android:summary="@string/AircraftColorPrimarySummary"
+            android:title="@string/AircraftColorPrimary" />
+
+        <com.ds.avare.utils.ListPreferenceWithSummary
+            android:entries="@array/ACColor"
+            android:entryValues="@array/ACColorValue"
+            android:key="@string/AircraftColorSecondary"
+            android:summary="@string/AircraftColorSecondarySummary"
+            android:title="@string/AircraftColorSecondary" />
+
+        <com.ds.avare.utils.ListPreferenceWithSummary
+            android:entries="@array/ACEquipment"
+            android:entryValues="@array/ACEquipment"
+            android:key="@string/AircraftEquipment"
+            android:summary="@string/AircraftEquipmentSummary"
+            android:title="@string/AircraftEquipment" />
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/AircraftTAS"
+            android:summary="@string/AircraftTASSummary"
+            android:key="@string/AircraftTAS"/>
+
+        <com.ds.avare.utils.EditTextPreferenceWithSummary
+            android:title="@string/GlideRatioLabel"
+            android:summary="@string/GlideRatioSummary"
+            android:key="@string/GlideRatio"/>
+
+    </PreferenceScreen>
+
 </PreferenceScreen>
