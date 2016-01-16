@@ -47,6 +47,7 @@ import com.ds.avare.position.Scale;
 import com.ds.avare.shapes.DrawingContext;
 import com.ds.avare.shapes.Layer;
 import com.ds.avare.shapes.MetShape;
+import com.ds.avare.shapes.ShapeFileShape;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.shapes.Tile;
 import com.ds.avare.shapes.TileMap;
@@ -62,6 +63,7 @@ import com.ds.avare.utils.Helper;
 import com.ds.avare.utils.InfoLines.InfoLineFieldLoc;
 import com.ds.avare.utils.NavComments;
 import com.ds.avare.utils.WeatherHelper;
+import com.ds.avare.weather.AdsbWeatherCache;
 import com.ds.avare.weather.AirSigMet;
 import com.ds.avare.weather.Airep;
 import com.ds.avare.weather.Metar;
@@ -463,7 +465,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
             }
             mGestureDetector.onTouchEvent(e);
         }
-        return mMultiTouchC.onTouchEvent(e);
+        return mMultiTouchC.onTouchEvent(e, mScale.getMaxScale(), mScale.getMinScale(), mMacro);
     }
     
     /**
@@ -692,6 +694,15 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * @param canvas
      * @param ctx
      */
+    private void drawShapes(Canvas canvas, DrawingContext ctx) {
+        ShapeFileShape.draw(ctx, mService.getShapeShapes(), null == mPointProjection);
+    }
+
+    /**
+     *
+     * @param canvas
+     * @param ctx
+     */
     private void drawAirSigMet(Canvas canvas, DrawingContext ctx) {
         MetShape.draw(ctx, mService.getInternetWeatherCache().getAirSigMet(), null == mPointProjection);
     }
@@ -702,43 +713,43 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      * @param ctx
      */
     private void drawLayers(Canvas canvas, DrawingContext ctx) {
-        if(mLayerType == null || null != mPointProjection || 0 == mPref.showLayer() || ctx.pref.useAdsbWeather()) {
+        if(mLayerType == null || null != mPointProjection || 0 == mPref.showLayer()) {
             return;
         }
 
-        if(mLayerType.equals("NEXRAD")) {
-            // draw nexrad
-            mLayer = mService.getRadarLayer();
-        }
-        else if(mLayerType.equals("METAR")) {
-            // draw metar flight catergory
-            mLayer = ctx.service.getMetarLayer();
+        if(ctx.pref.useAdsbWeather()) {
+            if (mLayerType.equals("NEXRAD")) {
+                NexradBitmap.draw(ctx, mService.getAdsbWeather().getNexrad(),
+                        mService.getAdsbWeather().getNexradConus(), null == mPointProjection);
+            }
+            else if (mLayerType.equals("METAR")) {
+                AdsbWeatherCache.drawMetars(ctx, mService.getAdsbWeather().getAllMetars(), null == mPointProjection);
+            }
         }
         else {
-            mLayer = null;
-            return;
+
+            if (mLayerType.equals("NEXRAD")) {
+                // draw nexrad
+                mLayer = mService.getRadarLayer();
+            } else if (mLayerType.equals("METAR")) {
+                // draw metar flight catergory
+                mLayer = ctx.service.getMetarLayer();
+            } else {
+                mLayer = null;
+                return;
+            }
+
+            /*
+             * layer is way too old.
+             */
+            if (mLayer.isOld(ctx.pref.getExpiryTime())) {
+                return;
+            }
+
+            mPaint.setAlpha(mPref.showLayer());
+            mLayer.draw(canvas, mPaint, mOrigin);
+            mPaint.setAlpha(255);
         }
-
-        /*
-         * layer is way too old.
-         */
-        if(mLayer.isOld(ctx.pref.getExpiryTime())) {
-            return;
-        }
-
-        mPaint.setAlpha(mPref.showLayer());
-        mLayer.draw(canvas, mPaint, mOrigin);
-        mPaint.setAlpha(255);
-    }
-
-    /**
-     *
-     * @param canvas
-     * @param ctx
-     */
-    private void drawNexrad(Canvas canvas, DrawingContext ctx) {
-        NexradBitmap.draw(ctx, mService.getAdsbWeather().getNexrad(),
-                mService.getAdsbWeather().getNexradConus(), null == mPointProjection);
     }
 
     /**
@@ -748,7 +759,7 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
      */
     private void drawTraffic(Canvas canvas, DrawingContext ctx) {
         Traffic.draw(ctx, mService.getTrafficCache().getTraffic(),
-                mGpsParams.getAltitude(), null == mPointProjection);
+                mService.getTrafficCache().getOwnAltitude(), null == mPointProjection);
     }
 
     /**
@@ -987,12 +998,12 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
         // Call the draw routines for the items that rotate with
         // the chart
         drawTiles(canvas, ctx);
-        drawNexrad(canvas, ctx);
         drawLayers(canvas, ctx);
         drawDrawing(canvas, ctx);
         drawCapGrids(canvas, ctx);
         drawTraffic(canvas, ctx);
         drawTFR(canvas, ctx);
+        drawShapes(canvas, ctx);
         drawAirSigMet(canvas, ctx);
         drawTracks(canvas, ctx);
         drawTrack(canvas, ctx);
@@ -1175,7 +1186,6 @@ public class LocationView extends View implements MultiTouchObjectCanvas<Object>
                         mService.setMovement(mMovement);
                         mMacro = mScale.getMacroFactor();
                         mScale.updateMacro();
-                        mMultiTouchC.setMacro(mMacro);
                         updateCoordinates();
                         invalidate();
 

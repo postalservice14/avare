@@ -208,32 +208,37 @@ public class NexradBitmap {
         /*
          * Get nexrad bitmaps to draw.
          */
-        SparseArray<NexradBitmap> bitmaps = null;
         if(ctx.scale.getMacroFactor() > 4) {
-            if(!conus.isOld()) {
+            if (!conus.isOld()) {
                 /*
                  * CONUS for larger scales.
                  */
-                bitmaps = conus.getImages();
+                drawImage(conus.getImages(), ctx);
             }
         }
         else {
-            if(!nexrad.isOld()) {
-                bitmaps = nexrad.getImages();
+            if (!nexrad.isOld()) {
+                /*
+                 * Draw high res over low res
+                 */
+                drawImage(nexrad.getImages(), ctx);
             }
         }
-
-        if(null == bitmaps) {
-            return;
-        }
-
-        // Draw all nexrad blocks
-        for(int i = 0; i < bitmaps.size(); i++) {
-            int key = bitmaps.keyAt(i);
-            NexradBitmap b = bitmaps.get(key);
-            b.drawOne(ctx.canvas, ctx.paint, ctx.origin, ctx.pref);
-        }
-
     }
 
+    /**
+     * Draw block by block
+     * @param bitmaps
+     * @param ctx
+     */
+    private static void drawImage(SparseArray<NexradBitmap> bitmaps, DrawingContext ctx) {
+        if (null != bitmaps) {
+            // Draw all nexrad blocks
+            for (int i = 0; i < bitmaps.size(); i++) {
+                int key = bitmaps.keyAt(i);
+                NexradBitmap b = bitmaps.get(key);
+                b.drawOne(ctx.canvas, ctx.paint, ctx.origin, ctx.pref);
+            }
+        }
+    }
 }

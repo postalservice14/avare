@@ -14,12 +14,10 @@ Redistribution and use in source and binary forms, with or without modification,
 package com.ds.avare.storage;
 
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Locale;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.hardware.GeomagneticField;
 
 import com.ds.avare.R;
 import com.ds.avare.place.Airport;
@@ -27,6 +25,7 @@ import com.ds.avare.place.Awos;
 import com.ds.avare.place.Destination;
 import com.ds.avare.place.Obstacle;
 import com.ds.avare.place.Runway;
+import com.ds.avare.plan.Cifp;
 import com.ds.avare.position.Coordinate;
 import com.ds.avare.position.Radial;
 import com.ds.avare.utils.Helper;
@@ -36,10 +35,13 @@ import com.ds.avare.weather.Metar;
 import com.ds.avare.weather.Taf;
 import com.ds.avare.weather.WindsAloft;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.hardware.GeomagneticField;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author zkhan, jlmcgraw
@@ -1346,7 +1348,44 @@ public class DataBaseHelper  {
         return run;
     }
 
-    
+    /**
+     * Find runway coordinate on its name, and airport name
+     * @param name
+     * @param airport
+     * @param params
+     * @return
+     */
+    public Coordinate findRunwayCoordinates(String name, String airport) {
+
+        Cursor cursor;
+        Coordinate c = null;
+
+        String qry = "select * from " + TABLE_AIRPORT_RUNWAYS + " where (" + LOCATION_ID_DB + "=='" + airport
+                + "' or " + LOCATION_ID_DB + "=='K" + airport + "') and (LEIdent=='" + name + "' or HEIdent=='" + name + "');";
+        cursor = doQuery(qry, getMainDb());
+
+        try {
+            /*
+             */
+            if(cursor != null) {
+                if(cursor.moveToNext()) {
+                    if(cursor.getString(4).equals(name)) { //LE
+                        c = new Coordinate(cursor.getDouble(8), cursor.getDouble(6));
+                    }
+                    else if(cursor.getString(5).equals(name)) { //HE
+                        c = new Coordinate(cursor.getDouble(9), cursor.getDouble(7));
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+        }
+        closes(cursor);
+
+        return c;
+    }
+
+
     /**
      * Find elevation based on its name
      * @param name
@@ -1543,6 +1582,35 @@ public class DataBaseHelper  {
                 if(cursor.moveToFirst()) {
                     
                     ret = new String(cursor.getString(LONGITUDE_COL) + "," + cursor.getString(LATITUDE_COL));
+                }
+            }
+        }
+        catch (Exception e) {
+        }
+        closes(cursor);
+        return ret;
+    }
+
+    /**
+     * Find the lat/lon of an airport
+     * @param name
+     * @return
+     */
+    public Coordinate findLonLatMetar(String name) {
+
+        name = name.replaceAll("^K", ""); // FAA database does not have K in it
+        /*
+         * Find with sqlite query
+         */
+        String qry = "select * from " + TABLE_AIRPORTS +
+                " where " + LOCATION_ID_DB + "=='" + name + "';";
+        Cursor cursor = doQuery(qry, getMainDb());
+        Coordinate ret = null;
+
+        try {
+            if(cursor != null) {
+                if(cursor.moveToFirst()) {
+                    ret = new Coordinate(cursor.getDouble(LONGITUDE_COL), cursor.getDouble(LATITUDE_COL));
                 }
             }
         }
@@ -2056,33 +2124,36 @@ public class DataBaseHelper  {
     /**
      * 
      * @param name
-     * @param type
-     * @param runway
+     * @param approach
      * @return
      */
-    public LinkedList<String> findProcedure(String name, String type, String runway) {
-        
-        LinkedList<String> ret = new LinkedList<String>();
-        
+    public LinkedList<Cifp> findProcedure(String name, String approach) {
+
+        TreeMap<String, Cifp> map = new TreeMap<String, Cifp>();
+        String params[] = Cifp.getParams(approach);
+        if(params[0] == null || params[1] == null) {
+            return new LinkedList<Cifp>();
+        }
+
+        // get runway matched to CIFP database
+
         String qry =
-                "select * from " + TABLE_PROCEDURE + " where Airport='" + name + "' and AppType='" + type + "' and runway='"  + runway  + "';";
-        
+                "select * from " + TABLE_PROCEDURE + " where (Airport='" + name + "' or Airport='K" + name +
+                "') and AppType='" + params[0] + "' and runway like'%"  + params[1]  + "%';";
+
         Cursor cursor = doQueryProcedures(qry, "procedures.db");
-        
+
         try {
             if(cursor != null) {
                 if(cursor.moveToFirst()) {
                     do {
-                        
+
                         /*
                          * Add as inital course, initial alts, final course, final alts, missed course, missed alts
                          */
-                        ret.add(cursor.getString(4));
-                        ret.add(cursor.getString(5));
-                        ret.add(cursor.getString(6));
-                        ret.add(cursor.getString(7));
-                        ret.add(cursor.getString(8));
-                        ret.add(cursor.getString(9));
+                        Cifp cifp = new Cifp(name, cursor.getString(4), cursor.getString(5), cursor.getString(6),
+                                cursor.getString(7), cursor.getString(8), cursor.getString(9));
+                        map.put(cifp.getInitialCourse(), cifp);
                     } while(cursor.moveToNext());
                 }
             }
@@ -2092,11 +2163,7 @@ public class DataBaseHelper  {
         
         closesProcedures(cursor);
         
-        if(ret.size() > 0) {
-            return ret;      
-        }
-        
-        return null;
+        return new LinkedList<Cifp>(map.values());
     }
     
     /**

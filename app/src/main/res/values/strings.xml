@@ -223,9 +223,9 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ADSBWeatherLabel">&quot;Use ADSB Weather&quot;</string>
     <string name="ADSBWeatherSummary">&quot;Select to use the weather from an ADSB receiver (requires the Avare External IO module app.), otherwise use the Internet weather&quot;</string>
     <string name="GeoRefPlates">&quot;Geo. Referenced Plates Database&quot;</string>
-    <string name="ADSBTraffic">ADSBTraffic</string>
-    <string name="ADSBTrafficLabel">&quot;Show ADSB Traffic&quot;</string>
-    <string name="ADSBTrafficSummary">&quot;Select to show the traffic from an ADSB receiver (requires the Avare External IO module app.)&quot;</string>
+    <string name="ADSBTrafficFilter">ADSBTrafficFilter</string>
+    <string name="ADSBTrafficFilterLabel">&quot;Filter ADSB Traffic&quot;</string>
+    <string name="ADSBTrafficFilterSummary">&quot;Show ADSB traffic within given feet of the aircraft&quot;</string>
     <string name="prefUseDynamicFields">UseDynamicFields</string>
     <string name="UseDynamicFieldsLabel">&quot;Use Dynamic Fields&quot;</string>
     <string name="UseDynamicFieldsSummary">&quot;Allow the top two text lines to be configured dynamically&quot;</string>
@@ -258,7 +258,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="unregister">Unregister</string>
     <string name="error">Error</string>
     <string name="error_internet">Please connect to a working Internet connection</string>
-    <string name="error_email">Please register a Gmail account before continuing</string>
+    <string name="error_email">Please register a Gmail account before continuing!</string>
     <string name="already_registered">You have already registered your account</string>
     <string name="already_unregistered">You have already unregistered</string>
     <string name="registering_server">Registering with the Apps4Av servers</string>
@@ -439,7 +439,7 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="ConnectedDrive">Connected to Google Drive</string>
     <string name="DisconnectedDrive">Disconnected from Google Drive</string>
 
-    <string name="Expires">&quot;Expires&quot;</string>
+    <string name="Expires">&quot;DataExpiry&quot;</string>
     <string name="ExpiresLabel">&quot;Data Expiry&quot;</string>
     <string name="ExpiresSummary">&quot;Select in minutes, after which Weather/TFRs/Other will turn red in Downloads, and disappear from Map screen&quot;</string>
 
@@ -474,7 +474,28 @@ Redistribution and use in source and binary forms, with or without modification,
     <string name="AircraftHomeBaseSummary">Aircraft/Pilot home base ICAO code for filing and planning</string>
 
     <string name="GlideRatioLabel">&quot;Aircraft Glide Ratio&quot;</string>
-    <string name="GlideRatioSummary">&quot;Aircraft glide ratio in miles per thousand feet&quot;</string>
+    <string name="GlideRatioSummary">&quot;Aircraft glide ratio (glide distance in feet for every foot of altitude)&quot;</string>
     <string name="NotGlideRange">&quot;Not in glide range&quot;</string>
+
+    <string name="SelectAirportToShow">&quot;Select an Airport&quot;</string>
+    <string name="SelectPlateToShow">&quot;Select a Plate&quot;</string>
+    <string name="SelectApproachToShow">&quot;Load an approach to Plan (Experimental)&quot;</string>
+    <string name="NoApproachToShow">&quot;No approaches available for this plate&quot;</string>
+    <string name="FuelTimerInterval">FuelTimerInterval</string>
+    <string name="FuelTimerLabel">Fuel Timer Interval</string>
+    <string name="FuelTimerSummary">Select fuel timer reset interval (change requires app restart)</string>
+
+    <string name="Proceed">Proceed</string>
+    <string name="GrantPermissions">Grant Permissions</string>
+    <string name="RationaleAccount">Let this app read your accounts? Email address from one account is needed to confirm that you have signed the privacy policy.</string>
+    <string name="RationaleLocation">Let this app use your GPS? GPS is needed for showing your location on the map.</string>
+    <string name="RationaleExternalStorage">Let this app use your SD Card? SD card access is needed to store large maps.</string>
+    <string name="RationaleSettings">Let this app change your device settings? Settings are modified for screen brightness.</string>
+    <string name="NoRationale">Disallowing a permission may cause the app to misbehave or crash.</string>
+
+    <string name="ShapeFile">ShapeFile</string>
+    <string name="ShapeFileLabel">Shape File Name</string>
+    <string name="ShapeFileSummary">Load Esri shape file of specified name from the download folder (change requires app restart)</string>
+
 
 </resources>

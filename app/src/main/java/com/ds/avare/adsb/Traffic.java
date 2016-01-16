@@ -3,6 +3,7 @@ package com.ds.avare.adsb;
 import android.graphics.Color;
 import android.util.SparseArray;
 
+import com.ds.avare.position.Origin;
 import com.ds.avare.position.PixelCoordinate;
 import com.ds.avare.shapes.DrawingContext;
 import com.ds.avare.utils.Helper;
@@ -105,10 +106,13 @@ public class Traffic {
     }
 
     public static void draw(DrawingContext ctx, SparseArray<Traffic> traffic, double altitude, boolean shouldDraw) {
+
+        int filterAltitude = ctx.pref.showAdsbTrafficWithin();
+
         /*
          * Get traffic to draw.
          */
-        if((!ctx.pref.showAdsbTraffic()) || (null == traffic) || (!shouldDraw)) {
+        if((null == traffic) || (!shouldDraw)) {
             return;
         }
 
@@ -118,6 +122,10 @@ public class Traffic {
             Traffic t = traffic.get(key);
             if(t.isOld()) {
                 traffic.delete(key);
+                continue;
+            }
+
+            if(!isOnScreen(ctx.origin, t.mLat, t.mLon)) {
                 continue;
             }
 
@@ -132,9 +140,27 @@ public class Traffic {
              */
             int color = Traffic.getColorFromAltitude(altitude, t.mAltitude);
 
+            int diff;
+            String text;
+
+            if(altitude == -Integer.MAX_VALUE) {
+                // This is when we do not have our own altitude set with ownship
+                diff = (int)t.mAltitude;
+                text = diff + "PA'"; // show that this is pressure altitude
+                // do not filter when own PA is not known
+            }
+            else {
+                // Own PA is known, show height difference
+                diff = (int)(t.mAltitude - altitude);
+                text = (diff > 0 ? "+" : "") + diff + "'";
+                // filter
+                if(Math.abs(diff) > filterAltitude) {
+                    continue;
+                }
+            }
+
 
             float radius = ctx.dip2pix * 8;
-            String text = t.mAltitude + "'";
             /*
              * Draw outline to show it clearly
              */
@@ -161,5 +187,22 @@ public class Traffic {
 
 
     }
-    
+
+    /*
+     * Determine if shape belong to a screen based on Screen longitude and latitude
+     * and shape max/min longitude latitude
+     */
+    public static boolean isOnScreen(Origin origin, double lat, double lon) {
+
+        double maxLatScreen = origin.getLatScreenTop();
+        double minLatScreen = origin.getLatScreenBot();
+        double minLonScreen = origin.getLonScreenLeft();
+        double maxLonScreen = origin.getLonScreenRight();
+
+        boolean isInLat = lat < maxLatScreen && lat > minLatScreen;
+        boolean isInLon = lon < maxLonScreen && lon > minLonScreen;
+        return isInLat && isInLon;
+    }
+
+
 }

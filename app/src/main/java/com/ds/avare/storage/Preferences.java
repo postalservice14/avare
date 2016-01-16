@@ -163,7 +163,7 @@ public class Preferences {
              */
             return "http://208.113.226.170/new/";
         } else if (val.equals("1")) {
-            return "http://avare.kitepilot.org/new/";
+            return "http://avare.kitepilot.net/new/";
         }
         return ("");
     }
@@ -584,13 +584,6 @@ public class Preferences {
     /**
      * @return
      */
-    public boolean shouldSaveTracks() {
-        return (mPref.getBoolean(mContext.getString(R.string.TrkUpdAllow), false));
-    }
-
-    /**
-     * @return
-     */
     public boolean useAdsbWeather() {
         return (mPref.getBoolean(mContext.getString(R.string.ADSBWeather), false));
     }
@@ -610,8 +603,12 @@ public class Preferences {
     /**
      * @return
      */
-    public boolean showAdsbTraffic() {
-        return (mPref.getBoolean(mContext.getString(R.string.ADSBTraffic), true));
+    public int showAdsbTrafficWithin() {
+        try {
+            return (Integer.parseInt(mPref.getString(mContext.getString(R.string.ADSBTrafficFilter), "100000")));
+        } catch (Exception x) {
+            return 100000;
+        }
     }
 
     /**
@@ -721,7 +718,7 @@ public class Preferences {
      * @return
      */
     public boolean isRegistered() {
-        return mPref.getBoolean(mContext.getString(R.string.register), Build.PRODUCT.contains("sdk") ? true : false);
+        return mPref.getBoolean(mContext.getString(R.string.register), false);
     }
 
     /**
@@ -819,7 +816,7 @@ public class Preferences {
      * @return
      */
     public boolean showTips() {
-        return mPref.getBoolean(mContext.getString(R.string.prefTip), true);
+        return mPref.getBoolean(mContext.getString(R.string.prefTip), false);
     }
 
     /**
@@ -1036,7 +1033,7 @@ public class Preferences {
      * @return
      */
     public int getExpiryTime() {
-        String exp = mPref.getString(mContext.getString(R.string.Expires), "30");
+        String exp = mPref.getString(mContext.getString(R.string.Expires), "120");
         return Integer.parseInt(exp);
     }
 
@@ -1100,4 +1097,18 @@ public class Preferences {
         return mPref.getString(mContext.getString(R.string.PilotContact), "TEST PILOT 1-800-WX-BRIEF");
     }
 
+    public String getShapeFileName() {
+        return mPref.getString(mContext.getString(R.string.ShapeFile), "custom.shp");
+    }
+
+    public int getFuelTimerInterval() {
+        String interval = mPref.getString(mContext.getString(R.string.FuelTimerInterval), "30");
+        int intervalInt = 30;
+        try {
+            intervalInt = Integer.parseInt(interval);
+        } catch (Exception e) {
+
+        }
+        return intervalInt;
+    }
 }

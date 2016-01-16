@@ -35,8 +35,10 @@ import com.ds.avare.instruments.EdgeDistanceTape;
 import com.ds.avare.instruments.FlightTimer;
 import com.ds.avare.instruments.FuelTimer;
 import com.ds.avare.instruments.Odometer;
+import com.ds.avare.instruments.UpTimer;
 import com.ds.avare.instruments.VNAV;
 import com.ds.avare.instruments.VSI;
+import com.ds.avare.network.ShapeFetcher;
 import com.ds.avare.network.TFRFetcher;
 import com.ds.avare.place.Area;
 import com.ds.avare.place.Destination;
@@ -48,6 +50,7 @@ import com.ds.avare.shapes.ElevationTile;
 import com.ds.avare.shapes.MetarLayer;
 import com.ds.avare.shapes.PixelDraw;
 import com.ds.avare.shapes.RadarLayer;
+import com.ds.avare.shapes.ShapeFileShape;
 import com.ds.avare.shapes.TFRShape;
 import com.ds.avare.shapes.Tile;
 import com.ds.avare.shapes.TileMap;
@@ -157,6 +160,8 @@ public class StorageService extends Service {
      */
     private TFRFetcher mTFRFetcher;
 
+    private ShapeFetcher mShapeFetcher;
+
     /**
      * For performing periodic activities.
      */
@@ -245,10 +250,13 @@ public class StorageService extends Service {
     
     // The edge distance tape instrument
     private EdgeDistanceTape mEdgeDistanceTape;
-    
+
     // Timer for switching fuel tanks
     private FuelTimer mFuelTimer;
-    
+
+    // Timer for count up
+    private UpTimer mUpTimer;
+
     
     /**
      * @author zkhan
@@ -297,11 +305,13 @@ public class StorageService extends Service {
          * All tiles
          */
         mTiles = new TileMap(getApplicationContext());
-          
+
         mInternetWeatherCache = new InternetWeatherCache();
         mInternetWeatherCache.parse(this);
         mTFRFetcher = new TFRFetcher(getApplicationContext());
         mTFRFetcher.parse();
+        mShapeFetcher = new ShapeFetcher(getApplicationContext());
+        mShapeFetcher.parse();
         mTimer = new Timer();
         TimerTask gpsTime = new UpdateTask();
         mIsGpsOn = false;
@@ -310,7 +320,7 @@ public class StorageService extends Service {
         mAfdIndex = 0;
         mTrafficCache = new TrafficCache();
         mLocationSem = new Mutex();
-        mAdsbWeatherCache = new AdsbWeatherCache(getApplicationContext());
+        mAdsbWeatherCache = new AdsbWeatherCache(getApplicationContext(), this);
         mLastPlateAirport = null;
         mLastPlateIndex = 0;
         mElevTile = new ElevationTile(getApplicationContext());
@@ -382,8 +392,9 @@ public class StorageService extends Service {
         
         // Declare a fuel tank switching timer. Default to 30
         // minutes per tank
-        mFuelTimer = new FuelTimer(30);	
-        
+        mFuelTimer = new FuelTimer(getApplicationContext());
+        mUpTimer = new UpTimer();
+
         /*
          * Monitor TFR every hour.
          */
@@ -578,7 +589,22 @@ public class StorageService extends Service {
     public TFRFetcher getTFRFetcher() {
         return mTFRFetcher;
     }
-    
+
+    /**
+     *
+     * @return
+     */
+    public ShapeFetcher getShapeFetcher() {
+        return mShapeFetcher;
+    }
+
+    /**
+     * @return
+     */
+    public LinkedList<ShapeFileShape> getShapeShapes() {
+        return mShapeFetcher.getShapes();
+    }
+
     /**
      * @return
      */
@@ -978,18 +1004,24 @@ public class StorageService extends Service {
      */
     public void deleteTFRFetcher() {
         mTFRFetcher = new TFRFetcher(getApplicationContext());
-
     }
- 
+
     /**
-     * 
+     *
+     */
+    public void deleteShapeFetcher() {
+        mShapeFetcher = new ShapeFetcher(getApplicationContext());
+    }
+
+    /**
+     *
      */
     public void deleteInternetWeatherCache() {
         mInternetWeatherCache = new InternetWeatherCache();
     }
-    
+
     /**
-     * 
+     *
      */
     public void deleteRadar() {
         mRadarLayer.flush();
@@ -1127,9 +1159,12 @@ public class StorageService extends Service {
     public EdgeDistanceTape getEdgeTape() {
     	return mEdgeDistanceTape;
     }
-    
+
     public FuelTimer getFuelTimer() {
-    	return mFuelTimer;
+        return mFuelTimer;
+    }
+    public UpTimer getUpTimer() {
+        return mUpTimer;
     }
 
 	public DrawCapLines getCap() {

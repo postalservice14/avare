@@ -12,15 +12,6 @@ Redistribution and use in source and binary forms, with or without modification,
 
 package com.ds.avare;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.ds.avare.instruments.CDI;
-import com.ds.avare.place.Destination;
-import com.ds.avare.place.Plan;
-import com.ds.avare.utils.Helper;
-
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,6 +23,15 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import com.ds.avare.instruments.CDI;
+import com.ds.avare.place.Destination;
+import com.ds.avare.place.Plan;
+import com.ds.avare.utils.Helper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * This class exposes the remote service to the client.
  * The client will be the Avare Helper, sending data to Avare
@@ -40,7 +40,8 @@ import android.os.Message;
 public class IHelperService extends Service {
 
     private StorageService mService;
-    
+    private JSONObject mGeoAltitude;
+
     /**
      * We need to bind to storage service to do anything useful 
      */
@@ -57,7 +58,8 @@ public class IHelperService extends Service {
              */
             StorageService.LocalBinder binder = (StorageService.LocalBinder)service;
             mService = binder.getService();
-        }    
+            mGeoAltitude = null;
+        }
 
         /* (non-Javadoc)
          * @see android.content.ServiceConnection#onServiceDisconnected(android.content.ComponentName)
@@ -204,14 +206,58 @@ public class IHelperService extends Service {
                             Helper.getMillisGMT()
                             /*XXX:object.getLong("time")*/);
                 }
+                else if(type.equals("geoaltitude")) {
+                    mGeoAltitude = object;
+                }
                 else if(type.equals("ownship")) {
                     Location l = new Location(LocationManager.GPS_PROVIDER);
                     l.setLongitude(object.getDouble("longitude"));
                     l.setLatitude(object.getDouble("latitude"));
-                    l.setSpeed((float)object.getDouble("speed"));
-                    l.setBearing((float)object.getDouble("bearing"));
-                    l.setAltitude(object.getDouble("altitude"));
+                    l.setSpeed((float) object.getDouble("speed"));
+                    l.setBearing((float) object.getDouble("bearing"));
                     l.setTime(object.getLong("time"));
+
+                    // Choose most appropriate altitude. This is because people fly all sorts
+                    // of equipment with or without altitudes
+                    double pressureAltitude = object.getDouble("altitude");
+                    double deviceAltitude = -1000;
+                    double geoAltitude = -1000;
+                    // If geo altitude from adsb available, use it if not too old
+                    if(mGeoAltitude != null) {
+                        long t1 = object.getLong("time");
+                        long t2 = mGeoAltitude.getLong("time");
+                        if((t1 - t2) < 10000) { // 10 seconds
+                            geoAltitude = mGeoAltitude.getDouble("altitude");
+                        }
+                    }
+                    // If geo altitude from device available, use it if not too old
+                    long t1 = System.currentTimeMillis();
+                    long t2 = mService.getGpsParams().getTime();
+                    if((t1 - t2) < 10000) { // 10 seconds
+                        deviceAltitude = mService.getGpsParams().getAltitude();
+                    }
+
+                    // choose best altitude. give preference to pressure altitude because that is
+                    // the most correct for traffic purpose.
+                    double alt = pressureAltitude;
+                    if(alt <= -1000) {
+                        alt = geoAltitude;
+                    }
+                    if(alt <= -1000) {
+                        alt = deviceAltitude;
+                    }
+                    // set pressure altitude for traffic alerts
+                    mService.getTrafficCache().setOwnAltitude((int) alt);
+
+                    // For own height, do not use pressure altitude
+                    alt = geoAltitude;
+                    if(alt <= -1000) {
+                        alt = deviceAltitude;
+                    }
+                    if(alt <= -1000) {
+                        alt = pressureAltitude;
+                    }
+                    l.setAltitude(alt);
                     mService.getGps().onLocationChanged(l, type);
                 }
                 else if(type.equals("nexrad")) {
@@ -250,7 +296,7 @@ public class IHelperService extends Service {
                      * Put METAR
                      */
                     mService.getAdsbWeather().putMetar(object.getLong("time"), 
-                            object.getString("location"), object.getString("data"));
+                            object.getString("location"), object.getString("data"), object.getString("flight_category"));
                 }
                 else if(type.equals("TAF") || type.equals("TAF.AMD")) {
                     mService.getAdsbWeather().putTaf(object.getLong("time"), 
